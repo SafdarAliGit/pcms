@@ -238,9 +238,6 @@ frappe.ready(function () {
   const $messageInput = $("#message");
   const $voiceModal = $("#voice-modal");
   const $audioReview = $("#audio-review");
-  $audioReview[0].muted = false;
-  $audioReview[0].volume = 1;
-
 
   function scrollToBottom() {
     $chatBody.scrollTop($chatBody[0].scrollHeight);
@@ -287,7 +284,7 @@ frappe.ready(function () {
       });
 
       mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/ogg;codecs=opus',
+        mimeType: 'audio/webm',
         audioBitsPerSecond: 64000
       });
 
