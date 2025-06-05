@@ -129,180 +129,226 @@
 
 
 
+// frappe.ready(function () {
+//   const $chatBody = $("#chat-body");
+//   const $messageInput = $("#message");
+
+//   function scrollToBottom() {
+//     $chatBody.scrollTop($chatBody[0].scrollHeight);
+//   }
+
+//   function appendMessage(text) {
+//     const $msg = $("<div>").addClass("chat-message sent").text(text);
+//     $chatBody.append($msg);
+//     scrollToBottom();
+//   }
+
+//   $("#send-btn").on("click", function () {
+//     const text = $messageInput.val().trim();
+//     if (text) {
+//       appendMessage(text);
+//       $messageInput.val("");
+//     }
+//   });
+
+//   $messageInput.on("keypress", function (e) {
+//     if (e.which === 13 && !e.shiftKey) {
+//       e.preventDefault();
+//       $("#send-btn").click();
+//     }
+//   });
+
+//   // --- Voice recording logic ---
+//   let mediaRecorder;
+//   let audioChunks = [];
+//   let currentAudioUrl = "";
+
+//   $("#record-btn").on("click", async function startRecording() {
+//     try {
+//       const stream = await navigator.mediaDevices.getUserMedia({
+//         audio: {
+//           channelCount: 1,
+//           sampleRate: 16000,
+//           sampleSize: 16,
+//           echoCancellation: true,
+//           noiseSuppression: true,
+//           autoGainControl: true
+//         }
+//       });
+//       mediaRecorder = new MediaRecorder(stream,{
+//         mimeType: 'audio/webm;codecs=opus',
+//         audioBitsPerSecond: 32000
+//       });
+//       audioChunks = [];
+
+//       mediaRecorder.ondataavailable = (e) => {
+//         if (e.data.size > 0) {
+//           audioChunks.push(e.data);
+//         }
+//       };
+
+//       mediaRecorder.onstop = () => {
+//         const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+//         currentAudioUrl = URL.createObjectURL(audioBlob);
+//         $("#audio-review").attr("src", currentAudioUrl);
+//         $("#voice-modal").removeClass("hidden");
+//       };
+
+//       mediaRecorder.start();
+//       $(this).text("⏹️ Stop").addClass("recording");
+
+//       $(this).off("click").on("click", function () {
+//         mediaRecorder.stop();
+//         $(this).text("🎤 Record").removeClass("recording");
+//         $(this).off("click").on("click", startRecording);
+//       });
+//     } catch (err) {
+//       alert("Microphone access denied or not available.");
+//     }
+//   });
+
+//   $("#play-voice").on("click", function () {
+//     const audio = document.getElementById("audio-review");
+//     audio.play();
+//   });
+
+//   $("#discard-voice").on("click", function () {
+//     $("#audio-review").attr("src", "");
+//     $("#voice-modal").addClass("hidden");
+//     currentAudioUrl = "";
+//   });
+
+//   $("#send-voice").on("click", function () {
+//     if (!currentAudioUrl) return;
+
+//     const voiceMsg = $("<div>").addClass("chat-message sent");
+//     const audio = $("<audio controls>").attr("src", currentAudioUrl);
+//     voiceMsg.append(audio);
+//     $chatBody.append(voiceMsg);
+
+//     scrollToBottom();
+//     $("#voice-modal").addClass("hidden");
+//     $("#audio-review").attr("src", "");
+//     currentAudioUrl = "";
+//   });
+// });
+
 frappe.ready(function () {
-  // const $chatBody = $("#chat-body");
-  // const $messageInput = $("#message");
+  const $chatBody = $("#chat-body");
+  const $messageInput = $("#message");
+  const $voiceModal = $("#voice-modal");
+  const $audioReview = $("#audio-review");
 
-  // function scrollToBottom() {
-  //   $chatBody.scrollTop($chatBody[0].scrollHeight);
-  // }
-
-  // function appendMessage(text) {
-  //   const $msg = $("<div>").addClass("chat-message sent").text(text);
-  //   $chatBody.append($msg);
-  //   scrollToBottom();
-  // }
-
-  // $("#send-btn").on("click", function () {
-  //   const text = $messageInput.val().trim();
-  //   if (text) {
-  //     appendMessage(text);
-  //     $messageInput.val("");
-  //   }
-  // });
-
-  // $messageInput.on("keypress", function (e) {
-  //   if (e.which === 13 && !e.shiftKey) {
-  //     e.preventDefault();
-  //     $("#send-btn").click();
-  //   }
-  // });
-
-  // // --- Voice recording logic ---
-  // let mediaRecorder;
-  // let audioChunks = [];
-  // let currentAudioUrl = "";
-
-  // $("#record-btn").on("click", async function startRecording() {
-  //   try {
-  //     const stream = await navigator.mediaDevices.getUserMedia({
-  //       audio: {
-  //         channelCount: 1,
-  //         sampleRate: 16000,
-  //         sampleSize: 16,
-  //         echoCancellation: true,
-  //         noiseSuppression: true,
-  //         autoGainControl: true
-  //       }
-  //     });
-  //     mediaRecorder = new MediaRecorder(stream,{
-  //       mimeType: 'audio/webm;codecs=opus',
-  //       audioBitsPerSecond: 32000
-  //     });
-  //     audioChunks = [];
-
-  //     mediaRecorder.ondataavailable = (e) => {
-  //       if (e.data.size > 0) {
-  //         audioChunks.push(e.data);
-  //       }
-  //     };
-
-  //     mediaRecorder.onstop = () => {
-  //       const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-  //       currentAudioUrl = URL.createObjectURL(audioBlob);
-  //       $("#audio-review").attr("src", currentAudioUrl);
-  //       $("#voice-modal").removeClass("hidden");
-  //     };
-
-  //     mediaRecorder.start();
-  //     $(this).text("⏹️ Stop").addClass("recording");
-
-  //     $(this).off("click").on("click", function () {
-  //       mediaRecorder.stop();
-  //       $(this).text("🎤 Record").removeClass("recording");
-  //       $(this).off("click").on("click", startRecording);
-  //     });
-  //   } catch (err) {
-  //     alert("Microphone access denied or not available.");
-  //   }
-  // });
-
-  // $("#play-voice").on("click", function () {
-  //   const audio = document.getElementById("audio-review");
-  //   audio.play();
-  // });
-
-  // $("#discard-voice").on("click", function () {
-  //   $("#audio-review").attr("src", "");
-  //   $("#voice-modal").addClass("hidden");
-  //   currentAudioUrl = "";
-  // });
-
-  // $("#send-voice").on("click", function () {
-  //   if (!currentAudioUrl) return;
-
-  //   const voiceMsg = $("<div>").addClass("chat-message sent");
-  //   const audio = $("<audio controls>").attr("src", currentAudioUrl);
-  //   voiceMsg.append(audio);
-  //   $chatBody.append(voiceMsg);
-
-  //   scrollToBottom();
-  //   $("#voice-modal").addClass("hidden");
-  //   $("#audio-review").attr("src", "");
-  //   currentAudioUrl = "";
-  // });
-
-
-
-
-  let mediaRecorder;
-  let audioChunks = [];
-  let currentAudioUrl = "";
-
-  const $recordBtn = document.getElementById("record-btn");
-  const $audioReview = document.getElementById("audio-review");
-  const $voiceModal = document.getElementById("voice-modal");
-  const $chatBody = document.getElementById("chat-body");
-
-  function appendAudioMessage(url) {
-    const msg = document.createElement("div");
-    msg.className = "chat-message";
-    const audio = document.createElement("audio");
-    audio.controls = true;
-    audio.src = url;
-    msg.appendChild(audio);
-    $chatBody.appendChild(msg);
+  function scrollToBottom() {
+    $chatBody.scrollTop($chatBody[0].scrollHeight);
   }
 
-  $recordBtn.addEventListener("click", async function handleRecordClick() {
-    if (!mediaRecorder || mediaRecorder.state === "inactive") {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  function appendMessage(text) {
+    const $msg = $("<div>").addClass("chat-message sent").text(text);
+    $chatBody.append($msg);
+    scrollToBottom();
+  }
 
-        mediaRecorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
-        audioChunks = [];
-
-        mediaRecorder.ondataavailable = (e) => {
-          if (e.data.size > 0) {
-            audioChunks.push(e.data);
-          }
-        };
-
-        mediaRecorder.onstop = () => {
-          const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-          currentAudioUrl = URL.createObjectURL(audioBlob);
-          $audioReview.src = currentAudioUrl;
-          $voiceModal.style.display = "block";
-        };
-
-        mediaRecorder.start();
-        $recordBtn.textContent = "⏹️ Stop";
-        $recordBtn.classList.add("recording");
-
-      } catch (err) {
-        alert("Microphone access denied or not available.");
-        console.error(err);
-      }
-    } else if (mediaRecorder.state === "recording") {
-      mediaRecorder.stop();
-      $recordBtn.textContent = "🎤 Record";
-      $recordBtn.classList.remove("recording");
+  $("#send-btn").on("click", function () {
+    const text = $messageInput.val().trim();
+    if (text) {
+      appendMessage(text);
+      $messageInput.val("");
     }
   });
 
-  document.getElementById("discard-voice").addEventListener("click", () => {
-    $audioReview.src = "";
-    $voiceModal.style.display = "none";
+  $messageInput.on("keypress", function (e) {
+    if (e.which === 13 && !e.shiftKey) {
+      e.preventDefault();
+      $("#send-btn").click();
+    }
+  });
+
+  // Voice recording logic
+  let mediaRecorder;
+  let audioChunks = [];
+  let audioBlob;
+  let currentAudioUrl = "";
+
+  $("#record-btn").on("click", async function startRecording() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          channelCount: 1,
+          sampleRate: 16000,
+          sampleSize: 16,
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        }
+      });
+
+      mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'audio/webm;codecs=opus',
+        audioBitsPerSecond: 64000
+      });
+
+      audioChunks = [];
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          audioChunks.push(e.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+        currentAudioUrl = URL.createObjectURL(audioBlob);
+
+        // Use .srcObject with a Blob if needed
+        $audioReview[0].src = currentAudioUrl;
+        $audioReview[0].load();
+
+        $voiceModal.removeClass("hidden");
+
+        // Stop all tracks (microphone)
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      mediaRecorder.start();
+      $(this).text("⏹️ Stop").addClass("recording");
+
+      // Switch button behavior to stop
+      $(this).off("click").on("click", function () {
+        mediaRecorder.stop();
+        $(this).text("🎤 Record").removeClass("recording");
+        $(this).off("click").on("click", startRecording);
+      });
+    } catch (err) {
+      alert("Microphone access denied or not available.");
+      console.error(err);
+    }
+  });
+
+  $("#play-voice").on("click", function () {
+    $audioReview[0].play();
+  });
+
+  $("#discard-voice").on("click", function () {
+    $audioReview[0].pause();
+    $audioReview[0].src = "";
+    currentAudioUrl = "";
+    $voiceModal.addClass("hidden");
+  });
+
+  $("#send-voice").on("click", function () {
+    if (!currentAudioUrl) return;
+
+    const $voiceMsg = $("<div>").addClass("chat-message sent");
+    const $audio = $("<audio controls>").attr("src", currentAudioUrl);
+    $voiceMsg.append($audio);
+    $chatBody.append($voiceMsg);
+
+    scrollToBottom();
+
+    $voiceModal.addClass("hidden");
+    $audioReview[0].pause();
+    $audioReview[0].src = "";
     currentAudioUrl = "";
   });
-
-  document.getElementById("send-voice").addEventListener("click", () => {
-    if (currentAudioUrl) {
-      appendAudioMessage(currentAudioUrl);
-      $audioReview.src = "";
-      $voiceModal.style.display = "none";
-      currentAudioUrl = "";
-    }
-  });
-  
 });
