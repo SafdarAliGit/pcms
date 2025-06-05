@@ -165,17 +165,8 @@ frappe.ready(function () {
 
   $("#record-btn").on("click", async function startRecording() {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({   channelCount: 1,
-        sampleRate: 16000,
-        sampleSize: 16,
-        echoCancellation: true,
-        noiseSuppression: true,
-        autoGainControl: true
-      });
-      mediaRecorder = new MediaRecorder(stream,{
-        mimeType: 'audio/webm;codecs=opus',
-        audioBitsPerSecond: 32000
-      });
+      const stream = await navigator.mediaDevices.getUserMedia();
+      mediaRecorder = new MediaRecorder(stream);
       audioChunks = [];
 
       mediaRecorder.ondataavailable = (e) => {
