@@ -125,7 +125,7 @@
 //   new VoiceRecorder().init();
 // });
 
-
+// ======================================================
 frappe.ready(function () {
     const $chatBody = $("#chat-body");
   const $messageInput = $("#message");
@@ -165,8 +165,17 @@ frappe.ready(function () {
 
   $("#record-btn").on("click", async function startRecording() {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
+      const stream = await navigator.mediaDevices.getUserMedia({   channelCount: 1,
+        sampleRate: 16000,
+        sampleSize: 16,
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true
+      });
+      mediaRecorder = new MediaRecorder(stream,{
+        mimeType: 'audio/webm;codecs=opus',
+        audioBitsPerSecond: 32000
+      });
       audioChunks = [];
 
       mediaRecorder.ondataavailable = (e) => {
@@ -217,14 +226,7 @@ frappe.ready(function () {
     $("#audio-review").attr("src", "");
     currentAudioUrl = "";
   });
-// from old code
-   function blobToBase64(blob) {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result.split(',')[1]);
-      reader.readAsDataURL(blob);
-    });
-  }
+
   
 });
 
