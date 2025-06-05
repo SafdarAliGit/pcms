@@ -1,0 +1,25 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Nursing Station{% endblock %}
+
+{% block page_content %}
+<div class="ns-container">
+  <div class="ns-header">🩺 Nursing Station</div>
+  <div id="message-list" class="ns-messages"></div>
+</div>
+
+<!-- Modal for message detail -->
+<div id="message-modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <div class="modal-body">
+      <p id="modal-message-text"></p>
+      <button id="respond-btn" class="btn">Respond</button>
+    </div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="/assets/pcms/css/ns.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/assets/pcms/js/ns.js"></script>
+{% endblock %}

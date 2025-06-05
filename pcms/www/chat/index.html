@@ -1,0 +1,58 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Chat{% endblock %}
+
+{% block page_content %}
+
+<!-- Redirect to login if not logged in -->
+{% if frappe.session.user == "Guest" %}
+  <script>
+    window.location.href = "/login?redirect-to=/chat";
+  </script>
+{% endif %}
+
+<link rel="stylesheet" href="/assets/pcms/css/chat.css">
+
+<div class="chat-container">
+
+  {% if patient %}
+  <div id="patient-info">
+    <span><strong>Name:</strong> {{ patient.patient_name }}</span>
+    <span><strong>MR No:</strong> {{ patient.mr_no }}</span>
+  </div>
+  
+{% endif %}
+
+  <div class="chat-header">Patient Chat</div>
+  
+  <div class="chat-body" id="chat-body">
+    <!-- Messages will appear here -->
+  </div>
+
+  <div class="chat-input">
+    <textarea id="message" placeholder="Type your message..."></textarea>
+    <div class="chat-buttons">
+      <button class="send-btn" id="send-btn">Send</button>
+      <button class="record-btn" id="record-btn">🎤 Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- Voice Review Modal -->
+<div class="voice-modal hidden" id="voice-modal">
+  <div class="voice-modal-content">
+    <h3>Voice Review</h3>
+    <audio id="audio-review" controls></audio>
+    <div class="voice-modal-buttons">
+      <button id="play-voice">Play</button>
+      <button id="discard-voice">Discard</button>
+      <button id="send-voice">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- Just include your own script. jQuery is already loaded via Frappe -->
+<script src="/assets/pcms/js/chat.js"></script>
+
+
+{% endblock %}

@@ -1,0 +1,100 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-02 18:19:34.691311",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "message",
+  "responding_nurse",
+  "nurse_name",
+  "nursing_station",
+  "health_care_unit",
+  "hospital",
+  "response_time",
+  "action_taken",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "message",
+   "fieldtype": "Link",
+   "label": "Message",
+   "options": "Message"
+  },
+  {
+   "fieldname": "responding_nurse",
+   "fieldtype": "Link",
+   "label": "Responding Nurse",
+   "options": "Nurse"
+  },
+  {
+   "fetch_from": "responding_nurse.nurse_name",
+   "fieldname": "nurse_name",
+   "fieldtype": "Data",
+   "label": "Nurse Name"
+  },
+  {
+   "fieldname": "nursing_station",
+   "fieldtype": "Link",
+   "label": "Nursing Station",
+   "options": "Nursing Station"
+  },
+  {
+   "fetch_from": "nursing_station.health_care_unit",
+   "fieldname": "health_care_unit",
+   "fieldtype": "Link",
+   "label": "Health Care Unit",
+   "options": "Health Care Unit"
+  },
+  {
+   "fetch_from": "health_care_unit.hospital",
+   "fieldname": "hospital",
+   "fieldtype": "Link",
+   "label": "Hospital",
+   "options": "Hospital"
+  },
+  {
+   "fieldname": "response_time",
+   "fieldtype": "Datetime",
+   "label": "Response Time"
+  },
+  {
+   "fieldname": "action_taken",
+   "fieldtype": "Small Text",
+   "label": "Action Taken"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "\nResponded\nIn Treatment\nCompleted"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-02 18:28:23.529927",
+ "modified_by": "Administrator",
+ "module": "Pcms",
+ "name": "Nurse Response",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

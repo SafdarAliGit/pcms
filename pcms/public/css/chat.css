@@ -1,0 +1,189 @@
+body {
+  margin: 0;
+  background: #f4f7fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.chat-container {
+  max-width: 600px;
+  margin: 30px auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
+  overflow: hidden;
+}
+
+.chat-header {
+  background-color: #1974D2;
+  color: #fff;
+  padding: 15px;
+  font-size: 20px;
+  text-align: center;
+}
+.chat-message.received {
+  align-self: flex-end;
+  background-color: #d1e7dd;
+  color: #000;
+}
+
+.chat-body {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f2f5;
+  display: flex;
+  flex-direction: column;
+}
+.chat-message.sent {
+  align-self: flex-start; /* Aligns message box to left */
+  background-color: #e1f5fe; /* Optional: softer background for user */
+  color: #000;
+}
+
+
+.chat-message {
+  background: #a0c1f9;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #5d94f4;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.chat-input {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  border-top: 1px solid #ddd;
+  background: #fff;
+}
+
+.chat-input textarea {
+  resize: none;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 60px;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.chat-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-buttons button {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.send-btn {
+  background-color: #1974D2;
+  color: white;
+}
+.send-btn:hover {
+  background-color: #135cb0;
+}
+
+.record-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+.record-btn:hover {
+  background-color: #3e8e41;
+}
+
+.voice-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.voice-modal.hidden {
+  display: none;
+}
+
+.voice-modal-content {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+}
+
+.voice-modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.voice-modal-buttons button {
+  flex: 1;
+  margin: 0 5px;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#play-voice {
+  background-color: #ffc107;
+  color: #000;
+}
+#discard-voice {
+  background-color: #dc3545;
+  color: #fff;
+}
+#send-voice {
+  background-color: #28a745;
+  color: #fff;
+}
+
+
+#patient-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f0f8ff, #e6f2ff);
+  border-left: 6px solid #1974D2;
+  padding: 5px 10px;
+  margin: 10px auto;
+  width: 90%;
+  max-width: 600px;
+  font-size: 18px;
+  font-family: "Segoe UI", sans-serif;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+}
+
+#patient-info span {
+  color: #333;
+  white-space: nowrap;
+}
+
+#patient-info strong {
+  color: #1974D2;
+}

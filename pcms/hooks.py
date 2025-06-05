@@ -5,6 +5,30 @@ app_description = "This is patient nurse chating app"
 app_email = "safdar211@gmail.com"
 app_license = "mit"
 
+# DocType Events
+# ------------------
+
+doc_events = {
+    "Doctor": {
+        "on_update": "pcms.pcms.doctype.doctor.doctor.create_doctor_user"
+    },
+    "Patient": {
+        "on_update": "pcms.pcms.doctype.patient.patient.create_patient_user",
+        "before_insert": "pcms.pcms.doctype.patient.patient.generate_mr_no"
+    }
+}
+
+# boot_session = "pcms.utils.boot.boot_session"
+# on_session_creation = "pcms.utils.boot.redirect_after_login"
+# get_website_user_home_page = "pcms.utils.redirect.get_home_page"
+# on_login = "pcms.utils.redirect.redirect_user_based_on_role"
+# your_app/hooks.py
+
+# auth_hooks = ["pcms.utils.redirect.redirect_user_based_on_role"]
+# hooks.py
+# on_session_creation = "pcms.utils.redirect.redirect_user"
+
+# get_website_user_home_page = "pcms.utils.redirect.get_home_page"
 # Apps
 # ------------------
 
@@ -26,7 +50,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/pcms/css/pcms.css"
-# app_include_js = "/assets/pcms/js/pcms.js"
+# app_include_js = "/assets/pcms/js/redirect.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/pcms/css/pcms.css"
@@ -60,9 +84,10 @@ app_license = "mit"
 # home_page = "login"
 
 # website user home page (by Role)
-# role_home_page = {
-# 	"Role": "home_page"
-# }
+role_home_page = {
+    "Patient": "chat"
+}
+
 
 # Generators
 # ----------

@@ -1,0 +1,103 @@
+body {
+    background: #f4f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+  }
+  
+  .ns-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .ns-header {
+    font-size: 26px;
+    font-weight: bold;
+    color: #1974D2;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .ns-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .ns-message {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #e8f0ff;
+    position: relative;
+  }
+  
+  .ns-message .from {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .ns-message .text {
+    margin-top: 5px;
+    font-size: 15px;
+    color: #444;
+  }
+  
+  .ns-message .action-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #1974D2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal.hidden {
+    display: none;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 400px;
+    position: relative;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #aaa;
+  }
+  
+  .btn {
+    background-color: #1974D2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  
