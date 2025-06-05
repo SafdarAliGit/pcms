@@ -126,100 +126,7 @@
 // });
 
 // ======================================================
-// frappe.ready(function () {
-//     const $chatBody = $("#chat-body");
-//   const $messageInput = $("#message");
 
-//   function scrollToBottom() {
-//     $chatBody.scrollTop($chatBody[0].scrollHeight);
-//   }
-
-//   function appendMessage(text) {
-//     const msgElement = $("<div>")
-//       .addClass("chat-message sent")
-//       .text(text);
-//     $("#chat-body").append(msgElement);
-//     $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
-//   }
-
-//   $("#send-btn").on("click", function () {
-//     const text = $messageInput.val().trim();
-//     if (text) {
-//       appendMessage(text);
-//       $messageInput.val(""); // clear input
-//     }
-//   });
-
-//   $messageInput.on("keypress", function (e) {
-//     if (e.which === 13 && !e.shiftKey) {
-//       e.preventDefault();
-//       $("#send-btn").click(); // trigger send
-//     }
-//   });
-  
-
-//   // Voice recording logic
-//   let mediaRecorder;
-//   let audioChunks = [];
-//   let currentAudioUrl = "";
-
-//   $("#record-btn").on("click", async function startRecording() {
-//     try {
-//       const stream = await navigator.mediaDevices.getUserMedia();
-//       mediaRecorder = new MediaRecorder(stream);
-//       audioChunks = [];
-
-//       mediaRecorder.ondataavailable = (e) => {
-//         if (e.data.size > 0) audioChunks.push(e.data);
-//       };
-
-//       mediaRecorder.onstop = () => {
-//         const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-//         currentAudioUrl = URL.createObjectURL(audioBlob);
-//         $("#audio-review").attr("src", currentAudioUrl);
-//         $("#voice-modal").removeClass("hidden");
-//       };
-
-//       mediaRecorder.start();
-//       $(this).text("⏹️ Stop").addClass("recording");
-
-//       $(this).off("click").on("click", function () {
-//         mediaRecorder.stop();
-//         $(this).text("🎤 Record").removeClass("recording");
-//         $(this).off("click").on("click", startRecording);
-//       });
-//     } catch (err) {
-//       alert("Microphone access denied or not available.");
-//     }
-//   });
-
-//   $("#play-voice").on("click", function () {
-//     const audio = document.getElementById("audio-review");
-//     audio.play();
-//   });
-
-//   $("#discard-voice").on("click", function () {
-//     $("#audio-review").attr("src", "");
-//     $("#voice-modal").addClass("hidden");
-//     currentAudioUrl = "";
-//   });
-
-//   $("#send-voice").on("click", function () {
-//     if (!currentAudioUrl) return;
-
-//     const voiceMessage = $("<div>").addClass("chat-message sent");
-//     const audio = $("<audio controls>").attr("src", currentAudioUrl);
-//     voiceMessage.append(audio);
-//     $chatBody.append(voiceMessage);
-
-//     scrollToBottom();
-//     $("#voice-modal").addClass("hidden");
-//     $("#audio-review").attr("src", "");
-//     currentAudioUrl = "";
-//   });
-
-  
-// });
 
 
 frappe.ready(function () {
@@ -258,8 +165,20 @@ frappe.ready(function () {
 
   $("#record-btn").on("click", async function startRecording() {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          channelCount: 1,
+          sampleRate: 16000,
+          sampleSize: 16,
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        }
+      });
+      mediaRecorder = new MediaRecorder(stream,{
+        mimeType: 'audio/webm;codecs=opus',
+        audioBitsPerSecond: 32000
+      });
       audioChunks = [];
 
       mediaRecorder.ondataavailable = (e) => {
