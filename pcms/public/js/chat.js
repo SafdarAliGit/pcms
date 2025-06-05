@@ -102,13 +102,13 @@
 //     }
 //   }
 
-//   blobToBase64(blob) {
-//     return new Promise((resolve) => {
-//       const reader = new FileReader();
-//       reader.onload = () => resolve(reader.result.split(',')[1]);
-//       reader.readAsDataURL(blob);
-//     });
-//   }
+  // blobToBase64(blob) {
+  //   return new Promise((resolve) => {
+  //     const reader = new FileReader();
+  //     reader.onload = () => resolve(reader.result.split(',')[1]);
+  //     reader.readAsDataURL(blob);
+  //   });
+  // }
 
 //   cleanup() {
 //     this.recording = false;
@@ -238,6 +238,9 @@ frappe.ready(function () {
   const $messageInput = $("#message");
   const $voiceModal = $("#voice-modal");
   const $audioReview = $("#audio-review");
+  $audioReview[0].muted = false;
+  $audioReview[0].volume = 1;
+
 
   function scrollToBottom() {
     $chatBody.scrollTop($chatBody[0].scrollHeight);
@@ -284,7 +287,7 @@ frappe.ready(function () {
       });
 
       mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus',
+        mimeType: 'audio/ogg;codecs=opus',
         audioBitsPerSecond: 64000
       });
 
