@@ -183,6 +183,7 @@ frappe.ready(function () {
 
       mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) audioChunks.push(e.data);
+        mediaRecorder.start();
       };
 
       mediaRecorder.onstop = () => {
