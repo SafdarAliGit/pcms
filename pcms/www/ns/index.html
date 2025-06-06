@@ -1,11 +1,11 @@
 {% extends "templates/web.html" %}
 
 {% block page_content %}
-<link rel="stylesheet" href="/assets/pcms/css/ns.css">
-
 <h2 class="chat-title">💬 Live Messages</h2>
 
 <div id="messages" class="chat-box"></div>
+
+<audio id="message-sound" src="/assets/pcms/sounds/message_received.mp3" preload="auto"></audio>
 
 <script>
   window.frappe = window.frappe || {};
@@ -33,6 +33,7 @@
   frappe.ready(function () {
     frappe.realtime.init();
 
+    // Fetch existing messages
     frappe.call({
       method: "frappe.client.get_list",
       args: {
@@ -52,6 +53,7 @@
 
     frappe.realtime.on("new_message", function (data) {
       appendMessage(data.sender, data.message);
+      document.getElementById("message-sound").play().catch(() => {});
     });
 
     function appendMessage(sender, message) {
