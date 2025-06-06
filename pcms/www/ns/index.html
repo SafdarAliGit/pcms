@@ -1,18 +1,12 @@
-
-
-
-{% extends "templates/web.html" %}
-
-{% block page_content %}
-<h2>Live Chat</h2>
-<div id="messages" style="height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
-<br>
-<input type="text" id="message_input" placeholder="Type your message..." style="width: 70%;" />
-<button onclick="sendMessage()">Send</button>
-
+<script src="/assets/frappe/js/lib/socket.io.min.js"></script>
 <script>
   frappe.ready(function () {
-    // Load previous messages
+    // 1. Initialize Socket.IO
+    if (!frappe.realtime.socket) {
+      frappe.realtime.init();
+    }
+
+    // 2. Load previous messages
     frappe.call({
       method: "frappe.client.get_list",
       args: {
@@ -30,26 +24,10 @@
       }
     });
 
-    // Listen to new real-time messages
+    // 3. Listen to new real-time messages
     frappe.realtime.on("new_message", function(data) {
       appendMessage(data.sender, data.message);
     });
-
-    // window.sendMessage = function () {
-    //   const input = document.getElementById("message_input");
-    //   const message = input.value.trim();
-    //   if (!message) return;
-
-    //   frappe.call({
-    //     method: "pcms.api.messaging.send_message",
-    //     args: {
-    //       message_text: message
-    //     },
-    //     callback: function () {
-    //       input.value = "";
-    //     }
-    //   });
-    // };
 
     function appendMessage(sender, message) {
       const container = document.getElementById("messages");
@@ -60,4 +38,3 @@
     }
   });
 </script>
-{% endblock %}
