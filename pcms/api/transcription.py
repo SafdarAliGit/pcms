@@ -173,10 +173,10 @@ def upload_voice_file():
 
         # Save to Message doctype
         # GET PATIENT INFORMATION
-        patient = frappe.db.get_value("Patient", {"user_id": frappe.session.user}, ["patient_name", "mr_no","nursing_station","health_care_unit","hospital","room_no"], as_dict=True)
+        patient = frappe.db.get_value("Patient", {"user_id": frappe.session.user}, ["name","patient_name", "mr_no","nursing_station","health_care_unit","hospital","room_no"], as_dict=True)
 
         message = frappe.new_doc("Message")
-        message.sender = patient.get("mr_no")
+        message.sender = patient.get("name")
         message.sender_name = patient.get("patient_name")
         message.nursing_station = patient.get("nursing_station")
         message.health_care_unit = patient.get("health_care_unit")

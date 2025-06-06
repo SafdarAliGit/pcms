@@ -28,14 +28,14 @@ frappe.ready(function () {
     method: "frappe.client.get_list",
     args: {
       doctype: "Message",
-      fields: ["message_content", "owner","room_no","sender_name","sent_time","status"],
+      fields: ["message_content", "sender","room_no","sender_name","sent_time","status"],
       order_by: "creation asc",
       limit_page_length: 50
     },
     callback: function (r) {
       if (r.message) {
         r.message.forEach(function (msg) {
-          appendMessage(msg.owner, msg.message_content,msg.room_no,msg.sender_name,msg.sent_time,msg.status);
+          appendMessage(msg.sender, msg.message_content,msg.room_no,msg.sender_name,msg.sent_time,msg.status);
         });
       }
     }
