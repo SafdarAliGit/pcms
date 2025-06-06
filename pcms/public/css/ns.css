@@ -6,6 +6,10 @@ body {
   color: #1e293b;
 }
 
+.chat-title {
+  margin: 0 auto;
+  text-align: center;
+}
 /* === Chat Container (wrap messages here) === */
 #messages {
   max-width: 720px;
@@ -46,11 +50,11 @@ body {
 
 .meta-block {
   background: #e0e7ff;
-  padding: 0.4rem 0.75rem;
+  padding: 0.2rem 0.25rem;
   border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.2rem;
   font-size: 0.9rem;
   box-shadow: inset 0 1px 2px rgba(99, 102, 241, 0.2);
 }
