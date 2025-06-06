@@ -28,37 +28,57 @@ frappe.ready(function () {
     method: "frappe.client.get_list",
     args: {
       doctype: "Message",
-      fields: ["message_content", "sender","room_no","sender_name","sent_time","status"],
+      fields: ["message_content", "sender","sender_name","room_no","sent_time","status"],
       order_by: "creation asc",
       limit_page_length: 50
     },
     callback: function (r) {
       if (r.message) {
         r.message.forEach(function (msg) {
-          appendMessage(msg.sender, msg.message_content,msg.room_no,msg.sender_name,msg.sent_time,msg.status);
+          appendMessage(msg.message_content, msg.sender,msg.sender_name,msg.room_no,msg.sent_time,msg.status);
         });
       }
     }
   });
 
   frappe.realtime.on("new_message", function (data) {
-    appendMessage(data.sender, data.message_content, data.room_no,data.sender_name,data.sent_time,data.status);
+    appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status);
     // playNotificationSound();
   });
 
-  function appendMessage(sender, message_content, room_no,sender_name,sent_time,status) {
+  function appendMessage(message_content, sender, sender_name, room_no, sent_time, status) {
     const container = document.getElementById("messages");
     const div = document.createElement("div");
     div.className = "chat-message";
     div.innerHTML = `
-      <div class="sender">MR No: ${sender}, Name: ${sender_name}, Room No: ${room_no}</div>
-      <div class="text">${message_content}</div>
-      <div class="time">${sent_time}</div>
-      <div class="status">${status}</div>
+      <div class="chat-meta">
+        <div class="meta-block">
+          <span class="meta-label">MR No:</span>
+          <span class="meta-value">${sender}</span>
+        </div>
+        <div class="meta-block">
+          <span class="meta-label">Name:</span>
+          <span class="meta-value">${sender_name}</span>
+        </div>
+        <div class="meta-block">
+          <span class="meta-label">Room No:</span>
+          <span class="meta-value">${room_no}</span>
+        </div>
+        <div class="meta-block">
+          <span class="meta-label">Time:</span>
+          <span class="meta-value">${sent_time}</span>
+        </div>
+        <div class="meta-block">
+          <span class="meta-label">Status:</span>
+          <span class="meta-value">${status}</span>
+        </div>
+      </div>
+      <div class="chat-text">${message_content}</div>
     `;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
   }
+  
 
   //   function playNotificationSound() {
 //   const audio = new Audio("https://transcription.thesmarterp.com/assets/pcms/sounds/message_received.mp3");

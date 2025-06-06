@@ -4,6 +4,7 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Container */
 .chat-container {
   max-width: 600px;
   margin: 30px auto;
@@ -16,6 +17,7 @@ body {
   overflow: hidden;
 }
 
+/* Header */
 .chat-header {
   background-color: #1974D2;
   color: #fff;
@@ -23,12 +25,8 @@ body {
   font-size: 20px;
   text-align: center;
 }
-.chat-message.received {
-  align-self: flex-end;
-  background-color: #d1e7dd;
-  color: #000;
-}
 
+/* Chat Body */
 .chat-body {
   flex: 1;
   padding: 20px;
@@ -36,26 +34,72 @@ body {
   display: flex;
   flex-direction: column;
   background-color: #f0f2f5;
-  display: flex;
-  flex-direction: column;
 }
+
+/* Message Box Common */
+.chat-message {
+  background: #a0c1f9;
+  border: 1px solid #5d94f4;
+  border-left: 6px solid #1974D2;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  max-width: 100%;
+  word-wrap: break-word;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+}
+
+.chat-message:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Message Types */
+.chat-message.received {
+  align-self: flex-end;
+  background-color: #d1e7dd;
+}
+
 .chat-message.sent {
-  align-self: flex-start; /* Aligns message box to left */
-  background-color: #e1f5fe; /* Optional: softer background for user */
+  align-self: flex-start;
+  background-color: #e1f5fe;
+}
+
+/* Message Metadata Layout */
+.chat-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.meta-block {
+  display: flex;
+  gap: 5px;
+}
+
+.meta-label {
+  font-weight: 600;
+  color: #666;
+}
+
+.meta-value {
   color: #000;
 }
 
-
-.chat-message {
-  background: #a0c1f9;
-  margin-bottom: 10px;
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px solid #5d94f4;
-  max-width: 70%;
-  word-wrap: break-word;
+/* Message Content */
+.chat-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+  background: #eef3fb;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-top: 10px;
 }
 
+/* Chat Input */
 .chat-input {
   display: flex;
   flex-direction: column;
@@ -74,6 +118,7 @@ body {
   margin-bottom: 10px;
 }
 
+/* Buttons */
 .chat-buttons {
   display: flex;
   gap: 10px;
@@ -104,6 +149,7 @@ body {
   background-color: #3e8e41;
 }
 
+/* Voice Modal */
 .voice-modal {
   position: fixed;
   top: 0;
@@ -159,7 +205,7 @@ body {
   color: #fff;
 }
 
-
+/* Patient Info Panel */
 #patient-info {
   display: flex;
   flex-wrap: wrap;
@@ -186,4 +232,26 @@ body {
 
 #patient-info strong {
   color: #1974D2;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+  .chat-meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .chat-message {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .chat-text {
+    font-size: 15px;
+  }
+
+  #patient-info {
+    font-size: 16px;
+    padding: 10px;
+  }
 }
