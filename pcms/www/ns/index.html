@@ -38,22 +38,22 @@
     frappe.realtime.init();
 
     // Load previous messages
-    // frappe.call({
-    //   method: "frappe.client.get_list",
-    //   args: {
-    //     doctype: "Message",
-    //     fields: ["message_content", "owner"],
-    //     order_by: "creation asc",
-    //     limit_page_length: 50
-    //   },
-    //   callback: function (r) {
-    //     if (r.message) {
-    //       r.message.forEach(function (msg) {
-    //         appendMessage(msg.owner, msg.message_content);
-    //       });
-    //     }
-    //   }
-    // });
+    frappe.call({
+      method: "frappe.client.get_list",
+      args: {
+        doctype: "Message",
+        fields: ["message_content", "owner"],
+        order_by: "creation asc",
+        limit_page_length: 50
+      },
+      callback: function (r) {
+        if (r.message) {
+          r.message.forEach(function (msg) {
+            appendMessage(msg.owner, msg.message_content);
+          });
+        }
+      }
+    });
 
     // Listen to new real-time messages
     frappe.realtime.on("new_message", function (data) {
