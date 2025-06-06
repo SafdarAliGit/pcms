@@ -233,6 +233,7 @@
 //   });
 // });
 
+
 frappe.ready(function () {
   const $chatBody = $("#chat-body");
   const $messageInput = $("#message");
@@ -352,46 +353,49 @@ frappe.ready(function () {
   //   currentAudioUrl = "";
   // });
 
-  $("#send-voice").on("click", async function () {
-    if (!currentAudioUrl) return;
+  $("#discard-voice").on("click", function () {
+    $audioReview[0].pause();
+    $voiceModal.addClass("hidden");
   
-    try {
-      // Fetch the blob from the URL
-      const response = await fetch(currentAudioUrl);
-      const blob = await response.blob();
+    if (!audioBlob) return;
   
-      const formData = new FormData();
-      formData.append("file", blob, "voice_note.webm");
+    const formData = new FormData();
+    formData.append("file", audioBlob, "voice_note.webm");
+    formData.append("is_private", "1");
   
-      // Send to Frappe file upload endpoint via your custom method
-      const res = await $.ajax({
-        url: "/api/method/pcms.api.transcription.upload_voice_file",
-        method: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
+    fetch("/api/method/pcms.api.transcription.upload_voice_file", {
+      method: "POST",
+      headers: {
+        "X-Frappe-CSRF-Token": frappe.csrf_token,
+      },
+      body: formData,
+      credentials: "include" // if user is logged in
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message && data.message.file_url) {
+          const fileUrl = data.message.file_url;
+  
+          const $voiceMsg = $("<div>").addClass("chat-message sent");
+          const $audio = $("<audio controls>").attr("src", fileUrl);
+          $voiceMsg.append($audio);
+          $("#chat-body").append($voiceMsg);
+          scrollToBottom();
+        } else {
+          console.error("Upload failed", data);
+          alert("Upload failed");
+        }
+      })
+      .catch(err => {
+        console.error("Error uploading voice:", err);
+        alert("Voice upload error");
       });
   
-      // Extract file info
-      const file_url = res.message.file_url;
-      const file_name = res.message.file_name;
-  
-      // UI update
-      const $voiceMsg = $("<div>").addClass("chat-message sent");
-      const $audio = $("<audio controls>").attr("src", file_url);
-      $voiceMsg.append($audio);
-      $chatBody.append($voiceMsg);
-      scrollToBottom();
-  
-    } catch (err) {
-      console.error("Upload failed", err);
-      frappe.msgprint("Failed to upload audio");
-    } finally {
-      $voiceModal.addClass("hidden");
-      $audioReview[0].pause();
-      $audioReview[0].src = "";
-      currentAudioUrl = "";
-    }
+    // Clear blob/url
+    $audioReview[0].src = "";
+    currentAudioUrl = "";
+    audioBlob = null;
   });
+
   
 });
