@@ -6,8 +6,6 @@
 
 <div id="messages" class="chat-box"></div>
 
-<audio id="message-sound" src="/assets/pcms/sounds/message_received.mp3" preload="auto"></audio>
-
 <script>
   window.frappe = window.frappe || {};
   frappe.ready = function (fn) {
@@ -54,7 +52,7 @@
 
     frappe.realtime.on("new_message", function (data) {
       appendMessage(data.sender, data.message);
-      document.getElementById("message-sound").play().catch(() => {});
+      playNotificationSound();
     });
 
     function appendMessage(sender, message) {
@@ -69,5 +67,12 @@
       container.scrollTop = container.scrollHeight;
     }
   });
+
+  function playNotificationSound() {
+  const audio = new Audio("https://transcription.thesmarterp.com/assets/pcms/sounds/message_received.mp3");
+  audio.play().catch((err) => {
+    console.warn("Audio play failed:", err);
+  });
+}
 </script>
 {% endblock %}
