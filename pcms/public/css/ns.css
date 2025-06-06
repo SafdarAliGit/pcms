@@ -44,8 +44,8 @@ body {
 .chat-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: .5rem;
-  margin-bottom: 0.20rem;
+  gap: .4rem;
+  margin-bottom: 0.15rem;
 }
 
 .meta-block {
@@ -92,7 +92,6 @@ body {
   }
 }
 
-/* === Responsive Styling === */
 @media (max-width: 768px) {
   #messages {
     height: 70vh;
@@ -101,6 +100,20 @@ body {
 
   .chat-message {
     padding: 0.9rem 1rem;
+    border-radius: 10px;
+  }
+
+  /* Status variations on tablets */
+  .chat-message.status-open {
+    background-color: #fee2e2; /* slightly stronger red */
+  }
+
+  .chat-message.status-in-progress {
+    background-color: #ffedd5; /* slightly stronger orange */
+  }
+
+  .chat-message.status-resolved {
+    background-color: #dcfce7; /* slightly stronger green */
   }
 
   .meta-block {
@@ -115,7 +128,23 @@ body {
 @media (max-width: 480px) {
   .chat-message {
     padding: 0.75rem 0.9rem;
-    border-radius: 10px;
+    border-radius: 8px;
+  }
+
+  /* Status variations on mobile */
+  .chat-message.status-open {
+    background-color: #fecaca;
+    border-left-color: #b91c1c;
+  }
+
+  .chat-message.status-in-progress {
+    background-color: #fde68a;
+    border-left-color: #c2410c;
+  }
+
+  .chat-message.status-resolved {
+    background-color: #bbf7d0;
+    border-left-color: #15803d;
   }
 
   .meta-block {
@@ -131,18 +160,18 @@ body {
 
 /* Status: Open */
 .chat-message.status-open {
-  background-color: #fef2f2; /* Red-50 */
+  background-color: #fab4b4; /* Red-50 */
   border-left-color: #dc2626; /* Red-600 */
 }
 
 /* Status: In Progress */
 .chat-message.status-in-progress {
-  background-color: #fff7ed; /* Orange-50 */
-  border-left-color: #ea580c; /* Orange-600 */
+  background-color: #e0f747; /* Orange-50 */
+  border-left-color: #f9f983; /* Orange-600 */
 }
 
 /* Status: Resolved */
 .chat-message.status-resolved {
-  background-color: #f0fdf4; /* Green-50 */
+  background-color: #63f38e; /* Green-50 */
   border-left-color: #16a34a; /* Green-600 */
 }
