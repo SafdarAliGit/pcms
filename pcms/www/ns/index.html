@@ -35,21 +35,21 @@
       appendMessage(data.sender, data.message);
     });
 
-    window.sendMessage = function () {
-      const input = document.getElementById("message_input");
-      const message = input.value.trim();
-      if (!message) return;
+    // window.sendMessage = function () {
+    //   const input = document.getElementById("message_input");
+    //   const message = input.value.trim();
+    //   if (!message) return;
 
-      frappe.call({
-        method: "your_app.api.messaging.send_message",
-        args: {
-          message_text: message
-        },
-        callback: function () {
-          input.value = "";
-        }
-      });
-    };
+    //   frappe.call({
+    //     method: "pcms.api.messaging.send_message",
+    //     args: {
+    //       message_text: message
+    //     },
+    //     callback: function () {
+    //       input.value = "";
+    //     }
+    //   });
+    // };
 
     function appendMessage(sender, message) {
       const container = document.getElementById("messages");
