@@ -15,6 +15,9 @@ doc_events = {
     "Patient": {
         "on_update": "pcms.pcms.doctype.patient.patient.create_patient_user",
         "before_insert": "pcms.pcms.doctype.patient.patient.generate_mr_no"
+    },
+    "Nursing Station": {
+        "on_update": "pcms.pcms.doctype.nursing_station.nursing_station.create_nursing_station_user"
     }
 }
 
@@ -85,7 +88,8 @@ doc_events = {
 
 # website user home page (by Role)
 role_home_page = {
-    "Patient": "chat"
+    "Patient": "chat",
+    "Nursing Station": "ns"
 }
 
 
