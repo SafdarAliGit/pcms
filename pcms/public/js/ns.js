@@ -60,7 +60,8 @@ frappe.ready(function () {
     div.className = `chat-message ${statusClass}`;
   
     div.innerHTML = `
-    <a href="{{ '/login?redirect-to=/app/nurse-response' | abs_url }}">
+
+<a href="/login?redirect-to=/app/nurse-response">
 
       <div class="chat-meta">
         <div class="meta-block">
