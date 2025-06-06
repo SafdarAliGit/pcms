@@ -9,6 +9,9 @@
   "nursing_station_name",
   "health_care_unit",
   "hospital",
+  "abbreviation",
+  "email",
+  "user_id",
   "is_active"
  ],
  "fields": [
@@ -36,12 +39,33 @@
    "fieldname": "is_active",
    "fieldtype": "Check",
    "label": "Is Active"
+  },
+  {
+   "fetch_from": "hospital.abbreviation",
+   "fieldname": "abbreviation",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Abbreviation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Email",
+   "reqd": 1
+  },
+  {
+   "fieldname": "user_id",
+   "fieldtype": "Link",
+   "label": "User ID",
+   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-02 16:50:57.366648",
+ "modified": "2025-06-06 15:34:04.461746",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Nursing Station",
