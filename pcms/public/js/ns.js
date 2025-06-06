@@ -109,7 +109,7 @@ frappe.ready(function () {
 frappe.ready(function () {
   $(document).on("click", ".login", function () {
     frappe.call({
-      method: 'pcms.api.get_user_roles.get_user_roles',
+      method: 'pcms.utils.get_user_roles.get_user_roles',
       callback: function (res) {
         const roles = res.message || [];
         if (!roles.includes("Nurse")) {
