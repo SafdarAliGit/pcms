@@ -61,7 +61,7 @@ frappe.ready(function () {
   
     div.innerHTML = `
 
-<a href="/login?redirect-to=/app/nurse-response/new-nurse-response">
+<a class="login" href="" style="text-decoration: none; color: inherit;" type="button">
 
       <div class="chat-meta">
         <div class="meta-block">
@@ -100,6 +100,71 @@ frappe.ready(function () {
 //     console.warn("Audio play failed:", err);
 //   });
 // }
+// LOGIN
 
+
+
+});
+
+frappe.ready(function () {
+  
+  $('.login').on('click', function() {
+    // Check if current user has 'Nurse' role
+    frappe.call({
+        method: 'frappe.client.get_roles',
+        callback: function(res) {
+            const roles = res.message || [];
+            if (!roles.includes("Nurse")) {
+                show_relogin_modal();  // Show re-login if not Nurse
+            } else {
+                frappe.msgprint("You have Nurse role. No re-login required.");
+                // Place your authorized action here if needed
+            }
+        }
+    });
+  });
+  
+  function show_relogin_modal() {
+  let d = new frappe.ui.Dialog({
+    title: 'Re-login Required',
+    fields: [
+        {
+            label: 'Username',
+            fieldname: 'usr',
+            fieldtype: 'Data',
+            reqd: true
+        },
+        {
+            label: 'Password',
+            fieldname: 'pwd',
+            fieldtype: 'Password',
+            reqd: true
+        }
+    ],
+    primary_action_label: 'Login',
+    primary_action(values) {
+        frappe.call({
+            method: 'login',
+            args: {
+                usr: values.usr,
+                pwd: values.pwd
+            },
+            callback: function (res) {
+                if (res.message === "Logged In") {
+                    frappe.msgprint(__('Re-authenticated successfully.'));
+                    d.hide();
+                    // Perform any follow-up actions here
+                } else {
+                    frappe.msgprint(__('Invalid credentials. Try again.'));
+                }
+            },
+            error: function () {
+                frappe.msgprint(__('Login failed.'));
+            }
+        });
+    }
+  });
+  d.show();
+}
 });
 
