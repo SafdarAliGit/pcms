@@ -360,32 +360,31 @@ frappe.ready(function () {
     if (!audioBlob) return;
   
     const formData = new FormData();
-    // formData.append("file", audioBlob, "voice_note.webm");
-    // formData.append("audio_data", audioBlob);  // 👈 Key must match Python argument
+    formData.append("file", audioBlob, "voice_note.webm");
     formData.append("is_private", "1");
   
-    fetch("/api/method/pcms.api.transcription.transcribe_audio", {
+    fetch("/api/method/pcms.api.transcription.upload_and_transcribe_voice_file", {
       method: "POST",
-      args: { audio_data: audioBlob },
       headers: {
         "X-Frappe-CSRF-Token": frappe.csrf_token,
       },
-      credentials: "include"
+      credentials: "include",
+      body: formData,
     })
       .then(res => res.json())
       .then(data => {
-        // if (data.message && data.message.file_url) {
-        //   const fileUrl = data.message.file_url;
+        if (data.message && data.message.file_url) {
+          const fileUrl = data.message.file_url;
   
-        //   const $voiceMsg = $("<div>").addClass("chat-message sent");
-        //   const $audio = $("<audio controls>").attr("src", fileUrl);
-        //   $voiceMsg.append($audio);
-        //   $("#chat-body").append($voiceMsg);
-        //   scrollToBottom();
-        // } else {
-        //   console.error("Upload failed", data);
-        //   alert("Upload failed");
-        // }
+          const $voiceMsg = $("<div>").addClass("chat-message sent");
+          const $audio = $("<audio controls>").attr("src", fileUrl);
+          $voiceMsg.append($audio);
+          $("#chat-body").append($voiceMsg);
+          scrollToBottom();
+        } else {
+          console.error("Upload failed", data);
+          alert("Upload failed");
+        }
       })
       .catch(err => {
         console.error("Error uploading voice:", err);
