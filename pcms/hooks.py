@@ -170,6 +170,12 @@ role_home_page = {
 # 	}
 # }
 
+doc_events = {
+	"Message": {
+		"after_insert": "pcms.api.notify_new_message.notify_new_message"
+	}
+}
+
 # Scheduled Tasks
 # ---------------
 
