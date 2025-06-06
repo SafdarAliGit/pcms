@@ -127,3 +127,22 @@ body {
     font-size: 0.9rem;
   }
 }
+
+
+/* Status: Open */
+.chat-message.status-open {
+  background-color: #fef2f2; /* Red-50 */
+  border-left-color: #dc2626; /* Red-600 */
+}
+
+/* Status: In Progress */
+.chat-message.status-in-progress {
+  background-color: #fff7ed; /* Orange-50 */
+  border-left-color: #ea580c; /* Orange-600 */
+}
+
+/* Status: Resolved */
+.chat-message.status-resolved {
+  background-color: #f0fdf4; /* Green-50 */
+  border-left-color: #16a34a; /* Green-600 */
+}

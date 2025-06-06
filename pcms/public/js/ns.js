@@ -49,7 +49,16 @@ frappe.ready(function () {
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status) {
     const container = document.getElementById("messages");
     const div = document.createElement("div");
-    div.className = "chat-message";
+  
+    // Normalize status to class format
+    const statusClass = {
+      "Open": "status-open",
+      "In Progress": "status-in-progress",
+      "Resolved": "status-resolved"
+    }[status] || "status-open"; // fallback to 'open' if unrecognized
+  
+    div.className = `chat-message ${statusClass}`;
+  
     div.innerHTML = `
       <div class="chat-meta">
         <div class="meta-block">
@@ -78,6 +87,7 @@ frappe.ready(function () {
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
   }
+  
   
 
   //   function playNotificationSound() {
