@@ -107,24 +107,12 @@ frappe.ready(function () {
 });
 
 frappe.ready(function () {
-  // Use event delegation properly
   $(document).on("click", ".login", function () {
-    // Check if current user has 'Nurse' role
-    frappe.call({
-      method: 'frappe.client.get_roles',
-      args: {
-        user: frappe.session.user
-      },
-      callback: function (res) {
-        const roles = res.message || [];
-        if (!roles.includes("Nurse")) {
-          show_relogin_modal(); // Show re-login if not Nurse
-        } else {
-          frappe.msgprint("You have Nurse role. No re-login required.");
-          // You can place the intended action here if needed
-        }
-      }
-    });
+    if (!frappe.user.has_role("Nurse")) {
+      show_relogin_modal();
+    } else {
+      frappe.msgprint("You have Nurse role. No re-login required.");
+    }
   });
 
   function show_relogin_modal() {
@@ -156,9 +144,9 @@ frappe.ready(function () {
             if (res.message === "Logged In") {
               frappe.msgprint(__('Re-authenticated successfully.'));
               d.hide();
-              // Perform any follow-up actions here
+              // Your follow-up logic here
             } else {
-              frappe.msgprint(__('Invalid credentials. Try again.'));
+              frappe.msgprint(__('Invalid credentials.'));
             }
           },
           error: function () {
@@ -170,3 +158,4 @@ frappe.ready(function () {
     d.show();
   }
 });
+
