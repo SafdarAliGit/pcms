@@ -336,19 +336,62 @@ frappe.ready(function () {
     $voiceModal.addClass("hidden");
   });
 
-  $("#send-voice").on("click", function () {
+  // $("#send-voice").on("click", function () {
+  //   if (!currentAudioUrl) return;
+
+  //   const $voiceMsg = $("<div>").addClass("chat-message sent");
+  //   const $audio = $("<audio controls>").attr("src", currentAudioUrl);
+  //   $voiceMsg.append($audio);
+  //   $chatBody.append($voiceMsg);
+
+  //   scrollToBottom();
+
+  //   $voiceModal.addClass("hidden");
+  //   $audioReview[0].pause();
+  //   $audioReview[0].src = "";
+  //   currentAudioUrl = "";
+  // });
+
+  $("#send-voice").on("click", async function () {
     if (!currentAudioUrl) return;
-
-    const $voiceMsg = $("<div>").addClass("chat-message sent");
-    const $audio = $("<audio controls>").attr("src", currentAudioUrl);
-    $voiceMsg.append($audio);
-    $chatBody.append($voiceMsg);
-
-    scrollToBottom();
-
-    $voiceModal.addClass("hidden");
-    $audioReview[0].pause();
-    $audioReview[0].src = "";
-    currentAudioUrl = "";
+  
+    try {
+      // Fetch the blob from the URL
+      const response = await fetch(currentAudioUrl);
+      const blob = await response.blob();
+  
+      const formData = new FormData();
+      formData.append("file", blob, "voice_note.webm");
+  
+      // Send to Frappe file upload endpoint via your custom method
+      const res = await $.ajax({
+        url: "/api/method/pcms.api.transcription.upload_voice_file",
+        method: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+      });
+  
+      // Extract file info
+      const file_url = res.message.file_url;
+      const file_name = res.message.file_name;
+  
+      // UI update
+      const $voiceMsg = $("<div>").addClass("chat-message sent");
+      const $audio = $("<audio controls>").attr("src", file_url);
+      $voiceMsg.append($audio);
+      $chatBody.append($voiceMsg);
+      scrollToBottom();
+  
+    } catch (err) {
+      console.error("Upload failed", err);
+      frappe.msgprint("Failed to upload audio");
+    } finally {
+      $voiceModal.addClass("hidden");
+      $audioReview[0].pause();
+      $audioReview[0].src = "";
+      currentAudioUrl = "";
+    }
   });
+  
 });
