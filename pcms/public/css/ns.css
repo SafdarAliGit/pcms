@@ -75,7 +75,7 @@ body {
   color: #334155;
   line-height: 1.6;
   font-weight: 600;
-  border-top: 1px solid #c7d2fe;
+  border-top: 1px solid #1c46ec;
   padding-top: 0.75rem;
   word-wrap: break-word;
 }
@@ -166,8 +166,8 @@ body {
 
 /* Status: In Progress */
 .chat-message.status-in-progress {
-  background-color: #e0f747; /* Orange-50 */
-  border-left-color: #f9f983; /* Orange-600 */
+  background-color: #dff35c; /* Orange-50 */
+  border-left-color: #f8f80d; /* Orange-600 */
 }
 
 /* Status: Resolved */
