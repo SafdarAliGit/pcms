@@ -61,7 +61,7 @@ frappe.ready(function () {
   
     div.innerHTML = `
 
-<a href="/login?redirect-to=/app/nurse-response">
+<a href="/login?redirect-to=/app/nurse-response/new-nurse-response">
 
       <div class="chat-meta">
         <div class="meta-block">
