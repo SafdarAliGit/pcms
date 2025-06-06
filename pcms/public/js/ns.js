@@ -112,6 +112,9 @@ frappe.ready(function () {
     // Check if current user has 'Nurse' role
     frappe.call({
       method: 'frappe.client.get_roles',
+      args: {
+        user: frappe.session.user
+      },
       callback: function (res) {
         const roles = res.message || [];
         if (!roles.includes("Nurse")) {
