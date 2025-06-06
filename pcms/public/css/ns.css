@@ -78,6 +78,7 @@ body {
   border-top: 1px solid #6b6c71;
   padding-top: 0.75rem;
   word-wrap: break-word;
+  margin-top: 0.10rem;
 }
 
 /* === Animation === */
@@ -103,19 +104,6 @@ body {
     border-radius: 10px;
   }
 
-  /* Status variations on tablets */
-  .chat-message.status-open {
-    background-color: #fee2e2; /* slightly stronger red */
-  }
-
-  .chat-message.status-in-progress {
-    background-color: #ffedd5; /* slightly stronger orange */
-  }
-
-  .chat-message.status-resolved {
-    background-color: #dcfce7; /* slightly stronger green */
-  }
-
   .meta-block {
     font-size: 0.85rem;
   }
@@ -131,21 +119,6 @@ body {
     border-radius: 8px;
   }
 
-  /* Status variations on mobile */
-  .chat-message.status-open {
-    background-color: #fecaca;
-    border-left-color: #b91c1c;
-  }
-
-  .chat-message.status-in-progress {
-    background-color: #fde68a;
-    border-left-color: #c2410c;
-  }
-
-  .chat-message.status-resolved {
-    background-color: #bbf7d0;
-    border-left-color: #15803d;
-  }
 
   .meta-block {
     font-size: 0.8rem;
@@ -166,8 +139,8 @@ body {
 
 /* Status: In Progress */
 .chat-message.status-in-progress {
-  background-color: #dff35c; /* Orange-50 */
-  border-left-color: #f8f80d; /* Orange-600 */
+  background-color: #acc40d; /* Orange-50 */
+  border-left-color: #fbfb22; /* Orange-600 */
 }
 
 /* Status: Resolved */
