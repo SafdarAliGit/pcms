@@ -18,7 +18,10 @@ doc_events = {
     },
     "Nursing Station": {
         "on_update": "pcms.pcms.doctype.nursing_station.nursing_station.create_nursing_station_user"
-    }
+    },
+    "Message": {
+		"after_insert": "pcms.api.notify_new_message.notify_new_message"
+	}
 }
 
 # boot_session = "pcms.utils.boot.boot_session"
@@ -174,11 +177,7 @@ role_home_page = {
 # 	}
 # }
 
-doc_events = {
-	"Message": {
-		"after_insert": "pcms.api.notify_new_message.notify_new_message"
-	}
-}
+
 
 # Scheduled Tasks
 # ---------------
