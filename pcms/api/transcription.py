@@ -95,7 +95,7 @@ def upload_voice_file():
         content=filedata.stream.read(),
         dt=None,  # or attach to a doctype, e.g. 'Chat Message'
         dn=None,
-        folder="Home/Voice Notes",
+        folder="",
         is_private=1
     )
 

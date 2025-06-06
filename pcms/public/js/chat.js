@@ -368,6 +368,7 @@ frappe.ready(function () {
       headers: {
         "X-Frappe-CSRF-Token": frappe.csrf_token,
       },
+      credentials: "include",
       body: formData,
       credentials: "include" // if user is logged in
     })
