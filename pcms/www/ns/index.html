@@ -7,4 +7,15 @@
 <div id="messages" class="chat-box"></div>
 
 <script src="/assets/pcms/js/ns.js"></script>
+
+<!-- Modal HTML -->
+<div id="relogin-modal" class="modal" style="display:none; position:fixed; top:20%; left:30%; width:40%; background:#fff; border:1px solid #ccc; padding:20px; z-index:10000;">
+    <h3>Re-login Required</h3>
+    <label>Username:</label><br>
+    <input type="text" id="relogin-username" /><br><br>
+    <label>Password:</label><br>
+    <input type="password" id="relogin-password" /><br><br>
+    <button id="relogin-submit">Login</button>
+    <button onclick="$('#relogin-modal').hide()">Cancel</button>
+  </div>
 {% endblock %}
