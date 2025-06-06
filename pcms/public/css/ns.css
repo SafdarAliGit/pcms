@@ -1,14 +1,21 @@
-/* Chat Title */
+/* === General Reset and Base Styling === */
+body {
+  margin: 0;
+  background: #f4f7fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1e293b;
+}
+
+/* === Chat Title === */
 .chat-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #1e293b; /* Slate-800 */
+  color: #1e293b;
   text-align: center;
-  margin-bottom: 1.25rem;
-  font-family: "Segoe UI", "Roboto", sans-serif;
+  margin: 1.5rem 0;
 }
 
-/* Chat Container */
+/* === Chat Box Container === */
 .chat-box {
   width: 100%;
   max-width: 720px;
@@ -23,20 +30,20 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  transition: all 0.3s ease;
   box-sizing: border-box;
 }
 
-/* Individual Message Box */
+/* === Individual Chat Message === */
 .chat-message {
   background-color: #ffffff;
-  border-left: 4px solid #6366f1; /* Indigo */
+  border-left: 4px solid #6366f1;
+  border-top: 4px solid #6366f1;
   border-radius: 12px;
   padding: 1rem 1.25rem;
-  box-shadow:
-    0 2px 5px rgba(0, 0, 0, 0.04),
-    0 6px 12px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04),
+              0 6px 12px rgba(99, 102, 241, 0.1);
   border: 1px solid #e0e7ff;
+  position: relative;
   animation: fadeIn 0.3s ease;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -44,28 +51,67 @@
 /* Raised effect on hover */
 .chat-message:hover {
   transform: translateY(-2px);
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.06),
-    0 8px 18px rgba(99, 102, 241, 0.12);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06),
+              0 8px 18px rgba(99, 102, 241, 0.12);
 }
 
-/* Sender Name */
+/* === "Message" Label on Top === */
+.chat-message::before {
+  content: "Message";
+  position: absolute;
+  top: -14px;
+  left: 16px;
+  background-color: #6366f1;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+/* === Sender === */
 .chat-message .sender {
   font-weight: 600;
   font-size: 0.95rem;
-  color: #4f46e5; /* Indigo-600 */
+  color: #4f46e5;
   margin-bottom: 6px;
 }
 
-/* Message Text */
+/* === Message Text === */
 .chat-message .text {
   font-size: 1rem;
-  color: #334155; /* Slate-700 */
+  color: #334155;
   line-height: 1.5;
   word-wrap: break-word;
+  font-weight: bold;
 }
 
-/* Fade In Animation */
+/* === Meta Block === */
+.meta-block {
+  background: #e0e7ff;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+/* === Meta Labels and Values === */
+.meta-label {
+  font-weight: bold;
+  color: #1e293b;
+  margin-right: 4px;
+}
+
+.meta-item {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+/* === Animation === */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -77,7 +123,9 @@
   }
 }
 
-/* Tablet (768px and below) */
+/* === Responsive Adjustments === */
+
+/* Tablet */
 @media (max-width: 768px) {
   .chat-title {
     font-size: 1.75rem;
@@ -97,7 +145,7 @@
   }
 }
 
-/* Mobile (480px and below) */
+/* Mobile */
 @media (max-width: 480px) {
   .chat-title {
     font-size: 1.5rem;
