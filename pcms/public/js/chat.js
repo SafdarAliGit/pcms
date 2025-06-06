@@ -361,12 +361,12 @@ frappe.ready(function () {
   
     const formData = new FormData();
     // formData.append("file", audioBlob, "voice_note.webm");
-    formData.append("audio_data", audioBlob);  // 👈 Key must match Python argument
+    // formData.append("audio_data", audioBlob);  // 👈 Key must match Python argument
     formData.append("is_private", "1");
   
     fetch("/api/method/pcms.api.transcription.transcribe_audio", {
       method: "POST",
-      body: formData,
+      args: { audio_data: audioBlob },
       headers: {
         "X-Frappe-CSRF-Token": frappe.csrf_token,
       },
