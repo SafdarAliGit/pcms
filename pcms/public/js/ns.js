@@ -108,11 +108,17 @@ frappe.ready(function () {
 
 frappe.ready(function () {
   $(document).on("click", ".login", function () {
-    if (!frappe.session.user.has_role("Nurse")) {
-      show_relogin_modal();
-    } else {
-      frappe.msgprint("You have Nurse role. No re-login required.");
-    }
+    frappe.call({
+      method: 'pcms.utils.get_user_roles.get_user_roles',  // Update with correct path
+      callback: function (res) {
+        const roles = res.message || [];
+        if (!roles.includes("Nurse")) {
+          show_relogin_modal();
+        } else {
+          frappe.msgprint("You have Nurse role. No re-login required.");
+        }
+      }
+    });
   });
 
   function show_relogin_modal() {
