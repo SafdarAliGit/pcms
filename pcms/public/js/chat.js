@@ -353,7 +353,7 @@ frappe.ready(function () {
   //   currentAudioUrl = "";
   // });
 
-  $("##send-voice").on("click", function () {
+  $("#send-voice").on("click", function () {
     $audioReview[0].pause();
     $voiceModal.addClass("hidden");
   
