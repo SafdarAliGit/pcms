@@ -26,7 +26,7 @@ body {
 /* === Chat Message Box === */
 .chat-message {
   background: #ffffff;
-  border-left: 5px solid #6366f1; /* Indigo */
+  border-left: 10px solid #6366f1; /* Indigo */
   border-radius: 12px;
   padding: 1rem 1.25rem;
   margin-bottom: 1rem;
@@ -45,7 +45,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: .4rem;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.55rem;
 }
 
 .meta-block {
@@ -78,7 +78,6 @@ body {
   border-top: 1px solid #6b6c71;
   padding-top: 0.75rem;
   word-wrap: break-word;
-  margin-top: 0.10rem;
 }
 
 /* === Animation === */
