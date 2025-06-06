@@ -16,6 +16,7 @@
   "nursing_station",
   "health_care_unit",
   "hospital",
+  "room_no",
   "is_active",
   "user_id"
  ],
@@ -92,13 +93,19 @@
    "fieldname": "user_id",
    "fieldtype": "Link",
    "label": "User ID",
-   "options": "User"
+   "options": "User",
+   "unique": 1
+  },
+  {
+   "fieldname": "room_no",
+   "fieldtype": "Data",
+   "label": "Room No"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-03 19:00:38.976987",
+ "modified": "2025-06-06 18:15:14.957388",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Patient",

@@ -6,10 +6,12 @@
  "engine": "InnoDB",
  "field_order": [
   "sender",
+  "sender_name",
   "nursing_station",
   "health_care_unit",
   "hospital",
   "message_content",
+  "room_no",
   "sent_time",
   "status",
   "attended_by",
@@ -76,12 +78,23 @@
    "fieldname": "attended_by_name",
    "fieldtype": "Data",
    "label": "Attended By Name"
+  },
+  {
+   "fieldname": "room_no",
+   "fieldtype": "Data",
+   "label": "Room No"
+  },
+  {
+   "fetch_from": "sender.patient_name",
+   "fieldname": "sender_name",
+   "fieldtype": "Data",
+   "label": "Sender Name"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-02 18:22:56.038256",
+ "modified": "2025-06-06 18:26:06.149236",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Message",

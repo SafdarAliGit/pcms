@@ -172,8 +172,19 @@ def upload_voice_file():
         text = result.get("text", "")
 
         # Save to Message doctype
+        # GET PATIENT INFORMATION
+        patient = frappe.db.get_value("Patient", {"user_id": frappe.session.user}, ["patient_name", "mr_no","nursing_station","health_care_unit","hospital","room_no"], as_dict=True)
+
         message = frappe.new_doc("Message")
-        message.message_content = text if text else "Still Text Not Found"
+        message.sender = patient.get("mr_no")
+        message.sender_name = patient.get("patient_name")
+        message.nursing_station = patient.get("nursing_station")
+        message.health_care_unit = patient.get("health_care_unit")
+        message.hospital = patient.get("hospital")
+        message.message_content = text if text else "No Message Found"
+        message.sent_time = frappe.utils.now_datetime()
+        message.room_no = patient.get("room_no","")
+        message.status = "Open"
         message.save()
 
         return {

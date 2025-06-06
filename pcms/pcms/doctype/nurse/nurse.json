@@ -71,7 +71,8 @@
    "fieldname": "user_id",
    "fieldtype": "Link",
    "label": "User ID",
-   "options": "User"
+   "options": "User",
+   "unique": 1
   },
   {
    "fieldname": "nurse_name",
@@ -84,7 +85,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-02 18:02:18.125713",
+ "modified": "2025-06-06 18:01:03.401240",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Nurse",

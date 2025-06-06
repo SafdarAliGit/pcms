@@ -60,13 +60,14 @@
    "fieldname": "user_id",
    "fieldtype": "Link",
    "label": "User ID",
-   "options": "User"
+   "options": "User",
+   "unique": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-06 15:49:56.115432",
+ "modified": "2025-06-06 18:00:39.506559",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Nursing Station",
