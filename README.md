@@ -7,6 +7,9 @@ This is patient nurse chating app
 mit# pcms
 
 pip install vosk soundfile librosa
+pip install pydub
+sudo apt install ffmpeg  # Or install ffmpeg for your OS
+
 
 OFFICIAL SITE
 https://alphacephei.com/vosk/models

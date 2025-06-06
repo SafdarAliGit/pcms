@@ -113,23 +113,24 @@
 #         "docname": saved_file.attached_to_name
 #     }
 
+
 import frappe
-import os
-import wave
-import json
-import tempfile
 from frappe.utils.file_manager import save_file
 from frappe import _
 from vosk import Model, KaldiRecognizer
+from pydub import AudioSegment
+import os
+import tempfile
+import wave
+import json
 
 @frappe.whitelist()
-def upload_and_transcribe_voice_file():
+def upload_voice_file():
     filedata = frappe.request.files.get('file')
-
     if not filedata:
         frappe.throw(_("No file uploaded"))
 
-    # Save uploaded file
+    # Save the original file
     saved_file = save_file(
         fname=filedata.filename,
         content=filedata.stream.read(),
@@ -139,37 +140,28 @@ def upload_and_transcribe_voice_file():
         is_private=1
     )
 
-    # Create temp file for transcription
-    temp_path = None
+    # Save original content to temp file
+    original_path = tempfile.mktemp(suffix=os.path.splitext(saved_file.file_name)[-1])
+    with open(original_path, 'wb') as f:
+        f.write(saved_file.get_content())
+
+    # Convert to 16kHz Mono WAV PCM format
+    converted_path = tempfile.mktemp(suffix=".wav")
     try:
-        # Save again to a temp file
-        _, temp_path = tempfile.mkstemp(suffix='.wav')
-        with open(temp_path, 'wb') as f:
-            f.write(saved_file.get_content())
+        audio = AudioSegment.from_file(original_path)
+        audio = audio.set_channels(1).set_frame_rate(16000).set_sample_width(2)
+        audio.export(converted_path, format="wav")
 
-        # Check WAV format
-        with wave.open(temp_path, 'rb') as wf:
-            if wf.getcomptype() != 'NONE':
-                return {"error": "Audio must be uncompressed PCM WAV format"}
-
-            channels = wf.getnchannels()
-            sample_width = wf.getsampwidth()
-            frame_rate = wf.getframerate()
-
-            if channels != 1 or sample_width != 2 or frame_rate != 16000:
-                return {
-                    "error": f"Audio must be mono (1 channel), 16-bit (2 bytes), 16kHz. Got: {channels} channels, {sample_width*8}-bit, {frame_rate}Hz"
-                }
-
-        # Transcribe using Vosk
+        # Load Vosk model
         model_path = os.path.join(frappe.get_app_path('pcms'), 'model')
         if not os.path.exists(model_path):
-            return {"error": "Vosk model path does not exist."}
+            frappe.throw(_("Vosk model not found at: {0}").format(model_path))
 
         model = Model(model_path)
+        recognizer = KaldiRecognizer(model, 16000)
 
-        with wave.open(temp_path, 'rb') as wf:
-            recognizer = KaldiRecognizer(model, 16000)
+        # Transcribe audio
+        with wave.open(converted_path, 'rb') as wf:
             while True:
                 data = wf.readframes(4000)
                 if len(data) == 0:
@@ -177,11 +169,11 @@ def upload_and_transcribe_voice_file():
                 recognizer.AcceptWaveform(data)
 
         result = json.loads(recognizer.FinalResult())
-        transcript = result.get("text", "")
+        text = result.get("text", "")
 
         # Save to Message doctype
         message = frappe.new_doc("Message")
-        message.message_content = transcript
+        message.message_content = text
         message.save()
 
         return {
@@ -189,13 +181,15 @@ def upload_and_transcribe_voice_file():
             "file_url": saved_file.file_url,
             "is_private": saved_file.is_private,
             "size": saved_file.file_size,
-            "text": transcript
+            "transcription": text
         }
 
     except Exception as e:
-        frappe.log_error("Upload & Transcription Error", str(e))
+        frappe.log_error("Transcription error", str(e))
         return {"error": str(e)}
 
     finally:
-        if temp_path and os.path.exists(temp_path):
-            os.remove(temp_path)
+        # Cleanup temp files
+        for path in [original_path, converted_path]:
+            if path and os.path.exists(path):
+                os.remove(path)
