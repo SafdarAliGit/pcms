@@ -86,7 +86,7 @@ frappe.ready(function () {
         </div>
       </div>
       <div class="chat-text">${message_content}</div>
-      <button class="login" href="" style="text-decoration: none; color: inherit;" type="button">Actions</button>
+      <button class="login" style="text-decoration: none; color: inherit;">Actions</button>
     `;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
@@ -107,64 +107,63 @@ frappe.ready(function () {
 });
 
 frappe.ready(function () {
-  
-  $(window).on(click,'.login', function() {
+  // Use event delegation properly
+  $(document).on("click", ".login", function () {
     // Check if current user has 'Nurse' role
     frappe.call({
-        method: 'frappe.client.get_roles',
-        callback: function(res) {
-            const roles = res.message || [];
-            if (!roles.includes("Nurse")) {
-                show_relogin_modal();  // Show re-login if not Nurse
-            } else {
-                frappe.msgprint("You have Nurse role. No re-login required.");
-                // Place your authorized action here if needed
-            }
+      method: 'frappe.client.get_roles',
+      callback: function (res) {
+        const roles = res.message || [];
+        if (!roles.includes("Nurse")) {
+          show_relogin_modal(); // Show re-login if not Nurse
+        } else {
+          frappe.msgprint("You have Nurse role. No re-login required.");
+          // You can place the intended action here if needed
         }
+      }
     });
   });
-  
+
   function show_relogin_modal() {
-  let d = new frappe.ui.Dialog({
-    title: 'Re-login Required',
-    fields: [
+    let d = new frappe.ui.Dialog({
+      title: 'Re-login Required',
+      fields: [
         {
-            label: 'Username',
-            fieldname: 'usr',
-            fieldtype: 'Data',
-            reqd: true
+          label: 'Username',
+          fieldname: 'usr',
+          fieldtype: 'Data',
+          reqd: true
         },
         {
-            label: 'Password',
-            fieldname: 'pwd',
-            fieldtype: 'Password',
-            reqd: true
+          label: 'Password',
+          fieldname: 'pwd',
+          fieldtype: 'Password',
+          reqd: true
         }
-    ],
-    primary_action_label: 'Login',
-    primary_action(values) {
+      ],
+      primary_action_label: 'Login',
+      primary_action(values) {
         frappe.call({
-            method: 'login',
-            args: {
-                usr: values.usr,
-                pwd: values.pwd
-            },
-            callback: function (res) {
-                if (res.message === "Logged In") {
-                    frappe.msgprint(__('Re-authenticated successfully.'));
-                    d.hide();
-                    // Perform any follow-up actions here
-                } else {
-                    frappe.msgprint(__('Invalid credentials. Try again.'));
-                }
-            },
-            error: function () {
-                frappe.msgprint(__('Login failed.'));
+          method: 'login',
+          args: {
+            usr: values.usr,
+            pwd: values.pwd
+          },
+          callback: function (res) {
+            if (res.message === "Logged In") {
+              frappe.msgprint(__('Re-authenticated successfully.'));
+              d.hide();
+              // Perform any follow-up actions here
+            } else {
+              frappe.msgprint(__('Invalid credentials. Try again.'));
             }
+          },
+          error: function () {
+            frappe.msgprint(__('Login failed.'));
+          }
         });
-    }
-  });
-  d.show();
-}
+      }
+    });
+    d.show();
+  }
 });
-
