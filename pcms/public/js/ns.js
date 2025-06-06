@@ -108,7 +108,7 @@ frappe.ready(function () {
 
 frappe.ready(function () {
   
-  $(window).on('login', click, function() {
+  $(window).on('click','.login', function() {
     // Check if current user has 'Nurse' role
     frappe.call({
         method: 'frappe.client.get_roles',
