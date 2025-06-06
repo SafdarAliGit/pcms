@@ -374,18 +374,18 @@ frappe.ready(function () {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.message && data.message.file_url) {
-          const fileUrl = data.message.file_url;
+        // if (data.message && data.message.file_url) {
+        //   const fileUrl = data.message.file_url;
   
-          const $voiceMsg = $("<div>").addClass("chat-message sent");
-          const $audio = $("<audio controls>").attr("src", fileUrl);
-          $voiceMsg.append($audio);
-          $("#chat-body").append($voiceMsg);
-          scrollToBottom();
-        } else {
-          console.error("Upload failed", data);
-          alert("Upload failed");
-        }
+        //   const $voiceMsg = $("<div>").addClass("chat-message sent");
+        //   const $audio = $("<audio controls>").attr("src", fileUrl);
+        //   $voiceMsg.append($audio);
+        //   $("#chat-body").append($voiceMsg);
+        //   scrollToBottom();
+        // } else {
+        //   console.error("Upload failed", data);
+        //   alert("Upload failed");
+        // }
       })
       .catch(err => {
         console.error("Error uploading voice:", err);
