@@ -363,7 +363,7 @@ frappe.ready(function () {
     formData.append("file", audioBlob, "voice_note.webm");
     formData.append("is_private", "1");
   
-    fetch("/api/method/pcms.api.transcription.upload_voice_file", {
+    fetch("/api/method/pcms.api.transcription.transcribe_audio", {
       method: "POST",
       headers: {
         "X-Frappe-CSRF-Token": frappe.csrf_token,
