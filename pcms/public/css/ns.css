@@ -10,7 +10,7 @@
 .chat-box {
   max-width: 720px;
   margin: 0 auto;
-  height: 70vh;
+  height: 80vh;
   overflow-y: auto;
   background: #f0f3f5;
   padding: 1rem;
@@ -35,13 +35,13 @@
 .chat-message .sender {
   font-weight: 600;
   font-size: 0.9rem;
-  color: #2980b9;
+  color: #1074b7;
   margin-bottom: 4px;
 }
 
 .chat-message .text {
   font-size: 0.95rem;
-  color: #2d3436;
+  color: #000000;
   word-wrap: break-word;
 }
 
