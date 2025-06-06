@@ -60,6 +60,8 @@ frappe.ready(function () {
     div.className = `chat-message ${statusClass}`;
   
     div.innerHTML = `
+    <a href="{{ '/login?redirect-to=/app/nurse-response' | abs_url }}">
+
       <div class="chat-meta">
         <div class="meta-block">
           <span class="meta-label">MR No:</span>
@@ -83,6 +85,7 @@ frappe.ready(function () {
         </div>
       </div>
       <div class="chat-text">${message_content}</div>
+    </a>
     `;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
