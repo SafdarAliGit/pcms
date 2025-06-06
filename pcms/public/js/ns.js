@@ -108,7 +108,7 @@ frappe.ready(function () {
 
 frappe.ready(function () {
   $(document).on("click", ".login", function () {
-    if (!frappe.user.has_role("Nurse")) {
+    if (!frappe.session.user.has_role("Nurse")) {
       show_relogin_modal();
     } else {
       frappe.msgprint("You have Nurse role. No re-login required.");
