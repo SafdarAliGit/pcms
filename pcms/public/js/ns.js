@@ -61,7 +61,7 @@ frappe.ready(function () {
   
     div.innerHTML = `
 
-<a class="login" href="" style="text-decoration: none; color: inherit;" type="button">
+
 
       <div class="chat-meta">
         <div class="meta-block">
@@ -86,7 +86,7 @@ frappe.ready(function () {
         </div>
       </div>
       <div class="chat-text">${message_content}</div>
-    </a>
+      <button class="login" href="" style="text-decoration: none; color: inherit;" type="button">Actions</button>
     `;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
