@@ -169,11 +169,11 @@ def upload_voice_file():
                 recognizer.AcceptWaveform(data)
 
         result = json.loads(recognizer.FinalResult())
-        text = result.get("text", "Still Text Not Found")
+        text = result.get("text", "")
 
         # Save to Message doctype
         message = frappe.new_doc("Message")
-        message.message_content = text
+        message.message_content = text if text else "Still Text Not Found"
         message.save()
 
         return {
