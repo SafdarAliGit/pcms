@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:{health_care_unit}-{health_care_unit}",
+ "autoname": "format:{health_care_unit}-{nursing_station_name}",
  "creation": "2025-06-02 16:45:58.532171",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -24,7 +24,8 @@
    "fieldname": "health_care_unit",
    "fieldtype": "Link",
    "label": "Health Care Unit",
-   "options": "Health Care Unit"
+   "options": "Health Care Unit",
+   "reqd": 1
   },
   {
    "fetch_from": "health_care_unit.hospital",
@@ -65,7 +66,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-06 15:34:04.461746",
+ "modified": "2025-06-06 15:49:56.115432",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Nursing Station",
