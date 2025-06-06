@@ -365,12 +365,11 @@ frappe.ready(function () {
   
     fetch("/api/method/pcms.api.transcription.transcribe_audio", {
       method: "POST",
+      args: { "audio_data": formData },
       headers: {
         "X-Frappe-CSRF-Token": frappe.csrf_token,
       },
-      credentials: "include",
-      body: formData,
-      credentials: "include" // if user is logged in
+      credentials: "include"
     })
       .then(res => res.json())
       .then(data => {
