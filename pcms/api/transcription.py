@@ -7,7 +7,6 @@ import os
 import tempfile
 import wave
 import json
-from pathlib import Path
 from pcms.utils.ensure_folder_path import ensure_folder_path
 
 @frappe.whitelist()
@@ -82,12 +81,12 @@ def upload_voice_file():
                 folder=folder,
                 is_private=1
             )
-            message.audio = f"{folder}/{attached_file.file_name}" # attached_file.file_url
+            message.audio = attached_file.file_url
             message.save()
 
         return {
             "file_name": attached_file.file_name,
-            "file_url": f"{folder}/{attached_file.file_name}",
+            "file_url": attached_file.file_url,
             "is_private": attached_file.is_private,
             "size": attached_file.file_size,
             "transcription": text
