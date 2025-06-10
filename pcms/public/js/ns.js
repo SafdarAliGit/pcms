@@ -85,7 +85,7 @@ frappe.ready(function () {
       </div>
       <div class="chat-text">${message_content}</div>
       <audio controls src="${audio}"></audio>
-      <button class="login_button" style="text-decoration: none; color: inherit;">Actions</button>
+      <button class="login_button" style="text-decoration: none; color: inherit;">Take Action</button>
     `;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
