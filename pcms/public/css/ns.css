@@ -130,14 +130,23 @@ body {
 }
 
 
-/* Status: Open */
-.chat-message.status-open {
-  background-color: #fab4b4; /* Red-50 */
-  border-left-color: #dc2626; /* Red-600 */
-}
+"New": "status-new",
+"Acknowledged": "status-acknowledged",
+"Resolved": "status-resolved",
+"Escalated": "status-escalated"
 
-/* Status: In Progress */
-.chat-message.status-in-progress {
+/* Status: New */
+.chat-message.status-new {
+    background-color: #6b21a8; /* Violet-800 */
+    border-left: 4px solid #581c87; /* Violet-900 */
+    color: #ffffff; /* White text for contrast */
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+
+/* Status: Acknowledged */
+.chat-message.status-acknowledged {
   background-color: #acc40d; /* Orange-50 */
   border-left-color: #fbfb22; /* Orange-600 */
 }
@@ -147,3 +156,10 @@ body {
   background-color: #63f38e; /* Green-50 */
   border-left-color: #16a34a; /* Green-600 */
 }
+
+/* Status: Escalated */
+.chat-message.status-escalated {
+  background-color: #fab4b4; /* Red-50 */
+  border-left-color: #dc2626; /* Red-600 */
+}
+

@@ -52,10 +52,11 @@ frappe.ready(function () {
   
     // Normalize status to class format
     const statusClass = {
-      "Open": "status-open",
-      "In Progress": "status-in-progress",
-      "Resolved": "status-resolved"
-    }[status] || "status-open"; // fallback to 'open' if unrecognized
+      "New": "status-new",
+      "Acknowledged": "status-acknowledged",
+      "Resolved": "status-resolved",
+      "Escalated": "status-escalated"
+    }[status] || "status-new"; // fallback to 'open' if unrecognized
   
     div.className = `chat-message ${statusClass}`;
   
