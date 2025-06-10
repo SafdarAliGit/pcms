@@ -134,11 +134,8 @@ body {
 
 /* Status: New */
 .chat-message.status-new {
-    background-color: #6b21a8; /* Violet-800 */
-    border-left: 4px solid #581c87; /* Violet-900 */
-    color: #ffffff; /* White text for contrast */
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background-color: #e4a029; /* Violet-800 */
+    border-left: 4px solid #f09b07; /* Violet-900 */
   }
 
 
