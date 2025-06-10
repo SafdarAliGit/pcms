@@ -28,7 +28,7 @@ frappe.ready(function () {
     method: "frappe.client.get_list",
     args: {
       doctype: "Message",
-      fields: ["message_content", "sender","sender_name","room_no","sent_time","status"],
+      fields: ["message_content", "sender","sender_name","room_no","sent_time","status","audio"],
       order_by: "creation asc",
       limit_page_length: 50
     },
@@ -42,11 +42,11 @@ frappe.ready(function () {
   });
 
   frappe.realtime.on("new_message", function (data) {
-    appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status);
+    appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
     // playNotificationSound();
   });
 
-  function appendMessage(message_content, sender, sender_name, room_no, sent_time, status) {
+  function appendMessage(message_content, sender, sender_name, room_no, sent_time, status,audio) {
     const container = document.getElementById("messages");
     const div = document.createElement("div");
   
@@ -61,9 +61,6 @@ frappe.ready(function () {
     div.className = `chat-message ${statusClass}`;
   
     div.innerHTML = `
-
-
-
       <div class="chat-meta">
         <div class="meta-block">
           <span class="meta-label">MR No:</span>
@@ -87,6 +84,7 @@ frappe.ready(function () {
         </div>
       </div>
       <div class="chat-text">${message_content}</div>
+      <audio controls src="${audio}"></audio>
       <button class="login" style="text-decoration: none; color: inherit;">Actions</button>
     `;
     container.appendChild(div);

@@ -29,5 +29,6 @@ def notify_new_message(doc, method):
         "sender_name": doc.sender_name,
         "room_no": doc.room_no,
         "status": doc.status,
-        "sent_time": doc.sent_time
+        "sent_time": doc.sent_time,
+        "audio": doc.audio
     })
