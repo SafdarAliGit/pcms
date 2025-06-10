@@ -110,7 +110,7 @@ audio:hover {
 .login_button:hover {
   background-color: transparent;
   border: 2px solid #fff;
-  opacity: 0.65;
+  opacity: 0.;
 }
 
 /* === Animation === */
