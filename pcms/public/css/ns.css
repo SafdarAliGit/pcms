@@ -87,11 +87,9 @@ audio {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 audio:hover {
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 .login_button {
@@ -102,8 +100,10 @@ audio:hover {
       border-radius: 6px;
       cursor: pointer;
       font-size: 1rem;
-      width: fit-content;
-      transition: background-color 0.3s ease;
+      width: 100%;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      
 }
 /* === Animation === */
 @keyframes fadeIn {
