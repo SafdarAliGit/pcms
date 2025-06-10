@@ -102,16 +102,14 @@ audio:hover {
   margin-bottom: 1rem;
   padding: 12px 24px;
   font-weight: 500;
-  color: #1e1b1b;
+  color: #000000;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   letter-spacing: 0.3px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .login_button:hover {
-  background-color: #1e1b1b;
-  color: #ffffff;
+  background-color: #cec7c7;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
