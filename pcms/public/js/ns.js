@@ -35,7 +35,7 @@ frappe.ready(function () {
     callback: function (r) {
       if (r.message) {
         r.message.forEach(function (msg) {
-          appendMessage(msg.message_content, msg.sender,msg.sender_name,msg.room_no,msg.sent_time,msg.status);
+          appendMessage(msg.message_content, msg.sender,msg.sender_name,msg.room_no,msg.sent_time,msg.status,msg.audio);
         });
       }
     }
