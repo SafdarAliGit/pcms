@@ -66,12 +66,8 @@ def upload_voice_file():
         message.save()
 
         # Save converted WAV file and attach to message.audio
-        folder_path = Path(
-            patient.get('hospital', 'unknown'),
-            patient.get('health_care_unit', 'unknown'),
-            patient.get('nursing_station', 'unknown')
-        )
-
+        folder_path = f"{patient.get('hospital', 'unknown')}/{patient.get('health_care_unit', 'unknown')}/{patient.get('nursing_station', 'unknown')}"
+        create_folder(folder_path)
 
         with open(converted_path, 'rb') as wav_file:
             wav_content = wav_file.read()
