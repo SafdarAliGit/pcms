@@ -18,7 +18,7 @@ frappe.ready(function () {
     callback: function (r) {
       if (r.message) {
         r.message.forEach(function (msg) {
-          appendMessage(msg.audio);
+          voiceMsg(msg.audio);
         });
       }
     }
@@ -145,11 +145,7 @@ frappe.ready(function () {
         if (data.message && data.message.file_url) {
           const fileUrl = data.message.file_url;
   
-          const $voiceMsg = $("<div>").addClass("chat-message sent");
-          const $audio = $("<audio controls>").attr("src", fileUrl);
-          $voiceMsg.append($audio);
-          $("#chat-body").append($voiceMsg);
-          scrollToBottom();
+          voiceMsg(fileUrl);
         } else {
           console.error("Upload failed", data);
           alert("Upload failed");
@@ -166,5 +162,11 @@ frappe.ready(function () {
     audioBlob = null;
   });
 
-  
+  function voiceMsg(fileUrl) {
+    const $voiceMsg = $("<div>").addClass("chat-message sent");
+    const $audio = $("<audio controls>").attr("src", fileUrl);
+    $voiceMsg.append($audio);
+    $("#chat-body").append($voiceMsg);
+    scrollToBottom();
+  }
 });
