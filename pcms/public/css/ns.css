@@ -112,6 +112,7 @@ audio:hover {
   background-color: #cec7c7;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1.5px solid #ffffff;
 }
 
 /* === Animation === */
