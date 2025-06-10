@@ -65,6 +65,12 @@ def upload_voice_file():
         message.save()
 
         # Save converted WAV file and attach to message.audio
+        required_keys = ['hospital', 'health_care_unit', 'nursing_station']
+        if all(key in patient for key in required_keys):
+            folder = f"{patient['hospital']}/{patient['health_care_unit']}/{patient['nursing_station']}"
+        else:
+            folder = "unclassified"  # Or handle the error appropriately
+
         with open(converted_path, 'rb') as wav_file:
             wav_content = wav_file.read()
             wav_filename = os.path.basename(converted_path)
@@ -73,7 +79,7 @@ def upload_voice_file():
                 content=wav_content,
                 dt="Message",
                 dn=message.name,
-                folder=f"{patient.get("hospital")}/{patient.get("health_care_unit")}/{patient.get("nursing_station")}",
+                folder=folder,
                 is_private=1
             )
             message.audio = attached_file.file_url
