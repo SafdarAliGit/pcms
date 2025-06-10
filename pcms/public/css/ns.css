@@ -96,7 +96,7 @@ audio:hover {
   background-color: #f9f9f9;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.2rem;
   width: 100%;
   margin-bottom: 1rem;
   padding: 12px 24px;
@@ -109,7 +109,7 @@ audio:hover {
 
 .login_button:hover {
   background-color: #cec7c7;
-  transform: translateY(-1px);
+  border: 1.5 solid #fff;
 }
 
 /* === Animation === */
