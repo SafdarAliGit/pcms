@@ -104,6 +104,7 @@ audio:hover {
   color: #000000;
   transition: all 0.3s ease;
   letter-spacing: 0.3px;
+  border: none;
 }
 
 .login_button:hover {
