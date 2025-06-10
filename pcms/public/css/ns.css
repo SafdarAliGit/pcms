@@ -99,6 +99,7 @@ audio:hover {
   font-size: 1.2rem;
   width: 100%;
   margin-bottom: 1rem;
+  padding: 12px 24px;
   font-weight: 500;
   color: #000000;
   transition: all 0.3s ease;
@@ -107,7 +108,7 @@ audio:hover {
 }
 
 .login_button:hover {
-  background-color: #2480f7;
+  background-color: #a9e2a8;
   border: 1.5px solid #fff;
 }
 
