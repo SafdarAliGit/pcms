@@ -81,7 +81,7 @@ def upload_voice_file():
                 content=wav_content,
                 dt="Message",
                 dn=message.name,
-                folder=str(folder_path),
+                folder=None,
                 is_private=1
             )
             message.audio = attached_file.file_url
