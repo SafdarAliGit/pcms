@@ -87,7 +87,7 @@ def upload_voice_file():
 
         return {
             "file_name": attached_file.file_name,
-            "file_url": attached_file.file_url,
+            "file_url": f"{folder}/{attached_file.file_name}",
             "is_private": attached_file.is_private,
             "size": attached_file.file_size,
             "transcription": text
