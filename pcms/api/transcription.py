@@ -1,5 +1,5 @@
 import frappe
-from frappe.utils.file_manager import save_file
+from frappe.utils.file_manager import create_folder, save_file
 from frappe import _
 from vosk import Model, KaldiRecognizer
 from pydub import AudioSegment
