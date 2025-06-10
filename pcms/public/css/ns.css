@@ -130,10 +130,7 @@ body {
 }
 
 
-"New": "status-new",
-"Acknowledged": "status-acknowledged",
-"Resolved": "status-resolved",
-"Escalated": "status-escalated"
+
 
 /* Status: New */
 .chat-message.status-new {
