@@ -184,7 +184,7 @@ def upload_voice_file():
         message.message_content = text if text else "No Message Found"
         message.sent_time = frappe.utils.now_datetime()
         message.room_no = patient.get("room_no","")
-        message.status = "Open"
+        message.status = "New"
         message.save()
 
         return {
