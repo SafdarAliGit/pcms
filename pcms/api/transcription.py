@@ -1,5 +1,5 @@
 import frappe
-from frappe.utils.file_manager import create_folder, save_file
+from frappe.utils.file_manager import save_file
 from frappe import _
 from vosk import Model, KaldiRecognizer
 from pydub import AudioSegment
@@ -8,6 +8,7 @@ import tempfile
 import wave
 import json
 from pathlib import Path
+from pcms.utils.ensure_folder_path import ensure_folder_path
 
 @frappe.whitelist()
 def upload_voice_file():
@@ -67,7 +68,8 @@ def upload_voice_file():
 
         # Save converted WAV file and attach to message.audio
         folder_path = f"{patient.get('hospital', 'unknown')}/{patient.get('health_care_unit', 'unknown')}/{patient.get('nursing_station', 'unknown')}"
-        create_folder(folder_path)
+        folder = ensure_folder_path(folder_path)
+
 
         with open(converted_path, 'rb') as wav_file:
             wav_content = wav_file.read()
@@ -77,7 +79,7 @@ def upload_voice_file():
                 content=wav_content,
                 dt="Message",
                 dn=message.name,
-                folder=str(folder_path),
+                folder=folder,
                 is_private=1
             )
             message.audio = attached_file.file_url
