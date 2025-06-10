@@ -182,7 +182,7 @@ def upload_voice_file():
         message.health_care_unit = patient.get("health_care_unit")
         message.hospital = patient.get("hospital")
         message.message_content = text if text else "No Message Found"
-        message.audio = converted_path
+        message.audio = audio.get("file_url")
         message.sent_time = frappe.utils.now_datetime()
         message.room_no = patient.get("room_no","")
         message.status = "New"
