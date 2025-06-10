@@ -108,8 +108,9 @@ audio:hover {
 }
 
 .login_button:hover {
-  background-color: #a9e2a8;
+  background-color: transparent;
   border: 1.5px solid #fff;
+  opacity: 0.8;
 }
 
 /* === Animation === */
