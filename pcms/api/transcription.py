@@ -7,6 +7,7 @@ import os
 import tempfile
 import wave
 import json
+from pathlib import Path
 
 @frappe.whitelist()
 def upload_voice_file():
@@ -65,11 +66,12 @@ def upload_voice_file():
         message.save()
 
         # Save converted WAV file and attach to message.audio
-        required_keys = ['hospital', 'health_care_unit', 'nursing_station']
-        if all(key in patient for key in required_keys):
-            folder = f"{patient['hospital']}/{patient['health_care_unit']}/{patient['nursing_station']}"
-        else:
-            folder = "unclassified"  # Or handle the error appropriately
+        folder_path = Path(
+            patient.get('hospital', 'unknown'),
+            patient.get('health_care_unit', 'unknown'),
+            patient.get('nursing_station', 'unknown')
+        )
+
 
         with open(converted_path, 'rb') as wav_file:
             wav_content = wav_file.read()
@@ -79,7 +81,7 @@ def upload_voice_file():
                 content=wav_content,
                 dt="Message",
                 dn=message.name,
-                folder=folder,
+                folder=str(folder_path),
                 is_private=1
             )
             message.audio = attached_file.file_url
