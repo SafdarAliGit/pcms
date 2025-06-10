@@ -73,7 +73,7 @@ def upload_voice_file():
                 content=wav_content,
                 dt="Message",
                 dn=message.name,
-                folder=None,
+                folder=f"{patient.get("hospital")}/{patient.get("health_care_unit")}/{patient.get("nursing_station")}",
                 is_private=1
             )
             message.audio = attached_file.file_url
