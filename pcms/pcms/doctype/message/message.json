@@ -11,6 +11,7 @@
   "health_care_unit",
   "hospital",
   "message_content",
+  "audio",
   "room_no",
   "sent_time",
   "status",
@@ -89,12 +90,17 @@
    "fieldname": "sender_name",
    "fieldtype": "Data",
    "label": "Sender Name"
+  },
+  {
+   "fieldname": "audio",
+   "fieldtype": "Attach",
+   "label": "Audio"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-10 12:45:12.705987",
+ "modified": "2025-06-10 13:31:50.668460",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Message",
