@@ -93,21 +93,29 @@ audio:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 .login_button {
-      background-color: transparent;
-      opacity: 0.8;
-      border: 1.5px solid rgb(30, 27, 27);
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      width: 100%;
-      margin-bottom: 1rem;
-      padding: 10px 20px;
-      font-weight: 20px;
+  background-color: #f9f9f9;
+  border: 1.5px solid #1e1b1b;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 12px 24px;
+  font-weight: 500;
+  color: #1e1b1b;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 .login_button:hover {
-  background-color: rgb(30, 27, 27);
-  color: white;
+  background-color: #1e1b1b;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
 /* === Animation === */
 @keyframes fadeIn {
   from {
