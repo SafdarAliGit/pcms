@@ -44,7 +44,7 @@ frappe.ready(function () {
     if (text) {
       
 
-      await safeUploadTextMessage(text);
+      safeUploadTextMessage(text);
 
 
     }
@@ -186,7 +186,7 @@ function isValidText(text) {
 }
 
 // 2. Wrapper upload function with whitelist check
-async function safeUploadTextMessage(text) {
+function safeUploadTextMessage(text) {
   if (!text || !isValidText(text)) {
     alert("❗ Invalid characters detected. Please use letters, numbers, spaces, dashes or underscores only.");
     return;
@@ -197,7 +197,7 @@ async function safeUploadTextMessage(text) {
       message_content: text
     };
 
-    const response = await fetch("/api/method/pcms.api.upload_text_message.upload_text_message", {
+    const response = fetch("/api/method/pcms.api.upload_text_message.upload_text_message", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -208,13 +208,13 @@ async function safeUploadTextMessage(text) {
     });
 
     if (!response.ok) {
-      const errText = await response.json()
+      const errText =  response.json()
         .then(data => data.message || data.error || JSON.stringify(data))
         .catch(() => response.statusText || `HTTP ${response.status}`);
       throw new Error(errText);
     }
 
-    const data = await response.json();
+    const data = response.json();
     appendMessage(data.message_content);
     $messageInput.val("");
   } catch (err) {
