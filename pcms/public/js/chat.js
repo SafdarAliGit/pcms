@@ -174,7 +174,7 @@ frappe.ready(function () {
       if (!res.ok) {
         throw new Error(data.message || data.error || res.statusText);
       }
-      appendMessage(data.message_content);
+      appendMessage(data.message);
       $messageInput.val("");
     } catch (err) {
       console.error("Upload failed:", err);
