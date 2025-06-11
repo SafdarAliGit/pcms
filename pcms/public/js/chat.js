@@ -214,7 +214,6 @@ async function safeUploadTextMessage(text) {
     }
 
     const data = await response.json();
-    console.log(data);
     appendMessage(data.message_content);
     $messageInput.val("");
   } catch (err) {
