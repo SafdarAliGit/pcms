@@ -18,7 +18,11 @@ frappe.ready(function () {
     callback: function (r) {
       if (r.message) {
         r.message.forEach(function (msg) {
-          uploadVoiceMsg(msg.audio);
+          if (msg.audio) {
+            uploadVoiceMsg(msg.audio);
+          }else{
+            appendMessage(msg.message_content);
+          }
         });
       }
     }
@@ -211,7 +215,6 @@ async function safeUploadTextMessage(text) {
 
     const data = await response.json();
     appendMessage(data.message_content);
-    scrollToBottom();
     $messageInput.val("");
   } catch (err) {
     console.error("Upload failed:", err);
