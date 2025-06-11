@@ -29,13 +29,11 @@ def upload_text_message(message_content=None):
         message.save()
               
 
-        return {
-            "message_content": message_content
-        }
+        return message_content
 
     except Exception as e:
         frappe.log_error("Text Message Error", str(e))
-        return {"error": str(e)}
+        return str(e)
 
 
         
