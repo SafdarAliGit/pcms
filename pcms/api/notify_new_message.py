@@ -9,7 +9,7 @@ def notify_new_message(doc, method):
     )
 
     # Send message only if the message's nursing station matches the logged-in user's
-    if doc.nursing_station == user_nursing_station:
+    if doc.nursing_station == user_nursing_station.nursing_station:
         frappe.publish_realtime("new_message", {
             "message_content": doc.message_content,
             "sender": doc.sender,
