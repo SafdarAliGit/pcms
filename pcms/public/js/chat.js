@@ -6,13 +6,7 @@ frappe.ready(function () {
 
   // Load existing messages
   frappe.call({
-    method: "frappe.client.get_list",
-    args: {
-      doctype: "Message",
-      fields: ["audio", "message_content"],
-      order_by: "creation asc",
-      limit_page_length: 50
-    },
+    method: "pcms.api.list_chat_messages.list_chat_messages",
     callback: r => {
       if (r.message) {
         r.message.forEach(msg => {
