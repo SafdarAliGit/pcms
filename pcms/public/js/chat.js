@@ -170,6 +170,7 @@ frappe.ready(function () {
       });
 
       const data = await res.json();
+      console.log(data.message_content);
       if (!res.ok) {
         throw new Error(data.message || data.error || res.statusText);
       }
