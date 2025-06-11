@@ -18,7 +18,7 @@ frappe.ready(function () {
     callback: function (r) {
       if (r.message) {
         r.message.forEach(function (msg) {
-          voiceMsg(msg.audio);
+          uploadVoiceMsg(msg.audio);
         });
       }
     }
