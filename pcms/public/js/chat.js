@@ -192,7 +192,7 @@ async function safeUploadTextMessage(text) {
       message_content: text
     };
 
-    const response = await fetch("/api/method/pcms.api.transcription.upload_text_message", {
+    const response = await fetch("/api/method/pcms.api.upload_text_message.upload_text_message", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
