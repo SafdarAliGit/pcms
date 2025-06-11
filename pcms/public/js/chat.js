@@ -34,11 +34,14 @@ frappe.ready(function () {
     scrollToBottom();
   }
 
-  $("#send-btn").on("click", function () {
-    const text = $messageInput.val().trim();
+  $("#send-btn").on("click", async function () {
+    
     if (text) {
-      appendMessage(text);
-      $messageInput.val("");
+      
+
+      await safeUploadTextMessage(text);
+
+
     }
   });
 
@@ -145,7 +148,7 @@ frappe.ready(function () {
         if (data.message && data.message.file_url) {
           const fileUrl = data.message.file_url;
   
-          voiceMsg(fileUrl);
+          uploadVoiceMsg(fileUrl);
         } else {
           console.error("Upload failed", data);
           alert("Upload failed");
@@ -162,11 +165,59 @@ frappe.ready(function () {
     audioBlob = null;
   });
 
-  function voiceMsg(fileUrl) {
+  function uploadVoiceMsg(fileUrl) {
     const $voiceMsg = $("<div>").addClass("chat-message sent");
     const $audio = $("<audio controls>").attr("src", fileUrl);
     $voiceMsg.append($audio);
     $("#chat-body").append($voiceMsg);
     scrollToBottom();
   }
+
+  // 1. Whitelist validation function
+function isValidText(text) {
+  // Only A-Z, a-z, 0-9, space, dash(-), underscore(_)
+  const regex = /^[A-Za-z0-9 _-]+$/;
+  return regex.test(text);
+}
+
+// 2. Wrapper upload function with whitelist check
+async function safeUploadTextMessage(text) {
+  if (!text || !isValidText(text)) {
+    alert("❗ Invalid characters detected. Please use letters, numbers, spaces, dashes or underscores only.");
+    return;
+  }
+
+  try {
+    const payload = {
+      message_content: text
+    };
+
+    const response = await fetch("/api/method/pcms.api.transcription.upload_text_message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Frappe-CSRF-Token": frappe.csrf_token
+      },
+      credentials: "include",
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errText = await response.json()
+        .then(data => data.message || data.error || JSON.stringify(data))
+        .catch(() => response.statusText || `HTTP ${response.status}`);
+      throw new Error(errText);
+    }
+
+    const data = await response.json();
+    appendMessage(data.message_content);
+    scrollToBottom();
+    $messageInput.val("");
+  } catch (err) {
+    console.error("Upload failed:", err);
+    alert(`Upload failed: ${err.message}`);
+  }
+}
+
+  
 });
