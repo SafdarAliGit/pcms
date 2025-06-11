@@ -106,7 +106,7 @@ frappe.ready(function () {
 });
 
 frappe.ready(function () {
-  $(document).on("click", ".login", function () {
+  $(document).on("click", ".login_button", function () {
     frappe.call({
       method: 'pcms.utils.get_user_roles.get_user_roles',
       callback: function (res) {
