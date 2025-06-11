@@ -17,7 +17,7 @@ def list_chat_messages():
     messages = frappe.db.get_all(
         "Message",
         filters={"sender": patient.mr_no},
-        fields=["audio", "m"],order_by="creation asc"
+        fields=["audio", "message_content"],order_by="creation asc"
     )
 
     return messages  # Return list (can be empty)
