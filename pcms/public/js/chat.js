@@ -35,7 +35,7 @@ frappe.ready(function () {
   }
 
   $("#send-btn").on("click", async function () {
-    
+    const text = $messageInput.val().trim();
     if (text) {
       
 
