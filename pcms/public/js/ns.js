@@ -25,13 +25,7 @@ frappe.ready(function () {
 
   // Fetch existing messages
   frappe.call({
-    method: "frappe.client.get_list",
-    args: {
-      doctype: "Message",
-      fields: ["message_content", "sender","sender_name","room_no","sent_time","status","audio"],
-      order_by: "creation asc",
-      limit_page_length: 50
-    },
+    method: "pcms.api.list_ns_messages.list_ns_messages",
     callback: function (r) {
       if (r.message) {
         r.message.forEach(function (msg) {
