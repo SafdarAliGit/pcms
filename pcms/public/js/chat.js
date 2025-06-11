@@ -33,7 +33,7 @@ frappe.ready(function () {
   }
 
   function appendMessage(text) {
-    const $msg = $("<div>").addClass("chat-message sent").text(text);
+    const $msg = $("<div>").addClass("chat-message sent").html(text);
     $chatBody.append($msg);
     scrollToBottom();
   }
