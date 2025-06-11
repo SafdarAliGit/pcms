@@ -33,7 +33,7 @@ frappe.ready(function () {
   }
 
   function appendMessage(text) {
-    const $msg = $("<div>").addClass("chat-message sent").innerText(text);
+    const $msg = $("<div>").addClass("chat-message sent").text(text);
     $chatBody.append($msg);
     scrollToBottom();
   }
@@ -214,7 +214,7 @@ async function safeUploadTextMessage(text) {
     }
 
     const data = await response.json();
-    appendMessage(data.message_content);
+    appendMessage("Testing...");
     $messageInput.val("");
   } catch (err) {
     console.error("Upload failed:", err);
