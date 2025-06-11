@@ -5,7 +5,8 @@ def notify_new_message(doc, method):
     user_nursing_station = frappe.db.get_value(
         "Patient", 
         {"user_id": frappe.session.user}, 
-        "nursing_station"
+        "nursing_station",
+        as_dict=True
     )
 
     # Send message only if the message's nursing station matches the logged-in user's
