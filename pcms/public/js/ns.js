@@ -84,7 +84,7 @@ frappe.ready(function () {
         </div>
       </div>
       <div class="chat-text">${message_content}</div>
-      <audio controls src="${audio}"></audio>
+      ${audio ? `<audio controls src="${audio}"></audio>` : ''}
       <button class="login_button" style="text-decoration: none; color: inherit;">Take Action</button>
     `;
     container.appendChild(div);
