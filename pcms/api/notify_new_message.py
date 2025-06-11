@@ -3,9 +3,9 @@ import frappe
 def notify_new_message(doc, method):
     # Get the nursing station of the currently logged-in user
     user_nursing_station = frappe.db.get_value(
-        "Nursing Station", 
+        "Patient", 
         {"user_id": frappe.session.user}, 
-        "name"
+        "nursing_station"
     )
 
     # Send message only if the message's nursing station matches the logged-in user's
