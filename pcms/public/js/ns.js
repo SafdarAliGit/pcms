@@ -1,3 +1,4 @@
+let nursing_station_name;
 window.frappe = window.frappe || {};
 frappe.ready = function (fn) {
   if (document.readyState !== "loading") fn();
@@ -36,31 +37,37 @@ frappe.ready(function () {
   });
 
 
-// 1. Get Nursing Station name (standalone)
-let nursing_station_name;
 
-frappe.db.get_value('Nursing Station', { user_id: frappe.session.user }, 'name')
-.then(r => {
-    if (r.message) nursing_station_name = r.message.name;
-});
+    // 1. Get station name
+    frappe.call({
+        method: 'frappe.client.get_value',
+        args: {
+            doctype: 'Nursing Station',
+            filters: { user_id: frappe.session.user },
+            fieldname: 'name'
+        },
+        callback: function(r) {
+            if (r.message) nursing_station_name = r.message.name;
+        }
+    });
 
-// 2. Independent realtime listener (standalone)
-const room = "nursing_station:" + (nursing_station_name || 'default')
-    .replace(/\W+/g, "_")
-    .replace(/^_+|_+$/g, "")
-    .toLowerCase();
+    // 2. Independent realtime setup
+    const room = "nursing_station:" + (window.nursing_station_name || 'default')
+        .replace(/\W+/g, "_")
+        .replace(/^_+|_+$/g, "")
+        .toLowerCase();
 
-frappe.realtime.on(room, data => {
-    appendMessage(
-        data.message_content,
-        data.sender,
-        data.sender_name,
-        data.room_no,
-        data.sent_time,
-        data.status,
-        data.audio
-    );
-});
+    frappe.realtime.on(room, function(data) {
+        appendMessage(
+            data.message_content,
+            data.sender,
+            data.sender_name,
+            data.room_no,
+            data.sent_time,
+            data.status,
+            data.audio
+        );
+    });
 
 
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status,audio) {
