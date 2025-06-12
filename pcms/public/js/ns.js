@@ -53,7 +53,7 @@ frappe.ready(function () {
 
   frappe.realtime.on("new_message", function (data) {
     appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
-    console.log(room);
+    alert(room);
   });
 
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status,audio) {
