@@ -37,11 +37,11 @@ frappe.ready(function () {
 
   async function subscribeToStationRoom() {
     const r = await frappe.db.get_value(
-      "Patient",
+      "Nursing Station",
       { user_id: frappe.session.user },
-      "nursing_station"
+      "name"
     );
-    const station = r.message && r.message.nursing_station;
+    const station = r.message && r.message.name;
     if (station) {
       const room = "nursing_station:" +
         station.replace(/\W+/g, "_").replace(/^_+|_+$/g, "").toLowerCase();
