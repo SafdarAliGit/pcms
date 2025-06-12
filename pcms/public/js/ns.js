@@ -36,39 +36,29 @@ frappe.ready(function () {
     }
   });
 
+  frappe.call({
+    method: 'frappe.client.get_value',
+    args: {
+        doctype: 'Nursing Station',
+        filters: { user_id: frappe.session.user },
+        fieldname: 'name'
+    },
+    callback: function(r) {
+        if (r.message) nursing_station_name = r.message.name;
+    }
+});
+
+// 2. Independent realtime setup
+const room = "nursing_station:"+(nursing_station_name)
+    .replace(/\W+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .toLowerCase();
 
 
-    // 1. Get station name
-    frappe.call({
-        method: 'frappe.client.get_value',
-        args: {
-            doctype: 'Nursing Station',
-            filters: { user_id: frappe.session.user },
-            fieldname: 'name'
-        },
-        callback: function(r) {
-            if (r.message) nursing_station_name = r.message.name;
-        }
-    });
-
-    // 2. Independent realtime setup
-    const room = "nursing_station:" + (window.nursing_station_name || 'default')
-        .replace(/\W+/g, "_")
-        .replace(/^_+|_+$/g, "")
-        .toLowerCase();
-
-    frappe.realtime.on(room, function(data) {
-        appendMessage(
-            data.message_content,
-            data.sender,
-            data.sender_name,
-            data.room_no,
-            data.sent_time,
-            data.status,
-            data.audio
-        );
-    });
-
+  frappe.realtime.on(room, function (data) {
+    appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
+    // playNotificationSound();
+  });
 
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status,audio) {
     const container = document.getElementById("messages");
