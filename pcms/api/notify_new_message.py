@@ -2,8 +2,7 @@ import frappe
 import re
 
 def sanitize_station(station_name):
-    # Replace non-alphanumeric characters with underscores, collapse duplicates
-    s = re.sub(r" ", "", station_name).lower()
+    s = re.sub(r"[-\s]", "", station_name).lower()
     return s
 
 def notify_new_message(doc, method):
