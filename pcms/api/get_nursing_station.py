@@ -8,4 +8,4 @@ def get_nursing_station(user=None):
         {"user_id": user},
         "name"
     )
-    return station  # Returns single string or None 
+    return station  

@@ -5,7 +5,9 @@
 <h2 class="chat-title">💬 Patient's Messages</h2>
 
 <div id="messages" class="chat-box"></div>
-
+<script>
+  window.nursing_station = {{ station.name | tojson | safe }};
+</script>
 <script src="/assets/pcms/js/ns.js"></script>
 
 <!-- Modal HTML -->

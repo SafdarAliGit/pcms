@@ -1,6 +1,6 @@
-let nursing_station = {
-  name: "",
-}
+// let nursing_station = {
+//   name: "",
+// }
 
 window.frappe = window.frappe || {};
 frappe.ready = function (fn) {
@@ -39,22 +39,22 @@ frappe.ready(function () {
     }
   });
 
-  frappe.call({
-    method: 'pcms.api.get_nursing_station.get_nursing_station',
-    args: {
-      user: frappe.session.user  // Explicitly pass current user
-    },
-    callback: function(r) {
-      console.log(r);
-        if (r.message) nursing_station.name = r.message;
-    }
-});
+//   frappe.call({
+//     method: 'pcms.api.get_nursing_station.get_nursing_station',
+//     args: {
+//       user: frappe.session.user  // Explicitly pass current user
+//     },
+//     callback: function(r) {
 
+//         if (r.message) nursing_station.name = r.message;
+//     }
+// });
+  const stationName = window.nursing_station || "";
 // 2. Independent realtime setup
-  const room = nursing_station.name.replace(/[-\s]/g, "").toLowerCase();
+  const room = stationName.replace(/[-\s]/g, "").toLowerCase();
 
-  console.log(nursing_station);
-  frappe.realtime.on("new_message", function (data) {
+  console.log(stationName);
+  frappe.realtime.on(room, function (data) {
     appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
     
   });
