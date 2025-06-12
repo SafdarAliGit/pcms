@@ -7,7 +7,7 @@ def sanitize_station(station_name):
 
 def notify_new_message(doc, method):
     # Use consistent naming pattern
-    room = f"nursing_message:{sanitize_station(doc.nursing_station)}"
+    room = sanitize_station(doc.nursing_station)
     
     frappe.publish_realtime(
         event=room,  # Consistent event name

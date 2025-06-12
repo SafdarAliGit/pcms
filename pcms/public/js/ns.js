@@ -47,7 +47,7 @@ frappe.ready(function () {
 });
 
 // 2. Independent realtime setup
-  const room = "nursing_message:" + nursing_station.name.replace(/[-\s]/g, "").toLowerCase();
+  const room = nursing_station.name.replace(/[-\s]/g, "").toLowerCase();
 
 
   frappe.realtime.on(room, function (data) {
