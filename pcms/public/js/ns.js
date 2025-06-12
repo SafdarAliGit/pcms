@@ -49,7 +49,7 @@ frappe.ready(function () {
 });
 
 // 2. Independent realtime setup
-const room = "nursing_station:"+(nursing_station_name)
+const room = "nursing_station:"+(window.nursing_station_name)
     .replace(/\W+/g, "_")
     .replace(/^_+|_+$/g, "")
     .toLowerCase();
