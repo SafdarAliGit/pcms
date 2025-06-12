@@ -9,7 +9,7 @@ def add_station_to_context(context):
             {"user_id": user},
             "name"
         )
-        context["station_name"] = station or ""
+        context["station"] = station or ""
     else:
-        context["station_name"] = ""
+        context["station"] = ""
     return context
