@@ -7,7 +7,7 @@ def sanitize_station(station_name):
 
 def notify_new_message(doc, method):
     station = sanitize_station(doc.nursing_station)
-    frappe.publish_realtime(str(station), {
+    frappe.publish_realtime("new_message", {
             "message_content": doc.message_content,
             "sender": doc.sender,
             "sender_name": doc.sender_name,
@@ -15,7 +15,8 @@ def notify_new_message(doc, method):
             "status": doc.status,
             "sent_time": doc.sent_time,
             "audio": doc.audio
-        })
+        },room=station
+        )
     
     
         
