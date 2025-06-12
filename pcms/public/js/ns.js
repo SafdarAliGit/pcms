@@ -42,7 +42,7 @@ frappe.ready(function () {
   frappe.call({
     method: 'pcms.api.get_nursing_station.get_nursing_station',
     callback: function(r) {
-        if (r.message) nursing_station.name = r.message.name;
+        if (r.message) nursing_station.name = r.message;
     }
 });
 
