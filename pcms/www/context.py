@@ -1,10 +1,15 @@
+# your_app/www/context.py
 import frappe
 
-def add_station(context):
-    if frappe.session.user != "Guest":
-        station = frappe.db.get_value("Nursing Station",
-                                      {"user_id": frappe.session.user},
-                                      "name", as_dict=True)
-        context.station = station or {}
-
-
+def add_station_to_context(context):
+    user = frappe.session.user
+    if user and user != "Guest":
+        station = frappe.db.get_value(
+            "Nursing Station",
+            {"user_id": user},
+            "name"
+        )
+        context["station_name"] = station or ""
+    else:
+        context["station_name"] = ""
+    return context
