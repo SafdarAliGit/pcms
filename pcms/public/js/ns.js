@@ -47,13 +47,13 @@ frappe.ready(function () {
 });
 
 // 2. Independent realtime setup
-const room = "nursing_station:"+(nursing_station.name)
+const room = (nursing_station.name)
     .replace(/\W+/g, "_")
     .replace(/^_+|_+$/g, "")
     .toLowerCase();
 
 
-  frappe.realtime.on("SZH-Radiology-NS3", function (data) {
+  frappe.realtime.on(room, function (data) {
     appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
     // playNotificationSound();
   });
