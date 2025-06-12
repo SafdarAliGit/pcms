@@ -41,7 +41,6 @@ frappe.ready(function () {
 
   frappe.call({
     method: 'pcms.api.get_nursing_station.get_nursing_station',
-    args: { return_type: "single" },
     callback: function(r) {
         if (r.message) nursing_station.name = r.message;
     }
