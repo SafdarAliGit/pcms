@@ -1,4 +1,7 @@
-let nursing_station_name;
+let nursing_station = {
+  name: "",
+}
+
 window.frappe = window.frappe || {};
 frappe.ready = function (fn) {
   if (document.readyState !== "loading") fn();
@@ -44,12 +47,12 @@ frappe.ready(function () {
         fieldname: 'name'
     },
     callback: function(r) {
-        if (r.message) nursing_station_name = r.message.name;
+        if (r.message) nursing_station.name = r.message.name;
     }
 });
 
 // 2. Independent realtime setup
-const room = "nursing_station:"+(nursing_station_name)
+const room = "nursing_station:"+(nursing_station.name)
     .replace(/\W+/g, "_")
     .replace(/^_+|_+$/g, "")
     .toLowerCase();
@@ -59,7 +62,7 @@ const room = "nursing_station:"+(nursing_station_name)
     appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
     // playNotificationSound();
   });
-  console.log(nursing_station_name);
+
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status,audio) {
     const container = document.getElementById("messages");
     const div = document.createElement("div");
