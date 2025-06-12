@@ -40,12 +40,7 @@ frappe.ready(function () {
   });
 
   frappe.call({
-    method: 'frappe.client.get_value',
-    args: {
-        doctype: 'Nursing Station',
-        filters: { user_id: frappe.session.user },
-        fieldname: 'name'
-    },
+    method: 'pcms.api.get_nursing_station.get_nursing_station',
     callback: function(r) {
         if (r.message) nursing_station.name = r.message.name;
     }
