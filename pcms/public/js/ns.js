@@ -59,7 +59,7 @@ const room = "nursing_station:"+(nursing_station_name)
     appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
     // playNotificationSound();
   });
-
+  console.log(nursing_station_name);
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status,audio) {
     const container = document.getElementById("messages");
     const div = document.createElement("div");
