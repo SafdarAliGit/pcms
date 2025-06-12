@@ -53,7 +53,6 @@ frappe.ready(function () {
 // 2. Independent realtime setup
   const room = stationName.replace(/[-\s]/g, "").toLowerCase();
 
-  console.log(stationName);
   frappe.realtime.on(room, function (data) {
     appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
     
