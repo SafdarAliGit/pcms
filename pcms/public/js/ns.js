@@ -48,9 +48,8 @@ frappe.ready(function () {
 
 // 2. Independent realtime setup
 const room = (nursing_station.name)
-    .replace(/\W+/g, "_")
-    .replace(/^_+|_+$/g, "")
-    .toLowerCase();
+  .replace(/ /g, '')
+  .toLowerCase();
 
 
   frappe.realtime.on(room, function (data) {
