@@ -19,6 +19,9 @@ doc_events = {
     "Nursing Station": {
         "on_update": "pcms.pcms.doctype.nursing_station.nursing_station.create_nursing_station_user"
     },
+    "Nurse": {
+        "on_update": "pcms.pcms.doctype.nurse.nurse.create_nurse_user"
+    },
     "Message": {
 		"on_update": "pcms.api.notify_new_message.notify_new_message"
 	}
