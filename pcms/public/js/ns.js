@@ -1,18 +1,20 @@
-// let nursing_station = {
-//   name: "",
-// }
-
+// Ensure frappe namespace exists
 window.frappe = window.frappe || {};
+
+// DOM Ready handler
 frappe.ready = function (fn) {
   if (document.readyState !== "loading") fn();
   else document.addEventListener("DOMContentLoaded", fn);
 };
 
+// Realtime setup
 frappe.realtime = {
   handlers: {},
+  
   on(event, fn) {
     this.handlers[event] = fn;
   },
+
   init() {
     this.socket = io();
     this.socket.on('message', function (msg) {
@@ -24,100 +26,83 @@ frappe.realtime = {
   }
 };
 
+// DOM Ready Logic
 frappe.ready(function () {
+  // 1. Initialize realtime connection
   frappe.realtime.init();
 
-  // Fetch existing messages
+  // 2. Fetch existing messages
   frappe.call({
     method: "pcms.api.list_ns_messages.list_ns_messages",
     callback: function (r) {
       if (r.message) {
         r.message.forEach(function (msg) {
-          appendMessage(msg.message_content, msg.sender,msg.sender_name,msg.room_no,msg.sent_time,msg.status,msg.audio);
+          appendMessage(
+            msg.message_content,
+            msg.sender,
+            msg.sender_name,
+            msg.room_no,
+            msg.sent_time,
+            msg.status,
+            msg.audio
+          );
         });
       }
     }
   });
 
-//   frappe.call({
-//     method: 'pcms.api.get_nursing_station.get_nursing_station',
-//     args: {
-//       user: frappe.session.user  // Explicitly pass current user
-//     },
-//     callback: function(r) {
-
-//         if (r.message) nursing_station.name = r.message;
-//     }
-// });
+  // 3. Realtime room subscription
   const stationName = window.nursing_station || "";
-// 2. Independent realtime setup
   const room = stationName.replace(/[-\s]/g, "").toLowerCase();
 
   frappe.realtime.on(room, function (data) {
-    appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
-    
+    appendMessage(
+      data.message_content,
+      data.sender,
+      data.sender_name,
+      data.room_no,
+      data.sent_time,
+      data.status,
+      data.audio
+    );
   });
 
-  function appendMessage(message_content, sender, sender_name, room_no, sent_time, status,audio) {
+  // 4. Message rendering
+  function appendMessage(message_content, sender, sender_name, room_no, sent_time, status, audio) {
     const container = document.getElementById("messages");
     const div = document.createElement("div");
-  
-    // Normalize status to class format
+
     const statusClass = {
       "New": "status-new",
       "Acknowledged": "status-acknowledged",
       "Resolved": "status-resolved",
       "Escalated": "status-escalated"
-    }[status] || "status-new"; // fallback to 'open' if unrecognized
-  
+    }[status] || "status-new";
+
     div.className = `chat-message ${statusClass}`;
-  
+
     div.innerHTML = `
       <div class="chat-meta">
-        <div class="meta-block">
-          <span class="meta-label">MR No:</span>
-          <span class="meta-value">${sender}</span>
-        </div>
-        <div class="meta-block">
-          <span class="meta-label">Name:</span>
-          <span class="meta-value">${sender_name}</span>
-        </div>
-        <div class="meta-block">
-          <span class="meta-label">Room No:</span>
-          <span class="meta-value">${room_no}</span>
-        </div>
-        <div class="meta-block">
-          <span class="meta-label">Time:</span>
-          <span class="meta-value">${sent_time}</span>
-        </div>
-        <div class="meta-block">
-          <span class="meta-label">Status:</span>
-          <span class="meta-value">${status}</span>
-        </div>
+        <div class="meta-block"><span class="meta-label">MR No:</span> <span class="meta-value">${sender}</span></div>
+        <div class="meta-block"><span class="meta-label">Name:</span> <span class="meta-value">${sender_name}</span></div>
+        <div class="meta-block"><span class="meta-label">Room No:</span> <span class="meta-value">${room_no}</span></div>
+        <div class="meta-block"><span class="meta-label">Time:</span> <span class="meta-value">${sent_time}</span></div>
+        <div class="meta-block"><span class="meta-label">Status:</span> <span class="meta-value">${status}</span></div>
       </div>
       <div class="chat-text">${message_content}</div>
       ${audio ? `<audio controls src="${audio}"></audio>` : ''}
       <button class="login_button" style="text-decoration: none; color: inherit;">Take Action</button>
     `;
+
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
   }
-  
-  
-
-  //   function playNotificationSound() {
-//   const audio = new Audio("https://transcription.thesmarterp.com/assets/pcms/sounds/message_received.mp3");
-//   audio.play().catch((err) => {
-//     console.warn("Audio play failed:", err);
-//   });
-// }
-// LOGIN
-
-
-
 });
 
+
+// Login and re-authentication logic
 frappe.ready(function () {
+  // Handle Take Action button click
   $(document).on("click", ".login_button", function () {
     frappe.call({
       method: 'pcms.utils.get_user_roles.get_user_roles',
@@ -131,10 +116,12 @@ frappe.ready(function () {
       }
     });
   });
-  
+
+  // Handle re-login form submission
   $(document).on("click", "#relogin-submit", function () {
     const usr = $("#relogin-username").val();
     const pwd = $("#relogin-password").val();
+
     frappe.call({
       method: 'login',
       args: { usr, pwd },
@@ -148,6 +135,4 @@ frappe.ready(function () {
       }
     });
   });
-  
 });
-
