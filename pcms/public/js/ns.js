@@ -36,30 +36,31 @@ frappe.ready(function () {
   });
 
 
-  const r = frappe.get_value(
-    "Nursing Station",
-    { user_id: frappe.session.user },
-    "name"
-);
+// 1. Get Nursing Station name (standalone)
+let nursing_station_name;
 
+frappe.db.get_value('Nursing Station', { user_id: frappe.session.user }, 'name')
+.then(r => {
+    if (r.message) nursing_station_name = r.message.name;
+});
 
-    const station = r.message.name;
-    const room = "nursing_station:" +
-        station.replace(/\W+/g, "_")      // Replace special chars with underscores
-              .replace(/^_+|_+$/g, "")  // Trim leading/trailing underscores
-              .toLowerCase();            // Convert to lowercase
+// 2. Independent realtime listener (standalone)
+const room = "nursing_station:" + (nursing_station_name || 'default')
+    .replace(/\W+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .toLowerCase();
 
-    frappe.realtime.on(room, (data) => {
-        appendMessage(
-            data.message_content,
-            data.sender,
-            data.sender_name,
-            data.room_no,
-            data.sent_time,
-            data.status,
-            data.audio
-        );
-    });
+frappe.realtime.on(room, data => {
+    appendMessage(
+        data.message_content,
+        data.sender,
+        data.sender_name,
+        data.room_no,
+        data.sent_time,
+        data.status,
+        data.audio
+    );
+});
 
 
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status,audio) {
