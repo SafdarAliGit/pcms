@@ -81,8 +81,7 @@ def upload_voice_file():
                 folder=folder,
                 is_private=1
             )
-            message.audio = attached_file.file_url
-            message.save()
+            frappe.db.set_value("Message", message.name, "audio", attached_file.file_url)
 
         return {
             "file_name": attached_file.file_name,
