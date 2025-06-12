@@ -1,10 +1,10 @@
 import frappe
 
 @frappe.whitelist()
-def get_nursing_station():
+def get_nursing_station(user):
         station = frappe.db.get_value(
             "Nursing Station", 
-            {"user_id": frappe.session.user}, 
+            {"user_id": user}, 
             "name"
         )
         return station    
