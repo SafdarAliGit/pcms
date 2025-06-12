@@ -85,7 +85,7 @@ def upload_voice_file():
             "status": "New",
             "audio": attached_file.file_url  # Attach file URL before insert
         })
-        message.insert(ignore_permissions=True)  # Save once
+        message.save()  # Save once
 
         # Update the File document to link it to the newly created Message
         frappe.db.set_value("File", attached_file.name, {
