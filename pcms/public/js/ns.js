@@ -42,7 +42,7 @@ frappe.ready(function () {
   frappe.call({
     method: 'pcms.api.get_nursing_station.get_nursing_station',
     callback: function(r) {
-        if (r.message) doc.nursing_station = r.message;
+        if (r.message) nursing_station.name = r.message;
     }
 });
 
@@ -50,7 +50,7 @@ frappe.ready(function () {
   const room = nursing_station.name.replace(/[-\s]/g, "").toLowerCase();
 
 
-  frappe.realtime.on(doc.nursing_station, function (data) {
+  frappe.realtime.on(room, function (data) {
     appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
     // playNotificationSound();
   });
