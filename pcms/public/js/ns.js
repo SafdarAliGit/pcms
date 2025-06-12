@@ -1,4 +1,4 @@
-let nursing_station_name;
+let nursing_station_name="ns";
 window.frappe = window.frappe || {};
 frappe.ready = function (fn) {
   if (document.readyState !== "loading") fn();
