@@ -1,11 +1,19 @@
 import frappe
-import frappe
 
-def add_station(context):
-    if frappe.session.user != "Guest":
-        station = frappe.db.get_value("Nursing Station",
-                                      {"user_id": frappe.session.user},
-                                      "name", as_dict=True)
-        context.station = station or {}
+def get_context(context):
+    user = frappe.session.user
+    context.patient = {}
 
+    if user != "Guest":
+        patient = frappe.db.get_value(
+            "Patient",
+            {"user_id": user},
+            ["patient_name", "mr_no"],
+            as_dict=True,
+            order_by="creation desc"
+        )
+        if patient:
+            context.patient = patient
+
+    return context
 

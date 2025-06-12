@@ -24,7 +24,7 @@ doc_events = {
 	}
 }
 
-update_website_context = "pcms.www.context.add_station_to_context"
+
 # boot_session = "pcms.utils.boot.boot_session"
 # on_session_creation = "pcms.utils.boot.redirect_after_login"
 # get_website_user_home_page = "pcms.utils.redirect.get_home_page"
