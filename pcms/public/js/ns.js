@@ -50,10 +50,10 @@ frappe.ready(function () {
 // 2. Independent realtime setup
   const room = nursing_station.name.replace(/[-\s]/g, "").toLowerCase();
 
-console.log(room);
+
   frappe.realtime.on(room, function (data) {
     appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
-    // playNotificationSound();
+    console.log(room);
   });
 
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status,audio) {
