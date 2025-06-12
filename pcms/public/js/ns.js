@@ -41,15 +41,14 @@ frappe.ready(function () {
 
   frappe.call({
     method: 'pcms.api.get_nursing_station.get_nursing_station',
+    args: { return_type: "single" },
     callback: function(r) {
         if (r.message) nursing_station.name = r.message;
     }
 });
 
 // 2. Independent realtime setup
-const room = nursing_station.name
-  .replace(/[-\s]/g, "")
-  .toLowerCase();
+  const room = "nursing_message:" + nursing_station.name.replace(/[-\s]/g, "").toLowerCase();
 
 
   frappe.realtime.on(room, function (data) {
