@@ -1,5 +1,4 @@
 import frappe
-import frappe
 
 def add_station(context):
     if frappe.session.user != "Guest":
