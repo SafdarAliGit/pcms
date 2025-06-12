@@ -2,18 +2,18 @@ import frappe
 
 def get_context(context):
     user = frappe.session.user
-    context.patient = {}
+    context.station = {}
 
     if user != "Guest":
-        patient = frappe.db.get_value(
-            "Patient",
+        station = frappe.db.get_value(
+            "Nursing Station",
             {"user_id": user},
-            ["patient_name", "mr_no"],
+            ["name"],
             as_dict=True,
             order_by="creation desc"
         )
-        if patient:
-            context.patient = patient
+        if station:
+            context.station = station
 
     return context
 
