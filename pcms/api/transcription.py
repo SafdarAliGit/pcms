@@ -63,7 +63,7 @@ def upload_voice_file():
         message.sent_time = frappe.utils.now_datetime()
         message.room_no = patient.get("room_no", "")
         message.status = "New"
-        # message.save()
+        message.insert(ignore_permissions=True)
 
         # Save converted WAV file and attach to message.audio
         folder_path = f"{patient.get('hospital', 'unknown')}/{patient.get('health_care_unit', 'unknown')}/{patient.get('nursing_station', 'unknown')}"
