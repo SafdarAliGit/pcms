@@ -35,10 +35,25 @@ frappe.ready(function () {
     }
   });
 
-  frappe.realtime.on("new_message", function (data) {
-    appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
-    // playNotificationSound();
-  });
+  async function subscribeToStationRoom() {
+    const r = await frappe.db.get_value(
+      "Patient",
+      { user_id: frappe.session.user },
+      "nursing_station"
+    );
+    const station = r.message && r.message.nursing_station;
+    if (station) {
+      const room = "nursing_station:" +
+        station.replace(/\W+/g, "_").replace(/^_+|_+$/g, "").toLowerCase();
+      frappe.realtime.on(room, data => {
+        appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
+      });
+    }
+  }
+  subscribeToStationRoom();
+  
+
+
 
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status,audio) {
     const container = document.getElementById("messages");
