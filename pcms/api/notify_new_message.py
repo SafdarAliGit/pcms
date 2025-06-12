@@ -10,7 +10,7 @@ def notify_new_message(doc, method):
     room = sanitize_station(doc.nursing_station)
     
     frappe.publish_realtime(
-        event=room,  # Consistent event name
+        event=doc.nursing_station,  # Consistent event name
         message={
             "message_content": doc.message_content,
             "sender": doc.sender,
