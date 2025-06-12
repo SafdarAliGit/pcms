@@ -53,7 +53,7 @@ const room = "nursing_station:"+(nursing_station.name)
     .toLowerCase();
 
 
-  frappe.realtime.on(room, function (data) {
+  frappe.realtime.on("SZH-Radiology-NS3", function (data) {
     appendMessage(data.message_content, data.sender,data.sender_name,data.room_no,data.sent_time,data.status,data.audio);
     // playNotificationSound();
   });
