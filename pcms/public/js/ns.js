@@ -56,15 +56,15 @@ frappe.ready(function () {
   const room = stationName.replace(/[-\s]/g, "").toLowerCase();
 
   frappe.realtime.on(room, function (data) {
-    appendMessage(
-      data.message_content,
-      data.sender,
-      data.sender_name,
-      data.room_no,
-      data.sent_time,
-      data.status,
-      data.audio
-    );
+    // appendMessage(
+    //   data.message_content,
+    //   data.sender,
+    //   data.sender_name,
+    //   data.room_no,
+    //   data.sent_time,
+    //   data.status,
+    //   data.audio
+    // );
   });
 
   // 4. Message rendering
