@@ -179,7 +179,7 @@ frappe.ready(function () {
   });
 
   function uploadVoiceMsg(url, sent_time, status) {
-    const $voiceMsg = $("<div>").addClass("chat-message sent");
+    const $voiceMsg = $("<div>").addClass("chat-message sent " + (status === "Acknowledged" ? "status-acknowledged" : ""));
   
     $("<audio>").attr({ controls: true, src: url }).appendTo($voiceMsg);
   
