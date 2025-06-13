@@ -1,22 +1,25 @@
 import frappe
 
+no_cache = 1  # disable page cache
+
 def get_context(context):
     context.no_cache = 1
+    context.patient = {}
     user = frappe.session.user
 
     if user and user != "Guest":
-        patient = frappe.db.get_list(
+        patient_list = frappe.db.get_list(
             "Patient",
             filters={"user_id": user},
             fields=["patient_name", "mr_no", "nursing_station"],
-            as_dict=True,
             order_by="creation desc",
-            limit=1
+            limit_page_length=1,  # limit to one record
+            as_dict=True
         )
-        if patient:
-            context["patient"] = patient[0].patient_name
-            context["mr_no"] = patient[0].mr_no
-            context["nursing_station"] = patient[0].nursing_station
+        if patient_list:
+            patient = patient_list[0]
+            context.patient = patient
+            context.station = patient.get("nursing_station")
+            context.mr_no = patient.get("mr_no")
 
     return context
-
