@@ -2,7 +2,6 @@ import frappe
 
 def get_context(context):
     context.no_cache = 1
-    context.patient = {}
 
     user = frappe.session.user
     if user and user != "Guest":
@@ -15,6 +14,8 @@ def get_context(context):
             page_length=1        # limit to just 1 result
         )
         if patients:
-            context.patient = patients[0]  # first (and only) record
+            context["patient"] = patients[0].patient_name  # first (and only) record
+            context["mr_no"] = patients[0].mr_no
+            context["nursing_station"] = patients[0].nursing_station
 
     return context
