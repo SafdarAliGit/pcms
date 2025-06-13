@@ -15,13 +15,13 @@
 
 <div class="chat-container">
 
-  {% if patient %}
+
   <div id="patient-info">
-    <span><strong>Name:</strong> {{ patient }}</span>
-    <span><strong>MR No:</strong> {{ mr_no }}</span>
+    <span><strong>Name:</strong> {{ patient or "" }}</span>
+    <span><strong>MR No:</strong> {{ mr_no or "" }}</span>
   </div>
   
-{% endif %}
+
 
   <div class="chat-header">Patient Chat</div>
   
