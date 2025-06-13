@@ -124,7 +124,7 @@ frappe.ready(function () {
 
       const data = await res.json();
       if (res.ok && data.message?.file_url) {
-        uploadVoiceMsg(data.message.file_url, data.message.sent_time, data.message.status);
+        uploadVoiceMsg(data.message.file_url,data.message.sent_time,data.message.status);
       } else {
         throw new Error(data.message || data.error || res.statusText);
       }
@@ -174,11 +174,11 @@ frappe.ready(function () {
       });
 
       const data = await res.json();
-      console.log(data);
+
       if (!res.ok) {
         throw new Error(data.message || data.error || res.statusText);
       }
-      appendMessage(data.message);
+      appendMessage(data.message_content,data.sent_time,data.status);
       $messageInput.val("");
     } catch (err) {
       console.error("Upload failed:", err);
