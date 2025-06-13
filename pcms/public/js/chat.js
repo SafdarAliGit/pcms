@@ -185,7 +185,7 @@ frappe.ready(function () {
   
     const $footer = $("<div>").addClass("voice-footer").appendTo($voiceMsg);
     $("<span>").addClass("voice-time").text(sent_time).appendTo($footer);
-    $("<span>").addClass("voice-status").text(status).appendTo($footer);
+    $("<span>").addClass((status === "Acknowledged" ? "status-acknowledged-text" : "voice-status")).text(status).appendTo($footer);
   
     $chatBody.append($voiceMsg);
     scrollToBottom();
