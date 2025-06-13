@@ -10,7 +10,7 @@ frappe.ready(function () {
     callback: r => {
       if (r.message) {
         r.message.forEach(msg => {
-          msg.audio ? uploadVoiceMsg(msg.audio, msg.sent_time, msg.status) : appendMessage(msg.message_content);
+          msg.audio ? uploadVoiceMsg(msg.audio, msg.sent_time, msg.status) : appendMessage(msg.message_content, msg.sent_time, msg.status);
         });
       }
     }
