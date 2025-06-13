@@ -30,7 +30,10 @@ frappe.realtime = {
 frappe.ready(function () {
   // 1. Initialize realtime connection
   frappe.realtime.init();
-
+  const container = document.getElementById("messages");
+  function scrollToBottom() {
+    container.scrollTop(container.scrollHeight);
+  }
   // 2. Fetch existing messages
   frappe.call({
     method: "pcms.api.list_ns_messages.list_ns_messages",
@@ -102,7 +105,7 @@ frappe.ready(function () {
 
   // 4. Message rendering
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status, audio) {
-    const container = document.getElementById("messages");
+    
     const div = document.createElement("div");
 
     const statusClass = {
@@ -128,7 +131,7 @@ frappe.ready(function () {
     `;
 
     container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
+    scrollToBottom();
   }
 });
 
