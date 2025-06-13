@@ -52,24 +52,11 @@ def upload_voice_file():
             "health_care_unit", "hospital", "room_no"
         ], as_dict=True)
 
-        # Save to Message Doctype
-        message = frappe.new_doc("Message")
-        message.sender = patient.get("name")
-        message.sender_name = patient.get("patient_name")
-        message.nursing_station = patient.get("nursing_station")
-        message.health_care_unit = patient.get("health_care_unit")
-        message.hospital = patient.get("hospital")
-        message.message_content = text if text else "No Message Found"
-        message.sent_time = frappe.utils.now_datetime()
-        message.room_no = patient.get("room_no", "")
-        message.status = "New"
-        message.insert()
-
-        # Save converted WAV file and attach to message.audio
+        # Prepare folder path for the attachment
         folder_path = f"{patient.get('hospital', 'unknown')}/{patient.get('health_care_unit', 'unknown')}/{patient.get('nursing_station', 'unknown')}"
         folder = ensure_folder_path(folder_path)
 
-
+        # Save WAV file first
         with open(converted_path, 'rb') as wav_file:
             wav_content = wav_file.read()
             wav_filename = os.path.basename(converted_path)
@@ -77,13 +64,30 @@ def upload_voice_file():
                 fname=wav_filename,
                 content=wav_content,
                 dt="Message",
-                dn=message.name,
+                dn=None,  # Temporarily None; we’ll set it after insert
                 folder=folder,
                 is_private=1
             )
-            message.audio = attached_file.file_url
-            message.save()
-            
+
+        # Create and insert the message with the audio URL included
+        message = frappe.get_doc({
+            "doctype": "Message",
+            "sender": patient.get("name"),
+            "sender_name": patient.get("patient_name"),
+            "nursing_station": patient.get("nursing_station"),
+            "health_care_unit": patient.get("health_care_unit"),
+            "hospital": patient.get("hospital"),
+            "room_no": patient.get("room_no", ""),
+            "message_content": text if text else "No Message Found",
+            "sent_time": frappe.utils.now_datetime(),
+            "status": "New",
+            "audio": attached_file.file_url
+        })
+        message.insert()
+
+        # Now bind the file to the actual document name
+        attached_file.attached_to_name = message.name
+        attached_file.save()
 
         return {
             "file_name": attached_file.file_name,
@@ -92,6 +96,7 @@ def upload_voice_file():
             "size": attached_file.file_size,
             "transcription": text
         }
+
 
     except Exception as e:
         frappe.log_error("Transcription error", str(e))
