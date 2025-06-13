@@ -7,8 +7,8 @@ from frappe.model.document import Document
 
 class Message(Document):
 	def on_update(self):
-		if self._in_insert:
-			# Skip on_update during insert
+		if getattr(self, "_in_insert", False):
+			# Skip logic during insert
 			return
 
 		# Publish real-time update
