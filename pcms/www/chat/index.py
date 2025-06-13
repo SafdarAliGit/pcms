@@ -1,7 +1,5 @@
 import frappe
 
-no_cache = 1  # ensures page-level cache is disabled
-
 def get_context(context):
     context.no_cache = 1
     context.patient = {}
