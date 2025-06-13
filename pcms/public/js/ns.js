@@ -128,7 +128,7 @@ frappe.ready(function () {
     `;
 
     container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
+    container.scrollTop = container[0].scrollHeight;
   }
 });
 
