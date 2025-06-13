@@ -2,21 +2,19 @@ import frappe
 
 def get_context(context):
     context.no_cache = 1
-
     user = frappe.session.user
+    context.patient = {}
 
     if user != "Guest":
-        patient_list = frappe.db.get_list(
+        patient = frappe.db.get_value(
             "Patient",
-            filters={"user_id": user},
-            fields=["patient_name", "mr_no", "nursing_station"],
-            order_by="creation desc",
-            limit_page_length=1
+            {"user_id": user},
+            ["patient_name", "mr_no"],
+            as_dict=True,
+            order_by="creation desc"
         )
-        if patient_list:
-            patient = patient_list[0]
-            context.patient = patient.get("patient_name")
-            context.station = patient.get("nursing_station")
-            context.mr_no = patient.get("mr_no")
+        if patient:
+            context.patient = patient
 
     return context
+
