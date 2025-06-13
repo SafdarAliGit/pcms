@@ -6,4 +6,22 @@ from frappe.model.document import Document
 
 
 class Message(Document):
-	pass
+	def on_update(self):
+		if self._in_insert:
+			# Skip on_update during insert
+			return
+
+		# Publish real-time update
+		# frappe.publish_realtime(
+		# 	self.nursing_station,
+		# 	{
+		# 		"message_content": self.message_content,
+		# 		"sender": self.sender,
+		# 		"sender_name": self.sender_name,
+		# 		"room_no": self.room_no,
+		# 		"status": self.status,
+		# 		"sent_time": self.sent_time,
+		# 		"audio": self.audio
+		# 	}
+		# )
+			
