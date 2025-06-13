@@ -56,15 +56,48 @@ frappe.ready(function () {
   const room = stationName.replace(/[-\s]/g, "").toLowerCase();
 
   frappe.realtime.on(room, function (data) {
-    appendMessage(
-      data.message_content,
-      data.sender,
-      data.sender_name,
-      data.room_no,
-      data.sent_time,
-      data.status,
-      data.audio
-    );
+    frappe.call({
+      method: "pcms.api.list_ns_messages.list_ns_messages",
+      callback: function (r) {
+        if (r.message) {
+          r.message.forEach(function (msg) {
+            appendMessage(
+              msg.message_content,
+              msg.sender,
+              msg.sender_name,
+              msg.room_no,
+              msg.sent_time,
+              msg.status,
+              msg.audio
+            );
+          });
+        }
+      }
+    });
+    
+  });
+
+  frappe.realtime.on(room+"_update", function (data) {
+    
+    frappe.call({
+      method: "pcms.api.list_ns_messages.list_ns_messages",
+      callback: function (r) {
+        if (r.message) {
+          r.message.forEach(function (msg) {
+            appendMessage(
+              msg.message_content,
+              msg.sender,
+              msg.sender_name,
+              msg.room_no,
+              msg.sent_time,
+              msg.status,
+              msg.audio
+            );
+          });
+        }
+      }
+    });
+
   });
 
   // 4. Message rendering
