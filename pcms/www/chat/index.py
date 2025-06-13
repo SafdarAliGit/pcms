@@ -5,7 +5,7 @@ def get_context(context):
 
     user = frappe.session.user
 
-    if user and user != "Guest":
+    if user != "Guest":
         patient_list = frappe.db.get_list(
             "Patient",
             filters={"user_id": user},
