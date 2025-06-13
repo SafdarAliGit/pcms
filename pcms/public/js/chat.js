@@ -20,9 +20,12 @@ frappe.ready(function () {
     $chatBody.scrollTop($chatBody[0].scrollHeight);
   }
 
-  function appendMessage(text) {
+  function appendMessage(text, sent_time, status) {
     if (!text) return;
     const $msg = $("<div>").addClass("chat-message sent").text(text);
+    const $footer = $("<div>").addClass("voice-footer").appendTo($msg);
+    $("<span>").addClass("voice-time").text(sent_time).appendTo($footer);
+    $("<span>").addClass("voice-status").text(status).appendTo($footer);
     $chatBody.append($msg);
     scrollToBottom();
   }
