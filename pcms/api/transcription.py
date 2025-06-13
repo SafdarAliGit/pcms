@@ -57,19 +57,20 @@ def upload_voice_file():
         folder = ensure_folder_path(folder_path)
 
         # Save WAV file first
+        # Save file first (unlinked)
         with open(converted_path, 'rb') as wav_file:
             wav_content = wav_file.read()
             wav_filename = os.path.basename(converted_path)
-            attached_file = save_file(
+            attached_file_data = save_file(
                 fname=wav_filename,
                 content=wav_content,
                 dt="Message",
-                dn=None,  # Temporarily None; we’ll set it after insert
+                dn=None,  # We'll attach this after inserting Message
                 folder=folder,
                 is_private=1
             )
 
-        # Create and insert the message with the audio URL included
+        # Create and insert the Message
         message = frappe.get_doc({
             "doctype": "Message",
             "sender": patient.get("name"),
@@ -81,21 +82,24 @@ def upload_voice_file():
             "message_content": text if text else "No Message Found",
             "sent_time": frappe.utils.now_datetime(),
             "status": "New",
-            "audio": attached_file.file_url
+            "audio": attached_file_data.file_url
         })
         message.insert()
 
-        # Now bind the file to the actual document name
-        attached_file.attached_to_name = message.name
-        attached_file.save()
+        # Now update the File doc and save it properly
+        file_doc = frappe.get_doc("File", attached_file_data.name)
+        file_doc.attached_to_doctype = "Message"
+        file_doc.attached_to_name = message.name
+        file_doc.save()
 
         return {
-            "file_name": attached_file.file_name,
-            "file_url": attached_file.file_url,
-            "is_private": attached_file.is_private,
-            "size": attached_file.file_size,
+            "file_name": file_doc.file_name,
+            "file_url": file_doc.file_url,
+            "is_private": file_doc.is_private,
+            "size": file_doc.file_size,
             "transcription": text
         }
+
 
 
     except Exception as e:
