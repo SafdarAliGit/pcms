@@ -17,7 +17,7 @@ def get_context(context):
         )
         if patient_list:
             patient = patient_list[0]
-            context.patient = patient
+            context.patient = patient.get("patient_name")
             context.station = patient.get("nursing_station")
             context.mr_no = patient.get("mr_no")
 
