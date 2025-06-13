@@ -124,7 +124,7 @@ frappe.ready(function () {
 
       const data = await res.json();
       if (res.ok && data.message?.file_url) {
-        uploadVoiceMsg(data.message.file_url);
+        uploadVoiceMsg(data.message.file_url, data.message.sent_time, data.message.status);
       } else {
         throw new Error(data.message || data.error || res.statusText);
       }

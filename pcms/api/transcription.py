@@ -90,7 +90,9 @@ def upload_voice_file():
             "file_url": attached_file.file_url,
             "is_private": attached_file.is_private,
             "size": attached_file.file_size,
-            "transcription": text
+            "transcription": text,
+            "sent_time": message.sent_time,
+            "status": message.status
         }
 
     except Exception as e:
