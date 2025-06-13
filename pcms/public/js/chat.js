@@ -135,10 +135,21 @@ frappe.ready(function () {
   });
 
   function uploadVoiceMsg(url) {
-    const $voiceMsg = $("<div>").addClass("chat-message sent");
-    $("<audio>").attr({ controls: true, src: url }).appendTo($voiceMsg);
-    $chatBody.append($voiceMsg);
-    scrollToBottom();
+    function uploadVoiceMsg(url, sent_time, status) {
+      const $voiceMsg = $("<div>").addClass("chat-message sent");
+    
+      // Audio player
+      $("<audio>").attr({ controls: true, src: url }).appendTo($voiceMsg);
+    
+      // Footer container
+      const $footer = $("<div>").addClass("voice-footer").appendTo($voiceMsg);
+      $("<span>").addClass("voice-time").text(sent_time).appendTo($footer);
+      $("<span>").addClass("voice-status").text(status).appendTo($footer);
+    
+      $chatBody.append($voiceMsg);
+      scrollToBottom();
+    }
+    
   }
 
   // Validate plain-text messages
