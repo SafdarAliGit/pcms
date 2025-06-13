@@ -1,20 +1,24 @@
 import frappe
 
+# Ensure this flag is set for the page-level cache control
+no_cache = 1
+
 def get_context(context):
+    # Disable caching for this page
     context.no_cache = 1
-    user = frappe.session.user
+
+    # Default empty patient info
     context.patient = {}
 
-    if user != "Guest":
-        patient = frappe.db.get_value(
+    user = frappe.session.user
+    if user and user != "Guest":
+        # Use get_last_doc for the most recent patient
+        patient = frappe.get_last_doc(
             "Patient",
-            {"user_id": user},
-            ["patient_name", "mr_no"],
-            as_dict=True,
-            order_by="creation desc"
+            filters={"user_id": user},
+            fields=["patient_name", "mr_no", "nursing_station"]
         )
         if patient:
-            context.patient = patient
-
+            # If it's a Document, convert to dict
+            context.patient = patient.as_dict() if hasattr(patient, "as_dict") else patient
     return context
-

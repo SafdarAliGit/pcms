@@ -1,4 +1,26 @@
+
+frappe.realtime = {
+  handlers: {},
+  
+  on(event, fn) {
+    this.handlers[event] = fn;
+  },
+
+  init() {
+    this.socket = io();
+    this.socket.on('message', function (msg) {
+      console.log("Socket message:", msg);
+    });
+    for (let key in this.handlers) {
+      this.socket.on(key, this.handlers[key]);
+    }
+  }
+};
+
+
+
 frappe.ready(function () {
+  frappe.realtime.init();
   const $chatBody = $("#chat-body");
   const $messageInput = $("#message");
   const $voiceModal = $("#voice-modal");
@@ -14,6 +36,25 @@ frappe.ready(function () {
         });
       }
     }
+  });
+
+  // 3. Realtime room subscription
+  const stationName = window.nursing_station || "";
+  const room = stationName.replace(/[-\s]/g, "").toLowerCase();
+  console.log("Room:", room);
+  frappe.realtime.on(room+"_update", function (data) {
+    
+    frappe.call({
+      method: "pcms.api.list_chat_messages.list_chat_messages",
+      callback: r => {
+        if (r.message) {
+          r.message.forEach(msg => {
+            msg.audio ? uploadVoiceMsg(msg.audio, msg.sent_time, msg.status) : appendMessage(msg.message_content, msg.sent_time, msg.status);
+          });
+        }
+      }
+    });
+
   });
 
   function scrollToBottom() {
