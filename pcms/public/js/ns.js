@@ -30,7 +30,7 @@ frappe.realtime = {
 frappe.ready(function () {
   // 1. Initialize realtime connection
   frappe.realtime.init();
-
+  const $container = $("#messages");
   // 2. Fetch existing messages
   frappe.call({
     method: "pcms.api.list_ns_messages.list_ns_messages",
@@ -102,7 +102,6 @@ frappe.ready(function () {
 
   // 4. Message rendering
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status, audio) {
-    const container = document.getElementById("messages");
     const div = document.createElement("div");
 
     const statusClass = {
@@ -127,8 +126,8 @@ frappe.ready(function () {
       ${(status === "New" || status === "Acknowledged") ? `<button class="login_button" style="text-decoration: none; color: inherit;">Take Action</button>` : ''}
     `;
 
-    container.appendChild(div);
-    container.scrollTop = container[0].scrollHeight;
+    $container.append(div);
+    $container.scrollTop($container[0].scrollHeight);
   }
 });
 
