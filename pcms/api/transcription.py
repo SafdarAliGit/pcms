@@ -52,25 +52,16 @@ def upload_voice_file():
             "health_care_unit", "hospital", "room_no"
         ], as_dict=True)
 
-        # Prepare folder path for the attachment
+        # Prepare folder path
         folder_path = f"{patient.get('hospital', 'unknown')}/{patient.get('health_care_unit', 'unknown')}/{patient.get('nursing_station', 'unknown')}"
         folder = ensure_folder_path(folder_path)
 
-        # Save WAV file first
-        # Save file first (unlinked)
+        # Read and upload the file temporarily (not attached yet)
         with open(converted_path, 'rb') as wav_file:
             wav_content = wav_file.read()
             wav_filename = os.path.basename(converted_path)
-            attached_file_data = save_file(
-                fname=wav_filename,
-                content=wav_content,
-                dt="Message",
-                dn=None,  # We'll attach this after inserting Message
-                folder=folder,
-                is_private=1
-            )
 
-        # Create and insert the Message
+        # Create Message doc first
         message = frappe.get_doc({
             "doctype": "Message",
             "sender": patient.get("name"),
@@ -80,17 +71,24 @@ def upload_voice_file():
             "hospital": patient.get("hospital"),
             "room_no": patient.get("room_no", ""),
             "message_content": text if text else "No Message Found",
-            "sent_time": frappe.utils.now_datetime(),
-            "status": "New",
-            "audio": attached_file_data.file_url
+            "sent_time": now_datetime(),
+            "status": "New"
         })
         message.insert()
 
-        # Now update the File doc and save it properly
-        file_doc = frappe.get_doc("File", attached_file_data.name)
-        file_doc.attached_to_doctype = "Message"
-        file_doc.attached_to_name = message.name
-        file_doc.save()
+        # Now attach the file using correct reference to message
+        file_doc = save_file(
+            fname=wav_filename,
+            content=wav_content,
+            dt="Message",
+            dn=message.name,  # Proper string value
+            folder=folder,
+            is_private=1
+        )
+
+        # Update message with file URL and save again
+        message.audio = file_doc.file_url
+        message.save()
 
         return {
             "file_name": file_doc.file_name,
