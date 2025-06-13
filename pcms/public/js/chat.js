@@ -173,8 +173,9 @@ frappe.ready(function () {
         body: JSON.stringify({ message_content: text })
       });
 
-      const data = await res.json();
-      console.log(data);
+      const json = await res.json();
+      const data = json.message;
+
       if (!res.ok) {
         throw new Error(data.message || data.error || res.statusText);
       }
