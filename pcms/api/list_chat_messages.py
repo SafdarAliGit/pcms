@@ -19,7 +19,8 @@ def list_chat_messages():
         filters={"sender": patient.mr_no},
         fields=["audio", "message_content","sent_time", "status"],order_by="creation asc"
     )
-
+    for m in messages:
+        m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")
     return messages  # Return list (can be empty)
 
        
