@@ -13,8 +13,7 @@ def get_context(context):
             filters={"user_id": user},
             fields=["patient_name", "mr_no", "nursing_station"],
             order_by="creation desc",
-            limit_page_length=1,  # limit to one record
-            as_dict=True
+            limit_page_length=1
         )
         if patient_list:
             patient = patient_list[0]
