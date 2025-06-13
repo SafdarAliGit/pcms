@@ -1,4 +1,5 @@
 import frappe
+from frappe.utils.data import format_datetime
 
 @frappe.whitelist()
 def list_ns_messages():
@@ -24,4 +25,6 @@ def list_ns_messages():
         order_by="creation asc"
     )
 
+    for m in messages:
+        m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")
     return messages  # Always returns a list, can be empty

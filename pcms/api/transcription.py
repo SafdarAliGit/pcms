@@ -8,6 +8,7 @@ import tempfile
 import wave
 import json
 from pcms.utils.ensure_folder_path import ensure_folder_path
+from frappe.utils.data import format_datetime
 
 @frappe.whitelist()
 def upload_voice_file():
@@ -91,7 +92,7 @@ def upload_voice_file():
             "is_private": attached_file.is_private,
             "size": attached_file.file_size,
             "transcription": text,
-            "sent_time": message.sent_time,
+            "sent_time": format_datetime(message.sent_time, "dd-MM-yyyy hh:mm a"),
             "status": message.status
         }
 

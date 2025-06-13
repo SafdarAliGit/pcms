@@ -1,6 +1,6 @@
 import frappe
 from frappe import _
-
+from frappe.utils import format_datetime
 
 @frappe.whitelist()
 def upload_text_message(message_content=None):
@@ -31,7 +31,7 @@ def upload_text_message(message_content=None):
 
         return {
             "message_content": message_content,
-            "sent_time": message.sent_time,
+            "sent_time":format_datetime(message.sent_time, "dd-MM-yyyy hh:mm a"),
             "status": message.status
         }
 
