@@ -7,8 +7,8 @@ def get_context(context):
     if user and user != "Guest":
         patient = frappe.db.get_list(
             "Patient",
-            {"user_id": user},
-            ["patient_name", "mr_no", "nursing_station"],
+            filters={"user_id": user},
+            fields=["patient_name", "mr_no", "nursing_station"],
             as_dict=True,
             order_by="creation desc",
             limit=1
