@@ -168,4 +168,9 @@ frappe.ready(function () {
       }
     });
   });
+
+  // Handle re-login form submission
+  $(document).on("click", "#relogin-cancel", function () {
+    $("#relogin-modal").addClass("hidden");
+  });
 });
