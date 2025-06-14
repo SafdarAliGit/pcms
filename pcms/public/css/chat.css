@@ -150,40 +150,6 @@ body {
   background-color: #3e8e41;
 }
 
-.relogin-modal {
-  padding: 0;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-}
-.relogin-modal::backdrop {
-  background: rgba(0,0,0,0.4);
-}
-
-.relogin-modal__content {
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  gap: 15px;
-  width: 90%;
-  max-width: 400px;
-}
-
-.relogin-modal__buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.relogin-modal__buttons button {
-  flex: 1;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
 /* Voice Modal */
 .voice-modal {
   position: fixed;

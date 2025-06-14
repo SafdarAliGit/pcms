@@ -11,19 +11,21 @@
 <script src="/assets/pcms/js/ns.js"></script>
 
 <!-- Modal HTML -->
-<div id="relogin-modal" class="voice-modal hidden">
-  <div class="voice-modal-content">
-    <h3>Re-login Required</h3>
-    <label for="relogin-username">Username:</label>
-    <input type="text" id="relogin-username" required />
-    <label for="relogin-password">Password:</label>
-    <input type="password" id="relogin-password" required />
-    <div class="voice-modal-buttons">
+<div id="relogin-modal" class="custom-modal hidden">
+  <div class="custom-modal-content">
+    <h3 class="custom-modal-title">Re-login Required</h3>
+
+    <label for="relogin-username" class="custom-label">Username:</label>
+    <input type="text" id="relogin-username" class="custom-input" required />
+
+    <label for="relogin-password" class="custom-label">Password:</label>
+    <input type="password" id="relogin-password" class="custom-input" required />
+
+    <div class="custom-modal-buttons">
       <button id="relogin-submit" class="btn-primary">Login</button>
       <button type="button" class="btn-secondary" onclick="closeReloginModal()">Cancel</button>
     </div>
   </div>
 </div>
-
 
 {% endblock %}
