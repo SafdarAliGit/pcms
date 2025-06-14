@@ -140,9 +140,9 @@ frappe.ready(function () {
       method: 'pcms.utils.get_user_roles.get_user_roles',
       callback: function (res) {
         const roles = res.message || [];
-        console.log(roles);
+
         if (!roles.includes("Nurse")) {
-          $("#relogin-modal").show();
+          $("#relogin-modal").removeClass("hidden");
         } else {
           frappe.msgprint("You have Nurse role.");
         }
@@ -161,7 +161,7 @@ frappe.ready(function () {
       callback: function (res) {
         if (res.message === "Logged In") {
           frappe.msgprint("Re-authenticated.");
-          $("#relogin-modal").hide();
+          $("#relogin-modal").addClass("hidden");
         } else {
           frappe.msgprint("Invalid credentials.");
         }
