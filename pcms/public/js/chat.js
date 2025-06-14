@@ -63,10 +63,10 @@ frappe.ready(function () {
 
   function appendMessage(text, sent_time, status) {
     if (!text) return;
-    const $msg = $("<div>").addClass("chat-message sent" + (status === "Acknowledged" ? " status-acknowledged" : "")).text(text);
+    const $msg = $("<div>").addClass("chat-message sent" + (status !== "New" ? " status-acknowledged" : "")).text(text);
     const $footer = $("<div>").addClass("voice-footer").appendTo($msg);
     $("<span>").addClass("voice-time").text(sent_time).appendTo($footer);
-    $("<span>").addClass((status === "Acknowledged" ? "status-acknowledged-text" : "voice-status")).text(status === "Acknowledged" ? "Acknowledged \u2713\u2713" : "\u2713").appendTo($footer);
+    $("<span>").addClass((status !== "New" ? "status-acknowledged-text" : "voice-status")).text(status !== "New" ? "Acknowledged \u2713\u2713" : "\u2713").appendTo($footer);
     $chatBody.append($msg);
     scrollToBottom();
   }
