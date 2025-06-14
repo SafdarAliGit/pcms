@@ -2,7 +2,12 @@ import frappe
 
 def get_context(context):
     context.no_cache = 1
-    context.patient = None  # Initialize as None for better conditional checks
+    context.patient = {
+        "name": "",
+        "patient_name": "",
+        "mr_no": "",
+        "nursing_station": "",
+    }
     
     if not frappe.session.user or frappe.session.user == "Guest":
         return context
