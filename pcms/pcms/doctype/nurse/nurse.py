@@ -22,7 +22,7 @@ def create_nurse_user(doc, method):
             "email": doc.email,
             "first_name": doc.nurse_name,
             "send_welcome_email": 0,
-            "roles": [{"role": "Nurse"}],
+            "roles": [{"role": "Nurse"}, {"role": "Nursing Station"}],
             "user_type": "System User"
         })
         user.insert(ignore_permissions=True)
