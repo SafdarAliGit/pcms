@@ -1,29 +1,35 @@
-
 import frappe
+from frappe import _
+
 def get_context(context):
     context.no_cache = 1
+
+    # Default structure for patient data
     context.patient = {
         "name": "",
         "patient_name": "",
         "mr_no": "",
         "nursing_station": "",
     }
-    
-    if not frappe.session.user or frappe.session.user == "Guest":
-        return context
-    
+
+    user = frappe.session.user or ""
+    if user == "Guest":
+        return context  # Guest users see an empty/default context
+
     try:
-        # Get the most recent patient record for this user
-        context.patient = frappe.get_value(
+        # Retrieve the most recent patient record tied to the user
+        patient = frappe.db.get_value(
             "Patient",
-            filters={"user_id": frappe.session.user},
-            fieldname=["name", "patient_name", "mr_no", "nursing_station"],
-            as_dict=True,
-            order_by="creation desc"
+            {"user_id": user},
+            ["name", "patient_name", "mr_no", "nursing_station"],
+            as_dict=True
         )
-        
+        if patient:
+            context.patient = patient
     except Exception as e:
-        frappe.log_error(f"Error fetching patient data for user {frappe.session.user}: {e}", "Patient Context Error")
-        # Consider showing a user-friendly message if needed
-    
+        frappe.log_error(
+            frappe.get_traceback(),
+            _("Error fetching patient data for user {0}").format(user)
+        )
+
     return context
