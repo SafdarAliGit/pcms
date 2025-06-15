@@ -10,6 +10,7 @@
   "abbreviation",
   "city",
   "state",
+  "column_break_qi5m",
   "country",
   "license_number",
   "logo",
@@ -67,12 +68,16 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Abbreviation"
+  },
+  {
+   "fieldname": "column_break_qi5m",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-02 17:40:02.559835",
+ "modified": "2025-06-15 11:36:47.929418",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Hospital",

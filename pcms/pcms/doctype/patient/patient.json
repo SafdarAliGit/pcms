@@ -13,6 +13,7 @@
   "mobile_number",
   "email",
   "address",
+  "column_break_kebh",
   "nursing_station",
   "health_care_unit",
   "hospital",
@@ -100,12 +101,16 @@
    "fieldname": "room_no",
    "fieldtype": "Data",
    "label": "Room No"
+  },
+  {
+   "fieldname": "column_break_kebh",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-06 18:15:14.957388",
+ "modified": "2025-06-15 11:38:07.943330",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Patient",

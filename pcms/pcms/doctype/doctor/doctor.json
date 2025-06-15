@@ -11,6 +11,7 @@
   "mobile_number",
   "email",
   "address",
+  "column_break_zdvx",
   "hospital",
   "health_care_unit",
   "nursing_station",
@@ -80,12 +81,16 @@
    "in_list_view": 1,
    "label": "Doctor Name",
    "reqd": 1
+  },
+  {
+   "fieldname": "column_break_zdvx",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-06 18:01:23.012754",
+ "modified": "2025-06-15 11:41:26.631307",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Doctor",

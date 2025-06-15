@@ -11,6 +11,7 @@
   "mobile_number",
   "email",
   "address",
+  "column_break_oh7e",
   "hospital",
   "health_care_unit",
   "nursing_station",
@@ -80,12 +81,16 @@
    "in_list_view": 1,
    "label": "Nurse Name",
    "reqd": 1
+  },
+  {
+   "fieldname": "column_break_oh7e",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-06 18:01:03.401240",
+ "modified": "2025-06-15 11:40:34.542818",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Nurse",

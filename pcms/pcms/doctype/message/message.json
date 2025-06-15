@@ -12,6 +12,7 @@
   "hospital",
   "message_content",
   "treatment",
+  "column_break_zels",
   "audio",
   "room_no",
   "sent_time",
@@ -102,12 +103,16 @@
    "fieldtype": "Small Text",
    "label": "Treatment",
    "placeholder": "Write Treatment here"
+  },
+  {
+   "fieldname": "column_break_zels",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-14 16:02:57.523454",
+ "modified": "2025-06-15 11:39:55.561657",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "Message",
