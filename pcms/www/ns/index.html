@@ -5,9 +5,11 @@
 <h3 class="chat-title">💬 Patient's Messages ({{ station}})</h2>
 
 <div id="messages" class="chat-box"></div>
+{% if station %}
 <script>
   window.nursing_station = {{ station | tojson | safe }};
 </script>
+{% endif %}
 
 <script src="/assets/pcms/js/ns.js"></script>
 
