@@ -55,8 +55,9 @@ frappe.ready(function () {
   // 3. Realtime room subscription
   const stationName = window.nursing_station || "";
   const room = stationName.replace(/[-\s]/g, "").toLowerCase();
-
+  if (room) {
   frappe.realtime.on(room, function (data) {
+    console.log("Realtime data:", data);
     frappe.call({
       method: "pcms.api.list_ns_messages.list_ns_messages",
       callback: function (r) {
@@ -76,8 +77,9 @@ frappe.ready(function () {
         }
       }
     });
-    
+       
   });
+  }
 
   frappe.realtime.on(room+"_update", function (data) {
     
