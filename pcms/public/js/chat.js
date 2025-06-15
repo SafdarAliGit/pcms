@@ -1,3 +1,4 @@
+window.frappe = window.frappe || {};
 
 frappe.realtime = {
   handlers: {},
