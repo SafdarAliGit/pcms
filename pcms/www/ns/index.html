@@ -8,12 +8,15 @@
 <script>
   window.nursing_station = {{ station | tojson | safe }};
 </script>
+
 <script src="/assets/pcms/js/ns.js"></script>
+
 
 <!-- Modal HTML -->
 <div id="relogin-modal" class="custom-modal hidden">
   <div class="custom-modal-content">
     <h3 class="custom-modal-title">Re-login Required</h3>
+    <span id="relogin-error" class="text-red"></span>
 
     <label for="relogin-username" class="custom-label">Username:</label>
     <input type="text" id="relogin-username" class="custom-input" required />
@@ -27,5 +30,30 @@
     </div>
   </div>
 </div>
+
+<!-- Custom Modal for Action -->
+<div id="actionModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Take Action</h5>
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 30px;font-weight: bold;">&times;</button>
+      </div>
+      <div class="modal-body">
+        <textarea id="treatment" class="form-control" rows="4" placeholder="Treatment"></textarea>
+        <div class="mt-3">
+          <span>Status: </span><strong id="statusDisplay"></strong>
+        </div>
+      </div>
+      <div class="modal-footer custom-modal-buttons">
+        <button class="btn-secondary status-btn" data-status="Acknowledged">Acknowledged</button>
+        <button class="btn-secondary status-btn" data-status="Resolved">Resolved</button>
+        <button class="btn-secondary status-btn" data-status="Escalated">Escalated</button>
+        <button class="btn-primary" id="saveAction">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}

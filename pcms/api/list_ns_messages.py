@@ -20,7 +20,7 @@ def list_ns_messages():
         filters={"nursing_station": nursing_station.name},
         fields=[
             "message_content", "sender", "sender_name", 
-            "room_no", "sent_time", "status", "audio"
+            "room_no", "sent_time", "status", "audio", "name"
         ],
         order_by="creation asc"
     )
