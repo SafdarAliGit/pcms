@@ -184,14 +184,14 @@ frappe.ready(function () {
 
   $(document).on('click', '.login_button', async function() {
     // get user roles
-    const roles = await frappe.call({
-      method: 'pcms.utils.get_user_roles.get_user_roles',
-      args: { user: frappe.session.user }
-    });
-    const role = roles.message;
-    if (!role.includes("Nurse")) {
-      $("#relogin-modal").removeClass("hidden");
-    } else {
+    // const roles = await frappe.call({
+    //   method: 'pcms.utils.get_user_roles.get_user_roles',
+    //   args: { user: frappe.session.user }
+    // });
+    // const role = roles.message;
+    // if (!role.includes("Nurse")) {
+    //   $("#relogin-modal").removeClass("hidden");
+    // } else {
       const name = $(this).data('name');
       currentMessage.name = name;
   
@@ -206,7 +206,7 @@ frappe.ready(function () {
     setStatus(doc.status || '');
   
     $('#actionModal').modal('show');
-    }
+    // }
   });
   
   function setStatus(st) {
