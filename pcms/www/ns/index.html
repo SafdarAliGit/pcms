@@ -48,7 +48,9 @@
         
         <textarea id="treatment" class="form-control" rows="4" placeholder="Treatment"></textarea>
         <div class="mt-3">
-          <span>Status: </span><strong id="statusDisplay"></strong>
+          <span>Status : </span><strong id="statusDisplay"></strong>
+          <button class="btn-primary" id="reloginDisplay" style="background-color: rgb(11, 178, 11);width: 100%;margin-top: 10px;margin-bottom: 10px;">Re Login </button>
+          <span style="width: 100%;">User : {{ frappe.session.user }}</span>
         </div>
       </div>
       <div class="modal-footer custom-modal-buttons">

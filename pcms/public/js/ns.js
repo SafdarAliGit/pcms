@@ -142,15 +142,15 @@ frappe.ready(function () {
 
   $(document).on('click', '.login_button', async function() {
     // get user roles
-    const roles = await frappe.call({
-      method: 'pcms.utils.get_user_roles.get_user_roles',
-      args: { user: frappe.session.user }
-    });
-    const role = roles.message.flat();
+    // const roles = await frappe.call({
+    //   method: 'pcms.utils.get_user_roles.get_user_roles',
+    //   args: { user: frappe.session.user }
+    // });
+    // const role = roles.message.flat();
 
-    if (!role.includes("Nurse")) {
-      $("#relogin-modal").removeClass("hidden");
-    } else {
+    // if (!role.includes("Nurse")) {
+    //   $("#relogin-modal").removeClass("hidden");
+    // } else {
       const name = $(this).data('name');
       currentMessage.name = name;
   
@@ -165,7 +165,11 @@ frappe.ready(function () {
     setStatus(doc.status || '');
   
     $('#actionModal').modal('show');
-    }
+    // }
+    $('#reloginDisplay').on('click', function() {
+      $('#actionModal').modal('hide');
+      show_relogin_modal();
+    });
   });
   
   function setStatus(st) {
@@ -212,6 +216,8 @@ frappe.ready(function () {
   }
   $(document).on("click", "#relogin-cancel", function () {
     hide_relogin_modal();
+
+    
   });
 
     // Handle re-login form submission
