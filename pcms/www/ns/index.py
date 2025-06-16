@@ -9,6 +9,8 @@ def get_context(context):
     if user != "Guest" and user:
         try:
             station = frappe.db.get_value("Nursing Station", {"user_id": user}, "name")
+            if not station:
+                station = frappe.db.get_value("Nurse", {"user_id": user}, "nursing_station")
             context.station = station or ""
         except Exception as e:
             frappe.log_error(frappe.get_traceback(), _("Error fetching Nursing Station for user {0}").format(user))

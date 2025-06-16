@@ -135,48 +135,6 @@ frappe.ready(function () {
 });
 
 
-// Login and re-authentication logic
-// frappe.ready(function () {
-//   // Handle Take Action button click
-//   $(document).on("click", ".login_button", function () {
-//     frappe.call({
-//       method: 'pcms.utils.get_user_roles.get_user_roles',
-//       callback: function (res) {
-//         const roles = res.message || [];
-
-//         if (!roles.includes("Nurse")) {
-//           $("#relogin-modal").removeClass("hidden");
-//         } else {
-//           frappe.msgprint("You have Nurse role.");
-//         }
-//       }
-//     });
-//   });
-
-//   // Handle re-login form submission
-//   $(document).on("click", "#relogin-submit", function () {
-//     const usr = $("#relogin-username").val();
-//     const pwd = $("#relogin-password").val();
-
-//     frappe.call({
-//       method: 'login',
-//       args: { usr, pwd },
-//       callback: function (res) {
-//         if (res.message === "Logged In") {
-//           frappe.msgprint("Re-authenticated.");
-//           $("#relogin-modal").addClass("hidden");
-//         } else {
-//           frappe.msgprint("Invalid credentials.");
-//         }
-//       }
-//     });
-//   });
-
-//   // Handle re-login form submission
-//   $(document).on("click", "#relogin-cancel", function () {
-//     $("#relogin-modal").addClass("hidden");
-//   });
-// });
 
 
 frappe.ready(function () {
@@ -184,14 +142,15 @@ frappe.ready(function () {
 
   $(document).on('click', '.login_button', async function() {
     // get user roles
-    // const roles = await frappe.call({
-    //   method: 'pcms.utils.get_user_roles.get_user_roles',
-    //   args: { user: frappe.session.user }
-    // });
-    // const role = roles.message;
-    // if (!role.includes("Nurse")) {
-    //   $("#relogin-modal").removeClass("hidden");
-    // } else {
+    const roles = await frappe.call({
+      method: 'pcms.utils.get_user_roles.get_user_roles',
+      args: { user: frappe.session.user }
+    });
+    const role = roles.message.flat();
+
+    if (!role.includes("Nurse")) {
+      $("#relogin-modal").removeClass("hidden");
+    } else {
       const name = $(this).data('name');
       currentMessage.name = name;
   
@@ -206,7 +165,7 @@ frappe.ready(function () {
     setStatus(doc.status || '');
   
     $('#actionModal').modal('show');
-    // }
+    }
   });
   
   function setStatus(st) {
@@ -264,9 +223,9 @@ frappe.ready(function () {
       method: 'login',
       args: { usr, pwd },
       callback: function (res) {
-        if (res.message === "Logged In") {
-          frappe.msgprint("Re-authenticated.");
+        if (res.message === "Logged In") {      
           $("#relogin-modal").addClass("hidden");
+          window.location.reload();
         } else {
           $("#relogin-error")
           .text("Invalid credentials.")

@@ -180,13 +180,13 @@ frappe.ready(function () {
   });
 
   function uploadVoiceMsg(url, sent_time, status) {
-    const $voiceMsg = $("<div>").addClass("chat-message sent " + (status === "Acknowledged" ? "status-acknowledged" : ""));
+    const $voiceMsg = $("<div>").addClass("chat-message sent " + (status !== "New" ? "status-acknowledged" : ""));
   
     $("<audio>").attr({ controls: true, src: url }).appendTo($voiceMsg);
   
     const $footer = $("<div>").addClass("voice-footer").appendTo($voiceMsg);
     $("<span>").addClass("voice-time").text(sent_time).appendTo($footer);
-    $("<span>").addClass((status === "Acknowledged" ? "status-acknowledged-text" : "voice-status")).text(status === "Acknowledged" ? "Acknowledged \u2713\u2713" : "\u2713").appendTo($footer);
+    $("<span>").addClass((status !== "New" ? "status-acknowledged-text" : "voice-status")).text(status !== "New" ? "Acknowledged \u2713\u2713" : "\u2713").appendTo($footer);
   
     $chatBody.append($voiceMsg);
     scrollToBottom();

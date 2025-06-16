@@ -208,6 +208,20 @@ audio:hover {
   color: red;
   font-weight: bold;
 }
+/* CSS */
+.highlighted-text {
+  display: inline-block;
+  font-weight: bold;
+  padding: 15px;
+  margin: 10px;
+  border: solid 1px #a8a4a4;
+  border-radius: 5px;
+  text-align: center;
+}
+.center-wrapper {
+  text-align: center;
+}
+
 /* Mobile responsive adjustments */
 @media (max-width: 480px) {
   .custom-modal-content {
