@@ -343,7 +343,7 @@ audio:hover {
   cursor: pointer;
   transition: background 0.3s;
 }
-.quick-voice-trigger-btn:hover, .quick-modal-close-btn:hover {
+.quick-voice-trigger-btn:hover {
   background: #4338ca;
 }
 
