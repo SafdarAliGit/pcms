@@ -230,32 +230,30 @@ frappe.ready(function () {
       alert("Upload failed: " + err.message);
     }
   }
-});
+  // quick voice
+const voiceMap = {
+  "headache": "/assets/pcms/voices/headache.webm",
+  "belly_pain": "/assets/pcms/voices/belly_pain.webm",
+  "breathing": "/assets/pcms/voices/breathing_issue.webm"
+};
 
-// quick voice
-frappe.ready(function () {
-  const voiceMap = {
-    "headache": "/assets/pcms/voices/headache.webm",
-    "belly_pain": "/assets/pcms/voices/belly_pain.webm",
-    "breathing": "/assets/pcms/voices/breathing_issue.webm"
-  };
+$("#open-quick-voice-modal").click(() => $("#quick-voice-modal").removeClass("hidden"));
+$("#close-quick-voice-modal").click(() => $("#quick-voice-modal").addClass("hidden"));
 
-  $("#open-quick-voice-modal").click(() => $("#quick-voice-modal").removeClass("hidden"));
-  $("#close-quick-voice-modal").click(() => $("#quick-voice-modal").addClass("hidden"));
+$(".quick-voice-item").click(async function () {
+  const key = $(this).data("voice");
+  const url = voiceMap[key];
+  if (!url) return;
 
-  $(".quick-voice-item").click(async function () {
-    const key = $(this).data("voice");
-    const url = voiceMap[key];
-    if (!url) return;
+  $("#quick-voice-modal").addClass("hidden");
+  uploadVoiceMsg(url, formatDateTime(new Date()), "New");
 
-    $("#quick-voice-modal").addClass("hidden");
-    uploadVoiceMsg(url, formatDateTime(new Date()), "New");
-
-    // send to Frappe or directly to nursing
-    frappe.call({
-      method: "pcms.api.messaging.send_voice",
-      args: { voice_url: url },
-      callback: () => console.log("sent voice:", key)
-    });
+  // send to Frappe or directly to nursing
+  frappe.call({
+    method: "pcms.api.messaging.send_voice",
+    args: { voice_url: url },
+    callback: () => console.log("sent voice:", key)
   });
 });
+});
+
