@@ -32,6 +32,7 @@
     <textarea id="message" placeholder="Type your message..."></textarea>
     <div class="chat-buttons">
       <button class="send-btn" id="send-btn">Send</button>
+      <button id="open-quick-voice-modal" class="quick-voice-trigger-btn">🎤 Quick Voice</button>
       <button class="record-btn" id="record-btn">🎤 Record</button>
     </div>
   </div>
@@ -49,6 +50,23 @@
     </div>
   </div>
 </div>
+
+
+
+<!-- quick Voice Selection Modal -->
+<div id="quick-voice-modal" class="quick-voice-modal hidden">
+  <div class="quick-voice-modal-content">
+    <h3>Select a Quick Voice</h3>
+    <div class="quick-voice-list">
+      <button data-voice="headache" class="quick-voice-item">🤕 I have a headache</button>
+      <button data-voice="pain" class="quick-voice-item">😣 I’m in pain</button>
+      <button data-voice="breathing" class="quick-voice-item">😤 Breathing issue</button>
+      <!-- Add more -->
+    </div>
+    <button id="close-quick-voice-modal" class="modal-close-btn">Cancel</button>
+  </div>
+</div>
+
 <script>
   window.nursing_station = {{ patient.nursing_station | tojson | safe }};
 </script>

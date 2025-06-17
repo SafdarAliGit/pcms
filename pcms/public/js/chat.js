@@ -231,3 +231,31 @@ frappe.ready(function () {
     }
   }
 });
+
+// quick voice
+frappe.ready(function () {
+  const voiceMap = {
+    "headache": "/assets/pcms/voices/have_headache.webm",
+    "pain": "/assets/pcms/voices/in_pain.webm",
+    "breathing": "/assets/pcms/voices/breathing_issue.webm"
+  };
+
+  $("#open-quick-voice-modal").click(() => $("#quick-voice-modal").removeClass("hidden"));
+  $("#close-quick-voice-modal").click(() => $("#quick-voice-modal").addClass("hidden"));
+
+  $(".quick-voice-item").click(async function () {
+    const key = $(this).data("voice");
+    const url = voiceMap[key];
+    if (!url) return;
+
+    $("#quick-voice-modal").addClass("hidden");
+    uploadVoiceMsg(url, formatDateTime(new Date()), "New");
+
+    // send to Frappe or directly to nursing
+    frappe.call({
+      method: "pcms.api.messaging.send_voice",
+      args: { voice_url: url },
+      callback: () => console.log("sent voice:", key)
+    });
+  });
+});
