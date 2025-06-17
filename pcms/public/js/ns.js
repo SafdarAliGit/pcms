@@ -36,6 +36,7 @@ frappe.ready(function () {
     method: "pcms.api.list_ns_messages.list_ns_messages",
     callback: function (r) {
       if (r.message) {
+        $container.empty(); 
         r.message.forEach(function (msg) {
           appendMessage(
             msg.message_content,
@@ -61,6 +62,7 @@ frappe.ready(function () {
       method: "pcms.api.list_ns_messages.list_ns_messages",
       callback: function (r) {
         if (r.message) {
+          $container.empty(); 
           r.message.forEach(function (msg) {
             appendMessage(
               msg.message_content,
@@ -85,6 +87,7 @@ frappe.ready(function () {
       method: "pcms.api.list_ns_messages.list_ns_messages",
       callback: function (r) {
         if (r.message) {
+          $container.empty(); 
           r.message.forEach(function (msg) {
             appendMessage(
               msg.message_content,
@@ -141,31 +144,17 @@ frappe.ready(function () {
   let currentMessage = {};
 
   $(document).on('click', '.login_button', async function() {
-    // get user roles
-    // const roles = await frappe.call({
-    //   method: 'pcms.utils.get_user_roles.get_user_roles',
-    //   args: { user: frappe.session.user }
-    // });
-    // const role = roles.message.flat();
-
-    // if (!role.includes("Nurse")) {
-    //   $("#relogin-modal").removeClass("hidden");
-    // } else {
       const name = $(this).data('name');
       currentMessage.name = name;
   
-    // Fetch current data
     const r = await frappe.call({
       method: 'frappe.client.get',
       args: { doctype: 'Message', name }
     });
-  
     const doc = r.message;
     $('#treatment').val(doc.treatment || '');
     setStatus(doc.status || '');
-  
     $('#actionModal').modal('show');
-    // }
     $('#reloginDisplay').on('click', function() {
       $('#actionModal').modal('hide');
       show_relogin_modal();
@@ -195,7 +184,6 @@ frappe.ready(function () {
       args: payload,
       callback: () => {
         $('#actionModal').modal('hide');
-        // location.reload(); // or update partial UI
       }
     });
   });
