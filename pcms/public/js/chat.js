@@ -249,11 +249,59 @@ $(".quick-voice-item").click(async function () {
   uploadVoiceMsg(url, formatDateTime(new Date()), "New");
 
   // send to Frappe or directly to nursing
-  frappe.call({
-    method: "pcms.api.messaging.send_voice",
-    args: { voice_url: url },
-    callback: () => console.log("sent voice:", key)
-  });
+  try {
+    const downloadResp = await fetch(url);
+    if (!downloadResp.ok) {
+      throw new Error("Download failed: " + downloadResp.statusText);
+    }
+  
+    const blob = await downloadResp.blob();
+    const fd = new FormData();
+    fd.append("file", blob, "voice_note.webm");
+    fd.append("is_private", "1");
+  
+    const uploadResp = await fetch("/api/method/pcms.api.transcription.upload_voice_file", {
+      method: "POST",
+      headers: { "X-Frappe-CSRF-Token": frappe.csrf_token },
+      credentials: "include",
+      body: fd,
+    });
+  
+    const data = await uploadResp.json();
+  
+    // 🛑 Throw only if HTTP error
+    if (!uploadResp.ok) {
+      let errMsg = data.error || data.message || `HTTP ${uploadResp.status}`;
+      if (typeof errMsg === "object") {
+        try {
+          errMsg = JSON.stringify(errMsg);
+        } catch {
+          errMsg = String(errMsg);
+        }
+      }
+      throw new Error(errMsg);
+    }
+  
+    // Check for missing data.package
+
+    if (!data.file_url) {
+      throw new Error("Unexpected response structure: no file_url");
+    }
+  
+    // ✅ Success path — this will no longer go into catch
+    uploadVoiceMsg(data.file_url, data.sent_time, data.status);
+  
+  } catch (err) {
+    console.error("Voice upload error:", err);
+    const msg =
+      err instanceof Error
+        ? err.message
+        : JSON.stringify(err);
+    alert("Voice upload failed: " + msg);
+  } finally {
+    $audioReview[0].removeAttribute("src");
+    audioBlob = null;
+  }
 });
 
 function formatDateTime(date) {
