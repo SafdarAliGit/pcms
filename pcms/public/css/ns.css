@@ -305,7 +305,7 @@ audio:hover {
 /* Status: Acknowledged */
 .chat-message.status-acknowledged {
   background-color: #acc40d; /* Orange-50 */
-  border-left-color: #fbfb22; /* Orange-600 */
+  border-left-color: #6f7d12; /* Orange-600 */
 }
 
 /* Status: Resolved */
