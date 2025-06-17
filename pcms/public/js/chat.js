@@ -267,14 +267,14 @@ $(".quick-voice-item").click(async function () {
       body: fd,
     });
   
-    const data = uploadResp.message;
+    const quickVoiceData = uploadResp.message;
   
    
-    if (!data.file_url) {
+    if (!quickVoiceData.file_url) {
       throw new Error("Unexpected response structure: no file_url");
     }
   
-    uploadVoiceMsg(data.file_url, data.sent_time, data.status);
+    uploadVoiceMsg(quickVoiceData.file_url, quickVoiceData.sent_time, quickVoiceData.status);
   
   } catch (err) {
     console.error("Voice upload error:", err);
