@@ -267,7 +267,7 @@ $(".quick-voice-item").click(async function () {
       body: fd,
     });
   
-    const data = await uploadResp.json();
+    const data = uploadResp.message;
   
     // 🛑 Throw only if HTTP error
     if (!uploadResp.ok) {
