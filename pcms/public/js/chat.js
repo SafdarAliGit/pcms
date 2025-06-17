@@ -250,16 +250,19 @@ $(".quick-voice-item").click(async function () {
 
   // send to Frappe or directly to nursing
   try {
+    // 1. Download the .webm file
     const downloadResp = await fetch(url);
     if (!downloadResp.ok) {
       throw new Error("Download failed: " + downloadResp.statusText);
     }
   
+    // 2. Convert to Blob
     const blob = await downloadResp.blob();
     const fd = new FormData();
     fd.append("file", blob, "voice_note.webm");
     fd.append("is_private", "1");
   
+    // 3. Upload it
     const uploadResp = await fetch("/api/method/pcms.api.transcription.upload_voice_file", {
       method: "POST",
       headers: { "X-Frappe-CSRF-Token": frappe.csrf_token },
@@ -267,26 +270,36 @@ $(".quick-voice-item").click(async function () {
       body: fd,
     });
   
-    const quickVoiceData = uploadResp.message;
+    // ✅ Crucial fix: await JSON parsing
+    const resBody = await uploadResp.json();
   
-   
+    // If your backend wraps result in `message`, extract it
+    const quickVoiceData = resBody.message || resBody;
+  
+    // 4a. Handle HTTP-level errors
+    if (!uploadResp.ok) {
+      let errMsg = quickVoiceData.error || quickVoiceData.message || `HTTP ${uploadResp.status}`;
+      if (typeof errMsg === "object") try { errMsg = JSON.stringify(errMsg); } catch { errMsg = String(errMsg); }
+      throw new Error(errMsg);
+    }
+  
+    // 4b. Make sure file_url exists
     if (!quickVoiceData.file_url) {
       throw new Error("Unexpected response structure: no file_url");
     }
   
+    // ✅ Success
     uploadVoiceMsg(quickVoiceData.file_url, quickVoiceData.sent_time, quickVoiceData.status);
   
   } catch (err) {
     console.error("Voice upload error:", err);
-    const msg =
-      err instanceof Error
-        ? err.message
-        : JSON.stringify(err);
+    const msg = err instanceof Error ? err.message : JSON.stringify(err);
     alert("Voice upload failed: " + msg);
   } finally {
     $audioReview[0].removeAttribute("src");
     audioBlob = null;
   }
+  
 });
 
 function formatDateTime(date) {
