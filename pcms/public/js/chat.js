@@ -269,26 +269,11 @@ $(".quick-voice-item").click(async function () {
   
     const data = uploadResp.message;
   
-    // 🛑 Throw only if HTTP error
-    if (!uploadResp.ok) {
-      let errMsg = data.error || data.message || `HTTP ${uploadResp.status}`;
-      if (typeof errMsg === "object") {
-        try {
-          errMsg = JSON.stringify(errMsg);
-        } catch {
-          errMsg = String(errMsg);
-        }
-      }
-      throw new Error(errMsg);
-    }
-  
-    // Check for missing data.package
-
+   
     if (!data.file_url) {
       throw new Error("Unexpected response structure: no file_url");
     }
   
-    // ✅ Success path — this will no longer go into catch
     uploadVoiceMsg(data.file_url, data.sent_time, data.status);
   
   } catch (err) {
