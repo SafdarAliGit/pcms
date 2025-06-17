@@ -32,6 +32,7 @@ frappe.ready(function () {
     method: "pcms.api.list_chat_messages.list_chat_messages",
     callback: r => {
       if (r.message) {
+        $chatBody.empty(); 
         r.message.forEach(msg => {
           msg.audio ? uploadVoiceMsg(msg.audio, msg.sent_time, msg.status) : appendMessage(msg.message_content, msg.sent_time, msg.status);
         });
@@ -49,6 +50,7 @@ frappe.ready(function () {
       method: "pcms.api.list_chat_messages.list_chat_messages",
       callback: r => {
         if (r.message) {
+          $chatBody.empty(); 
           r.message.forEach(msg => {
             msg.audio ? uploadVoiceMsg(msg.audio, msg.sent_time, msg.status) : appendMessage(msg.message_content, msg.sent_time, msg.status);
           });
