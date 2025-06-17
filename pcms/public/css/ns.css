@@ -192,16 +192,16 @@ audio:hover {
 }
 
 .btn-primary:hover {
-  background-color:#0056b3 ;
+  background-color:#08498f ;
 }
 
 .btn-secondary {
-  background-color:#e19108 ;
+  background-color:#2eb106 ;
   color: #fff;
 }
 
 .btn-secondary:hover {
-  background-color:#ac6f06;
+  background-color:#056522;
 }
 
 .text-red {
@@ -221,7 +221,12 @@ audio:hover {
 .center-wrapper {
   text-align: center;
 }
-
+.login-btn{
+  background-color: #2eb106;width: 100%;margin-top: 10px;
+}
+.login-btn:hover{
+  background-color: #056522;
+}
 /* Mobile responsive adjustments */
 @media (max-width: 480px) {
   .custom-modal-content {
