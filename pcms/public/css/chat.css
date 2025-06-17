@@ -360,8 +360,9 @@ audio:hover {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  width: auto;
+  width: 100%;
   transition: background 0.3s;
+
 }
 .quick-modal-close-btn:hover {
   background: #4338ca;
