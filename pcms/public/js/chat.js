@@ -235,8 +235,8 @@ frappe.ready(function () {
 // quick voice
 frappe.ready(function () {
   const voiceMap = {
-    "headache": "/assets/pcms/voices/have_headache.webm",
-    "pain": "/assets/pcms/voices/in_pain.webm",
+    "headache": "/assets/pcms/voices/headache.webm",
+    "belly_pain": "/assets/pcms/voices/belly_pain.webm",
     "breathing": "/assets/pcms/voices/breathing_issue.webm"
   };
 

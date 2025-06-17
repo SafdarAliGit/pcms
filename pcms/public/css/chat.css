@@ -342,6 +342,7 @@ audio:hover {
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s;
+  width: 100%;
 }
 .quick-voice-trigger-btn:hover {
   background: #4338ca;
