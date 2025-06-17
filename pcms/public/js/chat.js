@@ -232,13 +232,68 @@ frappe.ready(function () {
   }
   // quick voice
 const voiceMap = {
-  "headache": "/assets/pcms/voices/headache.webm",
-  "belly_pain": "/assets/pcms/voices/belly_pain.webm",
-  "breathing": "/assets/pcms/voices/breathing_issue.webm"
-};
+  "i_cant_breathe_well_lying_down": "/assets/pcms/voices/i_cant_breathe_well_lying_down.webm",
+  "i_feel_anxious": "/assets/pcms/voices/i_feel_anxious.webm",
+  "i_feel_chest_tightness": "/assets/pcms/voices/i_feel_chest_tightness.webm",
+  "i_feel_cold_chills": "/assets/pcms/voices/i_feel_cold_chills.webm",
+  "i_feel_dizzy": "/assets/pcms/voices/i_feel_dizzy.webm",
+  "i_feel_faint": "/assets/pcms/voices/i_feel_faint.webm",
+  "i_feel_lightheaded": "/assets/pcms/voices/i_feel_lightheaded.webm",
+  "i_feel_nauseous": "/assets/pcms/voices/i_feel_nauseous.webm",
+  "i_feel_sweaty": "/assets/pcms/voices/i_feel_sweaty.webm",
+  "i_feel_weak": "/assets/pcms/voices/i_feel_weak.webm",
+  "i_have_a_fever": "/assets/pcms/voices/i_have_a_fever.webm",
+  "i_have_a_rash": "/assets/pcms/voices/i_have_a_rash.webm",
+  "i_have_a_sore_throat": "/assets/pcms/voices/i_have_a_sore_throat.webm",
+  "i_have_bleeding": "/assets/pcms/voices/i_have_bleeding.webm",
+  "i_have_bruises": "/assets/pcms/voices/i_have_bruises.webm",
+  "i_have_diarrhea": "/assets/pcms/voices/i_have_diarrhea.webm",
+  "i_have_heartburn": "/assets/pcms/voices/i_have_heartburn.webm",
+  "i_have_indigestion": "/assets/pcms/voices/i_have_indigestion.webm",
+  "im_always_thirsty": "/assets/pcms/voices/im_always_thirsty.webm",
+  "im_constipated": "/assets/pcms/voices/im_constipated.webm",
+  "im_coughing": "/assets/pcms/voices/im_coughing.webm",
+  "im_forgetting_things": "/assets/pcms/voices/im_forgetting_things.webm",
+  "im_gaining_weight": "/assets/pcms/voices/im_gaining_weight.webm",
+  "im_having_trouble_sleeping": "/assets/pcms/voices/im_having_trouble_sleeping.webm",
+  "im_losing_weight": "/assets/pcms/voices/im_losing_weight.webm",
+  "im_passing_gas": "/assets/pcms/voices/im_passing_gas.webm",
+  "im_really_tired": "/assets/pcms/voices/im_really_tired.webm",
+  "im_shivering": "/assets/pcms/voices/im_shivering.webm",
+  "im_short_of_breath": "/assets/pcms/voices/im_short_of_breath.webm",
+  "im_sneezing": "/assets/pcms/voices/im_sneezing.webm",
+  "im_sweating_at_night": "/assets/pcms/voices/im_sweating_at_night.webm",
+  "i_need_to_pee_often": "/assets/pcms/voices/i_need_to_pee_often.webm",
+  "i_see_double": "/assets/pcms/voices/i_see_double.webm",
+  "it_hurts_when_i_pee": "/assets/pcms/voices/it_hurts_when_i_pee.webm",
+  "ive_been_vomiting": "/assets/pcms/voices/ive_been_vomiting.webm",
+  "my_back_hurts": "/assets/pcms/voices/my_back_hurts.webm",
+  "my_chest_hurts": "/assets/pcms/voices/my_chest_hurts.webm",
+  "my_ears_ring": "/assets/pcms/voices/my_ears_ring.webm",
+  "my_gums_bleed": "/assets/pcms/voices/my_gums_bleed.webm",
+  "my_head_hurts": "/assets/pcms/voices/my_head_hurts.webm",
+  "my_heart_is_racing": "/assets/pcms/voices/my_heart_is_racing.webm",
+  "my_joints_ache": "/assets/pcms/voices/my_joints_ache.webm",
+  "my_legs_are_swollen": "/assets/pcms/voices/my_legs_are_swollen.webm",
+  "my_mouth_is_dry": "/assets/pcms/voices/my_mouth_is_dry.webm",
+  "my_muscles_ache": "/assets/pcms/voices/my_muscles_ache.webm",
+  "my_nose_is_stuffy": "/assets/pcms/voices/my_nose_is_stuffy.webm",
+  "my_skin_is_itchy": "/assets/pcms/voices/my_skin_is_itchy.webm",
+  "my_stomach_hurts": "/assets/pcms/voices/my_stomach_hurts.webm",
+  "my_throat_hurts_to_swallow": "/assets/pcms/voices/my_throat_hurts_to_swallow.webm",
+  "my_vision_is_blurry": "/assets/pcms/voices/my_vision_is_blurry.webm",
+};  
 
 $("#open-quick-voice-modal").click(() => $("#quick-voice-modal").removeClass("hidden"));
 $("#close-quick-voice-modal").click(() => $("#quick-voice-modal").addClass("hidden"));
+// Live filtering
+$("#voice-search").on("input", function() {
+  const term = $(this).val().toLowerCase();
+  $(".quick-voice-item").each(function(){
+    const text = $(this).text().toLowerCase();
+    $(this).toggle(text.includes(term));
+  });
+});
 
 $(".quick-voice-item").click(async function () {
   const key = $(this).data("voice");
