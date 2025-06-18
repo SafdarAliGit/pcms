@@ -301,9 +301,12 @@ function closeModal() {
   $("#quick-voice-modal").addClass("hidden").css({ position: '', top: '' });
 }
 
-$("#open-quick-voice-modal").click(openModal);
-$("#close-quick-voice-modal").click(closeModal);
-
+$(document).on("click", "#open-quick-voice-modal", function () {
+  openModal();  
+});
+$(document).on("click", "#close-quick-voice-modal", function () {
+  closeModal();
+});
 
 // Live filtering
 $("#voice-search").on("input", function() {
