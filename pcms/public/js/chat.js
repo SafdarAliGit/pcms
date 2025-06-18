@@ -284,8 +284,27 @@ const voiceMap = {
   "my_vision_is_blurry": "/assets/pcms/voices/my_vision_is_blurry.webm",
 };  
 
-$("#open-quick-voice-modal").click(() => $("#quick-voice-modal").removeClass("hidden"));
-$("#close-quick-voice-modal").click(() => $("#quick-voice-modal").addClass("hidden"));
+
+function openModal() {
+  const modal = $("#quick-voice-modal");
+  modal.removeClass("hidden");
+  if (window.innerHeight < 800) {
+    // mobile
+    modal.css({
+      position: 'absolute',
+      top: window.scrollY + 'px'
+    });
+  }
+}
+
+function closeModal() {
+  $("#quick-voice-modal").addClass("hidden").css({ position: '', top: '' });
+}
+
+$("#open-quick-voice-modal").click(openModal);
+$("#close-quick-voice-modal").click(closeModal);
+
+
 // Live filtering
 $("#voice-search").on("input", function() {
   const term = $(this).val().toLowerCase();
