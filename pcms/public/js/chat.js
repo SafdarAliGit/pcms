@@ -319,6 +319,7 @@ $("#voice-search").on("input", function() {
 
 $(".quick-voice-item").click(async function () {
   const key = $(this).data("voice");
+  const text = $(this).text();
   const url = voiceMap[key];
   if (!url) return;
 
@@ -338,6 +339,7 @@ $(".quick-voice-item").click(async function () {
     const fd = new FormData();
     fd.append("file", blob, "voice_note.webm");
     fd.append("is_private", "1");
+    fd.append("text_msg", text);
   
     // 3. Upload it
     const uploadResp = await fetch("/api/method/pcms.api.transcription.upload_voice_file", {

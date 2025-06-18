@@ -13,6 +13,7 @@ from frappe.utils.data import format_datetime
 @frappe.whitelist()
 def upload_voice_file():
     filedata = frappe.request.files.get('file')
+    text_msg = frappe.request.form.get('text_msg', '')
     if not filedata:
         frappe.throw(_("No file uploaded"))
 
@@ -37,15 +38,18 @@ def upload_voice_file():
         recognizer = KaldiRecognizer(model, 16000)
 
         # Transcribe audio
-        with wave.open(converted_path, 'rb') as wf:
-            while True:
-                data = wf.readframes(4000)
-                if len(data) == 0:
-                    break
-                recognizer.AcceptWaveform(data)
+        if not text_msg:
+            with wave.open(converted_path, 'rb') as wf:
+                while True:
+                    data = wf.readframes(4000)
+                    if len(data) == 0:
+                        break
+                    recognizer.AcceptWaveform(data)
 
-        result = json.loads(recognizer.FinalResult())
-        text = result.get("text", "")
+            result = json.loads(recognizer.FinalResult())
+            text = result.get("text", "")
+        else:
+            text = text_msg
 
         # Get Patient Info
         patient = frappe.db.get_value("Patient", {"user_id": frappe.session.user}, [
