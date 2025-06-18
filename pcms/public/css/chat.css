@@ -21,7 +21,7 @@ body {
 .chat-header {
   background-color: #1974D2;
   color: #fff;
-  padding: 15px;
+  padding: 6px;
   font-size: 20px;
   text-align: center;
 }
@@ -215,8 +215,8 @@ body {
   align-items: center;
   background: linear-gradient(135deg, #f0f8ff, #e6f2ff);
   border-left: 6px solid #1974D2;
-  padding: 5px 10px;
-  margin: 10px auto;
+  padding: 5px;
+  margin: 5px auto;
   width: 90%;
   max-width: 600px;
   font-size: 18px;
