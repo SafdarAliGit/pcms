@@ -97,7 +97,8 @@ doc_events = {
 # website user home page (by Role)
 role_home_page = {
     "Patient": "chat",
-    "Nursing Station": "ns"
+    "Nursing Station": "ns",
+    "Nurse":"ns"
 }
 
 
