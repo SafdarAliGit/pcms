@@ -353,20 +353,21 @@ audio:hover {
 /* ❌ Close Button */
 .quick-modal-close-btn {
   margin: 0.5rem 1rem;
-  padding: 0.6rem;
-  align-self: flex-end;
+  padding: 0.6rem 1rem;
+  align-self: stretch;        /* Stretch across the flex container's width */
+  flex: 0 0 auto;             /* Don’t grow or shrink; natural size with stretch */
   background: #6366f1;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  width: 100%;
   transition: background 0.3s;
-
 }
 .quick-modal-close-btn:hover {
   background: #4338ca;
 }
+
+
 
 /* Fade-in animation */
 @keyframes fadeIn {
