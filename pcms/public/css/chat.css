@@ -300,7 +300,7 @@ audio:hover {
   background: #fff;
   width: 100%;
   max-width: 400px;
-  max-height: calc(60vh - 2rem); /* Responsive height */
+  max-height: calc(70vh - 2rem); /* Responsive height */
   display: flex;
   flex-direction: column;
   border-radius: 12px;
