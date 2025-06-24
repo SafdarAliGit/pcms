@@ -1,0 +1,128 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Chat{% endblock %}
+
+{% block page_content %}
+
+<!-- Redirect to login if not logged in -->
+{% if frappe.session.user == "Guest" %}
+  <script>
+    window.location.href = "/login?redirect-to=/chat";
+  </script>
+{% endif %}
+
+<link rel="stylesheet" href="/assets/pcms/css/chat.css">
+
+<div class="chat-container">
+
+  <div id="patient-info">
+    <span><strong>Name:</strong> {{ patient.patient_name }}</span>
+    <span><strong>MR No:</strong> {{ patient.mr_no }}</span>
+  </div>
+  
+
+
+  <div class="chat-header">Patient Chat</div>
+  
+  <div class="chat-body" id="chat-body">
+    <!-- Messages will appear here -->
+  </div>
+
+  <div class="chat-input">
+    <textarea id="message" placeholder="Type your message..."></textarea>
+    <div class="chat-buttons">
+      <button class="send-btn" id="send-btn">Send</button>
+      <button id="open-quick-voice-modal" class="quick-voice-trigger-btn">🎤 Quick Voice</button>
+      <button class="record-btn" id="record-btn">🎤 Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- Voice Review Modal -->
+<div class="voice-modal hidden" id="voice-modal">
+  <div class="voice-modal-content">
+    <h3>Voice Review</h3>
+    <audio id="audio-review" controls></audio>
+    <div class="voice-modal-buttons">
+      <button id="play-voice">Play</button>
+      <button id="discard-voice">Discard</button>
+      <button id="send-voice">Send</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- quick Voice Selection Modal -->
+<div id="quick-voice-modal" class="quick-voice-modal hidden">
+  <div class="quick-voice-modal-content">
+    <h5 style="text-align: center;">Quick Voices</h5>
+    <header>
+      <input style=" border: 1.5px solid #15c449;" type="text" id="voice-search" placeholder="Search quick voices…" />
+    </header>
+    <div class="quick-voice-list">
+      <button data-voice="i_cant_breathe_well_lying_down" class="quick-voice-item">I Cant Breathe Well Lying Down</button>
+<button data-voice="i_feel_anxious" class="quick-voice-item">I Feel Anxious</button>
+<button data-voice="i_feel_chest_tightness" class="quick-voice-item">I Feel Chest Tightness</button>
+<button data-voice="i_feel_cold_chills" class="quick-voice-item">I Feel Cold Chills</button>
+<button data-voice="i_feel_dizzy" class="quick-voice-item">I Feel Dizzy</button>
+<button data-voice="i_feel_faint" class="quick-voice-item">I Feel Faint</button>
+<button data-voice="i_feel_lightheaded" class="quick-voice-item">I Feel Lightheaded</button>
+<button data-voice="i_feel_nauseous" class="quick-voice-item">I Feel Nauseous</button>
+<button data-voice="i_feel_sweaty" class="quick-voice-item">I Feel Sweaty</button>
+<button data-voice="i_feel_weak" class="quick-voice-item">I Feel Weak</button>
+<button data-voice="i_have_a_fever" class="quick-voice-item">I Have A Fever</button>
+<button data-voice="i_have_a_rash" class="quick-voice-item">I Have A Rash</button>
+<button data-voice="i_have_a_sore_throat" class="quick-voice-item">I Have A Sore Throat</button>
+<button data-voice="i_have_bleeding" class="quick-voice-item">I Have Bleeding</button>
+<button data-voice="i_have_bruises" class="quick-voice-item">I Have Bruises</button>
+<button data-voice="i_have_diarrhea" class="quick-voice-item">I Have Diarrhea</button>
+<button data-voice="i_have_heartburn" class="quick-voice-item">I Have Heartburn</button>
+<button data-voice="i_have_indigestion" class="quick-voice-item">I Have Indigestion</button>
+<button data-voice="im_always_thirsty" class="quick-voice-item">Im Always Thirsty</button>
+<button data-voice="im_constipated" class="quick-voice-item">Im Constipated</button>
+<button data-voice="im_coughing" class="quick-voice-item">Im Coughing</button>
+<button data-voice="im_forgetting_things" class="quick-voice-item">Im Forgetting Things</button>
+<button data-voice="im_gaining_weight" class="quick-voice-item">Im Gaining Weight</button>
+<button data-voice="im_having_trouble_sleeping" class="quick-voice-item">Im Having Trouble Sleeping</button>
+<button data-voice="im_losing_weight" class="quick-voice-item">Im Losing Weight</button>
+<button data-voice="im_passing_gas" class="quick-voice-item">Im Passing Gas</button>
+<button data-voice="im_really_tired" class="quick-voice-item">Im Really Tired</button>
+<button data-voice="im_shivering" class="quick-voice-item">Im Shivering</button>
+<button data-voice="im_short_of_breath" class="quick-voice-item">Im Short Of Breath</button>
+<button data-voice="im_sneezing" class="quick-voice-item">Im Sneezing</button>
+<button data-voice="im_sweating_at_night" class="quick-voice-item">Im Sweating At Night</button>
+<button data-voice="i_need_to_pee_often" class="quick-voice-item">I Need To Pee Often</button>
+<button data-voice="i_see_double" class="quick-voice-item">I See Double</button>
+<button data-voice="it_hurts_when_i_pee" class="quick-voice-item">It Hurts When I Pee</button>
+<button data-voice="ive_been_vomiting" class="quick-voice-item">Ive Been Vomiting</button>
+<button data-voice="my_back_hurts" class="quick-voice-item">My Back Hurts</button>
+<button data-voice="my_chest_hurts" class="quick-voice-item">My Chest Hurts</button>
+<button data-voice="my_ears_ring" class="quick-voice-item">My Ears Ring</button>
+<button data-voice="my_gums_bleed" class="quick-voice-item">My Gums Bleed</button>
+<button data-voice="my_head_hurts" class="quick-voice-item">My Head Hurts</button>
+<button data-voice="my_heart_is_racing" class="quick-voice-item">My Heart Is Racing</button>
+<button data-voice="my_joints_ache" class="quick-voice-item">My Joints Ache</button>
+<button data-voice="my_legs_are_swollen" class="quick-voice-item">My Legs Are Swollen</button>
+<button data-voice="my_mouth_is_dry" class="quick-voice-item">My Mouth Is Dry</button>
+<button data-voice="my_muscles_ache" class="quick-voice-item">My Muscles Ache</button>
+<button data-voice="my_nose_is_stuffy" class="quick-voice-item">My Nose Is Stuffy</button>
+<button data-voice="my_skin_is_itchy" class="quick-voice-item">My Skin Is Itchy</button>
+<button data-voice="my_stomach_hurts" class="quick-voice-item">My Stomach Hurts</button>
+<button data-voice="my_throat_hurts_to_swallow" class="quick-voice-item">My Throat Hurts To Swallow</button>
+<button data-voice="my_vision_is_blurry" class="quick-voice-item">My Vision Is Blurry</button>
+      <!-- Add more items -->
+    </div>
+    <button id="close-quick-voice-modal" class="quick-modal-close-btn">Cancel</button>
+  </div>
+</div>
+
+
+<script>
+  window.nursing_station = {{ patient.nursing_station | tojson | safe }};
+</script>
+<!-- Just include your own script. jQuery is already loaded via Frappe -->
+<script src="/assets/pcms/js/chat.js"></script>
+
+
+{% endblock %}

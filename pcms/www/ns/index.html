@@ -1,0 +1,68 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<link rel="stylesheet" href="/assets/pcms/css/ns.css">
+<h3 class="chat-title">💬 Patient's Messages ({{ station}})</h2>
+
+<div id="messages" class="chat-box"></div>
+
+<script>
+  window.nursing_station = {{ station |  tojson | safe }};
+</script>
+
+
+<script src="/assets/pcms/js/ns.js"></script>
+
+
+<!-- Modal HTML -->
+<div id="relogin-modal" class="custom-modal hidden">
+  <div class="custom-modal-content">
+    <h3 class="custom-modal-title">Re-login Required</h3>
+    <div class="center-wrapper">
+      <span class="highlighted-text">Current User : {{ frappe.session.user }}</span>
+    </div>
+    <span id="relogin-error" class="text-red"></span>
+
+    <label for="relogin-username" class="custom-label">Username:</label>
+    <input type="text" id="relogin-username" class="custom-input" required />
+
+    <label for="relogin-password" class="custom-label">Password:</label>
+    <input type="password" id="relogin-password" class="custom-input" required />
+
+    <div class="custom-modal-buttons">
+      <button id="relogin-submit" class="btn-primary">Login</button>
+      <button id="relogin-cancel" type="button" class="btn-secondary">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Modal for Action -->
+<div id="actionModal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Take Action</h5>
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 30px;font-weight: bold;">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <textarea id="treatment" class="form-control" rows="4" placeholder="Treatment"></textarea>
+        <div class="mt-3">
+          <span style="width: 100%;display: inline-block;margin-bottom: 5px;">Status : <strong id="statusDisplay"></strong></span>
+          <span style="width: 100%;display: inline-block;">User : {{ frappe.session.user }}</span>
+          <button class="btn-primary login-btn" id="reloginDisplay">Re Login </button>
+          
+        </div>
+      </div>
+      <div class="modal-footer custom-modal-buttons">
+        <button class="btn-secondary status-btn" data-status="Acknowledged">Acknowledged</button>
+        <button class="btn-secondary status-btn" data-status="Resolved">Resolved</button>
+        <button class="btn-secondary status-btn" data-status="Escalated">Escalated</button>
+        <button class="btn-primary" id="saveAction">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

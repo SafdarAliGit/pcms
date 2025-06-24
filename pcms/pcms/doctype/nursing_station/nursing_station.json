@@ -1,0 +1,94 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{health_care_unit}-{nursing_station_name}",
+ "creation": "2025-06-02 16:45:58.532171",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "nursing_station_name",
+  "health_care_unit",
+  "hospital",
+  "abbreviation",
+  "email",
+  "user_id",
+  "is_active"
+ ],
+ "fields": [
+  {
+   "fieldname": "nursing_station_name",
+   "fieldtype": "Data",
+   "label": "Nursing Station Name"
+  },
+  {
+   "fieldname": "health_care_unit",
+   "fieldtype": "Link",
+   "label": "Health Care Unit",
+   "options": "Health Care Unit",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "health_care_unit.hospital",
+   "fieldname": "hospital",
+   "fieldtype": "Link",
+   "label": "Hospital",
+   "options": "Hospital",
+   "read_only": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "fetch_from": "hospital.abbreviation",
+   "fieldname": "abbreviation",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Abbreviation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Email",
+   "reqd": 1
+  },
+  {
+   "fieldname": "user_id",
+   "fieldtype": "Link",
+   "label": "User ID",
+   "options": "User",
+   "unique": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-06 18:00:39.506559",
+ "modified_by": "Administrator",
+ "module": "Pcms",
+ "name": "Nursing Station",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

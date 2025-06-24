@@ -1,0 +1,83 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{abbreviation}-{health_care_unit_name}",
+ "creation": "2025-06-02 16:23:54.645332",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "health_care_unit_name",
+  "hospital",
+  "abbreviation",
+  "unit_type",
+  "beds",
+  "is_active"
+ ],
+ "fields": [
+  {
+   "fieldname": "health_care_unit_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Health Care Unit Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "hospital",
+   "fieldtype": "Link",
+   "label": "Hospital",
+   "options": "Hospital",
+   "reqd": 1
+  },
+  {
+   "fieldname": "unit_type",
+   "fieldtype": "Link",
+   "label": "Unit Type",
+   "options": "Unit Type"
+  },
+  {
+   "fieldname": "beds",
+   "fieldtype": "Int",
+   "label": "Beds"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "fetch_from": "hospital.abbreviation",
+   "fieldname": "abbreviation",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Abbreviation"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-06 15:30:48.391890",
+ "modified_by": "Administrator",
+ "module": "Pcms",
+ "name": "Health Care Unit",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{hospital}-{nurse_name}",
+ "creation": "2025-06-02 17:50:07.002111",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "nurse_name",
+  "gender",
+  "mobile_number",
+  "email",
+  "address",
+  "column_break_oh7e",
+  "hospital",
+  "health_care_unit",
+  "nursing_station",
+  "is_active",
+  "user_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "label": "Gender",
+   "options": "\nMale\nFemale\nOther"
+  },
+  {
+   "fieldname": "mobile_number",
+   "fieldtype": "Data",
+   "label": "Mobile Number"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Email",
+   "reqd": 1
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "nursing_station",
+   "fieldtype": "Link",
+   "label": "Nursing Station",
+   "options": "Nursing Station"
+  },
+  {
+   "fieldname": "health_care_unit",
+   "fieldtype": "Link",
+   "label": "Health Care Unit",
+   "options": "Health Care Unit"
+  },
+  {
+   "fetch_from": "nursing_station.hospital",
+   "fieldname": "hospital",
+   "fieldtype": "Link",
+   "label": "Hospital",
+   "options": "Hospital",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "user_id",
+   "fieldtype": "Link",
+   "label": "User ID",
+   "options": "User",
+   "unique": 1
+  },
+  {
+   "fieldname": "nurse_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nurse Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_oh7e",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-15 11:40:34.542818",
+ "modified_by": "Administrator",
+ "module": "Pcms",
+ "name": "Nurse",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
