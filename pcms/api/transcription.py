@@ -15,7 +15,7 @@ from gtts import gTTS
 @frappe.whitelist()
 def upload_voice_file():
     filedata = frappe.request.files.get('file')
-    # text_msg = frappe.request.form.get('text_msg', '')
+    text_msg = frappe.request.form.get('text_msg', '')
     if not filedata:
         frappe.throw(_("No file uploaded"))
 
@@ -94,8 +94,7 @@ def upload_voice_file():
                 is_private=1
             )
             message.audio = attached_file.file_url
-            message.save()
-        
+            # message.save()
         # Save generated MP3 file ---
         mp3_path = tempfile.mktemp(suffix=".mp3")
         tts.save(mp3_path)
