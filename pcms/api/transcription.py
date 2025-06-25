@@ -16,6 +16,7 @@ from gtts import gTTS
 def upload_voice_file():
     filedata = frappe.request.files.get('file')
     text_msg = frappe.request.form.get('text_msg', '')
+    text = ""
     if not filedata:
         frappe.throw(_("No file uploaded"))
 
