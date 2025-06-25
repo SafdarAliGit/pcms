@@ -43,7 +43,7 @@ def extract_and_format(text, threshold=0.8):
     "distal","external","internal","superficial","deep","prone","supine",
     "bilateral","unilateral","contralateral","ipsilateral","cranial","caudal",
     "rostral","central","peripheral"
-}
+    }
     raw = ner(text)
     merged, current = [], None
 
