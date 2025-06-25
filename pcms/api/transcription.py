@@ -94,6 +94,7 @@ def upload_voice_file():
                 is_private=1
             )
             message.audio = attached_file.file_url
+            message.save()
         
         # Save generated MP3 file ---
         mp3_path = tempfile.mktemp(suffix=".mp3")
