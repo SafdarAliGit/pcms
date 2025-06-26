@@ -137,15 +137,11 @@ def upload_voice_file():
         return {"error": str(e)}
 
     finally:
-        for path in [original_path, converted_path]:
+        # Clean up all temp files
+        for path in [original_path, converted_path, mp3_path]:
             try:
-                os.remove(path)
-            except FileNotFoundError:
-                pass  # file was never created or already deleted
-
-        # Safely delete the mp3 file if it exists
-        try:
-            os.remove(mp3_path)
-        except (UnboundLocalError, FileNotFoundError):
-            pass  # mp3_path wasn't created or already removed
+                if path and os.path.exists(path):
+                    os.remove(path)
+            except:
+                pass
 
