@@ -58,7 +58,7 @@ def upload_voice_file():
             text = result.get("text", "")
         else:
             text = text_msg
-
+        spell_checked_text = spell_checker.correct(text)
         # Get Patient Info
         patient = frappe.db.get_value("Patient", {"user_id": frappe.session.user}, [
             "name", "patient_name", "mr_no", "nursing_station",
@@ -72,12 +72,12 @@ def upload_voice_file():
         message.nursing_station = patient.get("nursing_station")
         message.health_care_unit = patient.get("health_care_unit")
         message.hospital = patient.get("hospital")
-        message.message_content = text if text else "No Message Found"
+        message.message_content = spell_checked_text if spell_checked_text else "No Message Found"
         message.sent_time = frappe.utils.now_datetime()
         message.room_no = patient.get("room_no", "")
         message.status = "New"
         # Extract symptoms
-        spell_checked_text = spell_checker.correct(text)
+        
         symptoms = extractor.get_patient_symptoms(spell_checked_text)
         message.symptoms = symptoms
         message.save()
@@ -127,7 +127,7 @@ def upload_voice_file():
             "symptoms_audio_url": attached_mp3.file_url,
             "is_private": attached_file.is_private,
             "size": attached_file.file_size,
-            "transcription": text,
+            "transcription": spell_checked_text,
             "sent_time": format_datetime(message.sent_time, "dd-MM-yyyy hh:mm a"),
             "status": message.status
         }

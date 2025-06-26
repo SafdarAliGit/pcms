@@ -47,3 +47,6 @@ sudo make install
 ./configure --prefix=/usr/local --enable-gpl --enable-nonfree
 make -j$(nproc)
 sudo make install# pcms
+
+sudo apt install openjdk-17-jdk-headless
+
