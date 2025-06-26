@@ -80,7 +80,7 @@ def upload_voice_file():
         
         symptoms = extractor.get_patient_symptoms(spell_checked_text)
         message.symptoms = symptoms
-        message.save()
+        message.insert()
 
         # Generate MP3 from symptoms text
         tts = gTTS(symptoms)
