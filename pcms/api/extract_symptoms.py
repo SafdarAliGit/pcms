@@ -1,82 +1,70 @@
-from transformers import pipeline
-from pydub import AudioSegment
+import re
+import pandas as pd
+import language_tool_python
 
+class SymptomExtractor:
+    def __init__(self, symptoms_csv_path):
+        self.tool = language_tool_python.LanguageTool('en-US')
+        self.body_parts = {
+            'head', 'neck', 'chest', 'back', 'arm', 'leg', 'hand', 'foot',
+            'eye', 'ear', 'nose', 'mouth', 'stomach', 'abdomen', 'pelvis',
+            'shoulder', 'knee', 'elbow', 'wrist', 'ankle', 'finger', 'toe',
+            'thumb', 'hip', 'thigh', 'shin', 'calf', 'heel', 'sole', 'palm',
+            'brain', 'heart', 'lung', 'liver', 'kidney', 'intestine', 'colon',
+            'bladder', 'pancreas', 'spleen', 'gallbladder', 'appendix'
+        }
+        self.helper_words = {
+            'and', 'or', 'the', 'a', 'an', 'is', 'am', 'are', 'was', 'were',
+            'have', 'has', 'had', 'do', 'does', 'did', 'may', 'might', 'can',
+            'could', 'shall', 'should', 'will', 'would', 'must', 'being'
+        }
+        self.master_symptoms = self._load_symptoms(symptoms_csv_path)
 
-def extract_and_format(text, threshold=0.8):
+    def _load_symptoms(self, csv_path):
+        """Load and preprocess symptoms from CSV"""
+        disease_db = pd.read_csv(csv_path)
+        disease_db['symptoms_list'] = disease_db['common_symptom'].fillna('').str.lower().str.split(', ')
+        
+        master_symptoms = set()
+        for sublist in disease_db['symptoms_list']:
+            for symptom in sublist:
+                if symptom:
+                    words = symptom.split()
+                    if len(words) == 1 and (words[0] in self.body_parts or words[0] in self.helper_words):
+                        continue
+                    unique_words = []
+                    seen_words = set()
+                    for word in words:
+                        if word not in seen_words:
+                            seen_words.add(word)
+                            unique_words.append(word)
+                    cleaned = ' '.join(unique_words)
+                    master_symptoms.add(cleaned)
+        return master_symptoms
 
-    ner = pipeline(
-    "ner",
-    model="AventIQ-AI/bert-medical-entity-extraction",
-    tokenizer="AventIQ-AI/bert-medical-entity-extraction",
-    aggregation_strategy="none"
-    )
+    def _format_symptoms(self, symptom_set):
+        """Format symptoms list into natural language string"""
+        if not symptom_set:
+            return "No symptoms found"
+        symptoms = sorted(symptom_set, key=lambda x: (-len(x), x))
+        if len(symptoms) == 1:
+            return "Symptom is: " + symptoms[0]
+        return "Symptoms are: " + ', '.join(symptoms[:-1]) + ' and ' + symptoms[-1]
 
-    LABEL_MAP = {
-    "LABEL_0": "O",
-    "LABEL_1": "Drug",
-    "LABEL_2": "Disease",
-    "LABEL_3": "Symptom",
-    "LABEL_4": "Treatment"
-    }
+    def _extract_exact_symptoms(self, text):
+        """Extract only exact matches from master symptoms"""
+        txt = text.lower()
+        found = set()
+        
+        for symptom in sorted(self.master_symptoms, key=lambda x: -len(x)):
+            pattern = r'(^|\s)' + re.escape(symptom) + r'(\s|$|[.,;])'
+            if re.search(pattern, txt):
+                found.add(symptom)
+                txt = re.sub(pattern, ' ', txt)
+        return found
 
-    # Terms to ignore (common anatomy, not symptoms/diseases)
-    IGNORE_TERMS = {
-    # Body parts (singular + plural)
-    "head","heads","neck","necks","chest","chests","abdomen","abdomens",
-    "back","backs","pelvis","pelvises","shoulder","shoulders","arm","arms",
-    "elbow","elbows","forearm","forearms","wrist","wrists","hand","hands",
-    "finger","fingers","thumb","thumbs","hip","hips","thigh","thighs",
-    "knee","knees","leg","legs","ankle","ankles","foot","feet","toe","toes",
-    "calf","calves","buttock","buttocks","breast","breasts","genital","genitals",
-    "ear","ears","eye","eyes","nose","noses","mouth","lips","lip","jaw","jaws",
-    "tongue","skin","hair","nail","nails","joint","joints",
-
-    # Anatomical regions/cavities
-    "cranial","facial","thoracic","abdominal","pelvic","axillary","brachial",
-    "antecubital","antebrachial","carpal","palmar","tarsal","plantar","dorsal",
-    "ventral","orbital","ocular","buccal","auricle","otic","oral","mental",
-    "scapular","lumbar","sacral","anal","calcaneal","phalangeal","coxal","patellar",
-    "crural","sternal","umbilical","mammary","inguinal","femoral","dewlap",
-
-    # Directional terms
-    "anterior","posterior","superior","inferior","medial","lateral","proximal",
-    "distal","external","internal","superficial","deep","prone","supine",
-    "bilateral","unilateral","contralateral","ipsilateral","cranial","caudal",
-    "rostral","central","peripheral"
-    }
-    raw = ner(text)
-    merged, current = [], None
-
-    for tok in raw:
-        w, ent, s = tok["word"], tok["entity"], tok["score"]
-        lbl = LABEL_MAP[ent]
-
-        if w.startswith("##") and current:
-            current["word"] += w[2:]
-            current["score_sum"] += s
-            current["count"] += 1
-        else:
-            if current:
-                current["score"] = current["score_sum"] / current["count"]
-                merged.append(current)
-            current = {"word": w, "label": lbl, "score_sum": s, "count": 1}
-    if current:
-        current["score"] = current["score_sum"] / current["count"]
-        merged.append(current)
-
-    # Combine Diseases & Symptoms, filter irrelevant anatomy terms
-    symptoms = [
-        m["word"] for m in merged
-        if m["label"] in ("Disease", "Symptom")
-           and m["score"] >= threshold
-           and m["word"].lower() not in IGNORE_TERMS
-    ]
-    symptoms = list(dict.fromkeys(symptoms))
-
-    if not symptoms:
-        return "Patient has no detected symptoms."
-
-    # Build the spoken summary, keeping it concise for TTS clarity
-    summary = "Patient has the following symptoms: " + ", ".join(symptoms) + "."
-    return summary
-
+    def get_patient_symptoms(self, patient_text):
+        """Main method to get corrected symptom string"""
+        corrected_text = self.tool.correct(patient_text.lower())
+        extracted = self._extract_exact_symptoms(corrected_text)
+        return self._format_symptoms(extracted)

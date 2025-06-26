@@ -9,11 +9,16 @@ import wave
 import json
 from pcms.utils.ensure_folder_path import ensure_folder_path
 from frappe.utils.data import format_datetime
-from pcms.api.extract_symptoms import extract_and_format
+from pcms.api.extract_symptoms import SymptomExtractor
 from gtts import gTTS
+import language_tool_python
+
 
 @frappe.whitelist()
 def upload_voice_file():
+    csv_path = os.path.join(os.path.dirname(__file__), 'final_symptoms.csv')
+    extractor = SymptomExtractor(csv_path)
+    spell_checker = language_tool_python.LanguageTool('en-US')
     filedata = frappe.request.files.get('file')
     text_msg = frappe.request.form.get('text_msg', '')
     text = ""
@@ -72,7 +77,8 @@ def upload_voice_file():
         message.room_no = patient.get("room_no", "")
         message.status = "New"
         # Extract symptoms
-        symptoms = extract_and_format(text)
+        spell_checked_text = spell_checker.correct(text)
+        symptoms = extractor.get_patient_symptoms(spell_checked_text)
         message.symptoms = symptoms
         message.save()
 

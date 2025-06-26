@@ -46,6 +46,7 @@ frappe.ready(function () {
             msg.sent_time,
             msg.status,
             msg.audio,
+            msg.symptoms_audio,
             msg.name
           );
         });
@@ -72,6 +73,7 @@ frappe.ready(function () {
               msg.sent_time,
               msg.status,
               msg.audio,
+              msg.symptoms_audio,
               msg.name
             );
           });
@@ -97,6 +99,7 @@ frappe.ready(function () {
               msg.sent_time,
               msg.status,
               msg.audio,
+              msg.symptoms_audio,
               msg.name
             );
           });
@@ -107,7 +110,7 @@ frappe.ready(function () {
   });
 
   // 4. Message rendering
-  function appendMessage(message_content, sender, sender_name, room_no, sent_time, status, audio, message_name) {
+  function appendMessage(message_content, sender, sender_name, room_no, sent_time, status, audio, symptoms_audio, message_name) {
     const div = document.createElement("div");
 
     const statusClass = {
@@ -129,6 +132,7 @@ frappe.ready(function () {
       </div>
       <div class="chat-text">${message_content}</div>
       ${audio ? `<audio controls src="${audio}"></audio>` : ''}
+      ${symptoms_audio ? `<audio style="margin-top: 10px;border:2px solid red;border-radius:25px;" controls src="${symptoms_audio}"></audio>` : ''}
       <button class="login_button" style="text-decoration: none; color: inherit;" data-name="${message_name}">Take Action</button>
     `;
 

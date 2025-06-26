@@ -17,6 +17,9 @@ pip install gtts
 pip install transformers>=4.30
 pip install torch>=2.0
 
+for spelling correction
+pip install language-tool-python
+
 sudo apt install ffmpeg 
 # Or install ffmpeg for your OS
 
