@@ -6,10 +6,10 @@ from frappe.model.document import Document
 
 
 class Message(Document):
-	def on_update(self):
-		if getattr(self, "_in_insert", False):
-			# Skip logic during insert
-			return
+	# def on_update(self):
+	# 	if getattr(self, "_in_insert", False):
+	# 		# Skip logic during insert
+	# 		return
 
 		# Publish real-time update
 		# frappe.publish_realtime(
@@ -24,4 +24,4 @@ class Message(Document):
 		# 		"audio": self.audio
 		# 	}
 		# )
-			
+		pass
