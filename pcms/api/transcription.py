@@ -1,22 +1,21 @@
 import frappe
 from frappe.utils.file_manager import save_file
 from frappe import _
-from vosk import Model, KaldiRecognizer
 from pydub import AudioSegment
 import os
 import tempfile
-import wave
-import json
 from pcms.utils.ensure_folder_path import ensure_folder_path
 from frappe.utils.data import format_datetime
 from pcms.api.extract_symptoms import SymptomExtractor
 from gtts import gTTS
 import language_tool_python
 import re
-
+from pcms.api.transcribe_wave import safe_transcribe
 
 @frappe.whitelist()
 def upload_voice_file():
+    max_size_kb = frappe.db.get_single_value("PCMS Settings", "max_audio_size_kb") or 1024
+    max_size_bytes = max_size_kb * 1024  # Convert KB to bytes
     csv_path = os.path.join(os.path.dirname(__file__), 'final_symptoms.csv')
     extractor = SymptomExtractor(csv_path)
     spell_checker = language_tool_python.LanguageTool('en-US')
@@ -25,6 +24,16 @@ def upload_voice_file():
     text = ""
     if not filedata:
         frappe.throw(_("No file uploaded"))
+    
+    # Check file size before processing
+    file_size = len(filedata.stream.read())
+    filedata.stream.seek(0)  # Reset stream for later use
+
+    if file_size > max_size_bytes:
+        frappe.throw(_(
+            f"File size exceeds maximum allowed ({max_size_kb} KB). "
+            f"Uploaded: {file_size / 1024:.2f} KB"
+        ))
 
     # Save original uploaded file to temp path
     original_path = tempfile.mktemp(suffix=os.path.splitext(filedata.filename)[-1])
@@ -39,26 +48,11 @@ def upload_voice_file():
         audio.export(converted_path, format="wav")
 
         # Load Vosk model
-        model_path = os.path.join(frappe.get_app_path('pcms'), 'model')
-        if not os.path.exists(model_path):
-            frappe.throw(_("Vosk model not found at: {0}").format(model_path))
-
-        model = Model(model_path)
-        recognizer = KaldiRecognizer(model, 16000)
-
-        # Transcribe audio
         if not text_msg:
-            with wave.open(converted_path, 'rb') as wf:
-                while True:
-                    data = wf.readframes(4000)
-                    if len(data) == 0:
-                        break
-                    recognizer.AcceptWaveform(data)
-
-            result = json.loads(recognizer.FinalResult())
-            text = result.get("text", "")
+            text = safe_transcribe(converted_path)
         else:
             text = text_msg
+
         spell_checked_text = spell_checker.correct(text)
         # Get Patient Info
         patient = frappe.db.get_value("Patient", {"user_id": frappe.session.user}, [
