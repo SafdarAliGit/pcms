@@ -27,7 +27,8 @@ def update_message(name, treatment, status):
             "status": msg.status,
             "sent_time": msg.sent_time,
             "audio": msg.audio,
-            "symptoms_audio":doc.symptoms_audio
+            "symptoms_audio":msg.symptoms_audio,
+            "name": msg.name
         }
         )
     # END OF REALTIME MESSAGE   
