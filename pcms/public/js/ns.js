@@ -104,34 +104,44 @@ frappe.ready(function () {
   // 4. Message rendering
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status, audio, symptoms_audio, message_name) {
     const div = document.createElement("div");
-
     const statusClass = {
       "New": "status-new",
       "Acknowledged": "status-acknowledged",
       "Resolved": "status-resolved",
       "Escalated": "status-escalated"
     }[status] || "status-new";
-
     div.className = `chat-message ${statusClass}`;
-
+  
     div.innerHTML = `
-      <div class="chat-meta">
-        <div class="meta-block"><span class="meta-label">MR No:</span> <span class="meta-value">${sender}</span></div>
-        <div class="meta-block"><span class="meta-label">Name:</span> <span class="meta-value">${sender_name}</span></div>
-        <div class="meta-block"><span class="meta-label">Room No:</span> <span class="meta-value">${room_no}</span></div>
-        <div class="meta-block"><span class="meta-label">Time:</span> <span class="meta-value">${sent_time}</span></div>
-        <div class="meta-block"><span class="meta-label">Status:</span> <span class="meta-value">${status}</span></div>
-      </div>
+      <div class="chat-meta">…metadata…</div>
       <div class="chat-text">${message_content}</div>
-      ${audio ? `<audio controls src="${audio}"></audio>` : ''}
-      ${symptoms_audio ? `<audio style="margin-top: 10px;border:2px solid red;border-radius:25px;" controls src="${symptoms_audio}"></audio>` : ''}
-      <button class="login_button" style="text-decoration: none; color: inherit;" data-name="${message_name}">Take Action</button>
+  
+      ${audio ? `
+        <audio class="voice-audio" preload="metadata">
+          <source src="${audio}" type="audio/webm">
+          Your browser doesn’t support this audio format.
+        </audio>
+        <button class="audio-btn" data-type="voice">🔊 Play Voice</button>
+      ` : ''}
+  
+      ${symptoms_audio ? `
+        <audio class="symptom-audio" preload="metadata">
+          <source src="${symptoms_audio}" type="audio/mpeg">
+          Your browser doesn’t support this audio format.
+        </audio>
+        <button class="audio-btn" data-type="symptom">🎤 Play Symptoms</button>
+      ` : ''}
+  
+      <button class="login_button" data-name="${message_name}">Take Action</button>
     `;
-
+  
     $container.append(div);
     $container.scrollTop($container[0].scrollHeight);
   }
 });
+
+
+
 
 
 
