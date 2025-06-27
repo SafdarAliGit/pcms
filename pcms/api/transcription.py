@@ -14,7 +14,7 @@ from pcms.api.transcribe_wave import safe_transcribe
 
 @frappe.whitelist()
 def upload_voice_file():
-    max_size_kb = frappe.db.get_single_value("PCMS Settings", "max_audio_size_kb") or 1024
+    max_size_kb = frappe.db.get_single_value("App Settings", "max_audio_size") or 1024
     max_size_bytes = max_size_kb * 1024  # Convert KB to bytes
     csv_path = os.path.join(os.path.dirname(__file__), 'final_symptoms.csv')
     extractor = SymptomExtractor(csv_path)
