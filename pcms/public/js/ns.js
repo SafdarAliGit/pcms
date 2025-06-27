@@ -113,6 +113,13 @@ frappe.ready(function () {
     div.className = `chat-message ${statusClass}`;
   
     div.innerHTML = `
+      <div class="chat-meta">
+        <div class="meta-block"><span class="meta-label">MR No:</span> <span class="meta-value">${sender}</span></div>
+        <div class="meta-block"><span class="meta-label">Name:</span> <span class="meta-value">${sender_name}</span></div>
+        <div class="meta-block"><span class="meta-label">Room No:</span> <span class="meta-value">${room_no}</span></div>
+        <div class="meta-block"><span class="meta-label">Time:</span> <span class="meta-value">${sent_time}</span></div>
+        <div class="meta-block"><span class="meta-label">Status:</span> <span class="meta-value">${status}</span></div>
+      </div>
       <div class="chat-text">${message_content}</div>
   
       ${audio ? `
@@ -137,36 +144,36 @@ frappe.ready(function () {
     $container.append(div);
     $container.scrollTop($container[0].scrollHeight);
   }
+  
+    // play voices
+    let currentAudio = null;
 
-  // play voices
-  let currentAudio = null;
-
-document.addEventListener('click', e => {
-  if (!e.target.classList.contains('audio-btn')) return;
-
-  const btn = e.target;
-  const type = btn.dataset.type;
-  const audioEl = btn.previousElementSibling;
-  if (!audioEl) return;
-
-  document.querySelectorAll('audio').forEach(a => {
-    if (a !== audioEl) a.pause();
-  });
-
-  if (audioEl.paused) {
-    audioEl.play().catch(() => {});
-    btn.textContent = type === 'voice' ? "⏸️ Pause Voice" : "⏸️ Pause Symptoms";
-  } else {
-    audioEl.pause();
-    btn.textContent = type === 'voice' ? "🔊 Play Voice" : "🎤 Play Symptoms";
-  }
-
-  audioEl.onended = () => {
-    btn.textContent = type === 'voice' ? "🔊 Play Voice" : "🎤 Play Symptoms";
-  };
-});
-
-  // end play voices
+    document.addEventListener('click', e => {
+      if (!e.target.classList.contains('audio-btn')) return;
+    
+      const btn = e.target;
+      const type = btn.dataset.type;
+      const audioEl = btn.previousElementSibling;
+      if (!audioEl) return;
+    
+      document.querySelectorAll('audio').forEach(a => {
+        if (a !== audioEl) a.pause();
+      });
+    
+      if (audioEl.paused) {
+        audioEl.play().catch(() => {});
+        btn.textContent = type === 'voice' ? "⏸️ Pause Voice" : "⏸️ Pause Symptoms";
+      } else {
+        audioEl.pause();
+        btn.textContent = type === 'voice' ? "🔊 Play Voice" : "🎤 Play Symptoms";
+      }
+    
+      audioEl.onended = () => {
+        btn.textContent = type === 'voice' ? "🔊 Play Voice" : "🎤 Play Symptoms";
+      };
+    });
+    
+      // end play voices
 });
 
 
