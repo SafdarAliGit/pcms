@@ -113,7 +113,6 @@ frappe.ready(function () {
     div.className = `chat-message ${statusClass}`;
   
     div.innerHTML = `
-      <div class="chat-meta">…metadata…</div>
       <div class="chat-text">${message_content}</div>
   
       ${audio ? `
