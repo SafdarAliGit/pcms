@@ -58,28 +58,54 @@ frappe.ready(function () {
   const stationName = window.nursing_station || "";
   const room = stationName.replace(/[-\s]/g, "").toLowerCase();
 
+  // frappe.realtime.on(room, function (data) {
+  //   frappe.call({
+  //     method: "pcms.api.list_ns_messages.list_ns_messages",
+  //     callback: function (r) {
+  //       if (r.message) {
+  //         $container.empty(); 
+  //         r.message.forEach(function (msg) {
+  //           appendMessage(
+  //             msg.message_content,
+  //             msg.sender,
+  //             msg.sender_name,
+  //             msg.room_no,
+  //             msg.sent_time,
+  //             msg.status,
+  //             msg.audio,
+  //             msg.symptoms_audio,
+  //             msg.name
+  //           );
+  //         });
+  //       }
+  //     }
+  //   });
+    
+  // });
+
   frappe.realtime.on(room, function (data) {
-    frappe.call({
-      method: "pcms.api.list_ns_messages.list_ns_messages",
-      callback: function (r) {
-        if (r.message) {
-          $container.empty(); 
-          r.message.forEach(function (msg) {
-            appendMessage(
-              msg.message_content,
-              msg.sender,
-              msg.sender_name,
-              msg.room_no,
-              msg.sent_time,
-              msg.status,
-              msg.audio,
-              msg.symptoms_audio,
-              msg.name
-            );
-          });
-        }
-      }
-    });
+    console.log("Socket message:", data);
+    // frappe.call({
+    //   method: "pcms.api.list_ns_messages.list_ns_messages",
+    //   callback: function (r) {
+    //     if (r.message) {
+    //       $container.empty(); 
+    //       r.message.forEach(function (msg) {
+    //         appendMessage(
+    //           msg.message_content,
+    //           msg.sender,
+    //           msg.sender_name,
+    //           msg.room_no,
+    //           msg.sent_time,
+    //           msg.status,
+    //           msg.audio,
+    //           msg.symptoms_audio,
+    //           msg.name
+    //         );
+    //       });
+    //     }
+    //   }
+    // });
     
   });
 
