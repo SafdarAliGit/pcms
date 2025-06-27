@@ -119,7 +119,7 @@ def upload_voice_file():
         )
         message.symptoms_audio = attached_mp3.file_url
         message.save()
-        
+
         # SEND REALTIME MESSAGE
         def sanitize_station(station_name):
             s = re.sub(r"[-\s]", "", station_name).lower()

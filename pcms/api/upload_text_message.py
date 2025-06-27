@@ -1,7 +1,7 @@
 import frappe
 from frappe import _
 from frappe.utils import format_datetime
-
+import re
 @frappe.whitelist()
 def upload_text_message(message_content=None):
     if message_content is None:
@@ -27,8 +27,24 @@ def upload_text_message(message_content=None):
         message.room_no = patient.get("room_no", "")
         message.status = "New"
         message.save()
-              
 
+        # SEND REALTIME MESSAGE
+        def sanitize_station(station_name):
+            s = re.sub(r"[-\s]", "", station_name).lower()
+            return s
+        station = sanitize_station(message.nursing_station)
+        frappe.publish_realtime(station, {
+                "message_content": message.message_content,
+                "sender": message.sender,
+                "sender_name": message.sender_name,
+                "room_no": message.room_no,
+                "status": message.status,
+                "sent_time": message.sent_time,
+                "name": message.name
+            }
+            )
+              
+        # END OF REALTIME MESSAGE
         return {
             "message_content": message_content,
             "sent_time":format_datetime(message.sent_time, "dd-MM-yyyy hh:mm a"),
