@@ -32,7 +32,7 @@ def update_message(name, treatment, status):
         }
         )
     # END OF REALTIME MESSAGE  
-     
+    
     return {'status': status}
 
 
