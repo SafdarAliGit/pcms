@@ -12,6 +12,24 @@ def update_message(name, treatment, status):
         msg.attended_time = frappe.utils.now()
     msg.save(ignore_permissions=True)
     frappe.db.commit()
+
+    # SEND REALTIME MESSAGE
+    def sanitize_station(station_name):
+        s = re.sub(r"[-\s]", "", station_name).lower()
+        return s
+    station = sanitize_station(msg.nursing_station)
+    frappe.publish_realtime(station+"_update", {
+            "message_content": msg.message_content,
+            "sender": msg.sender,
+            "sender_name": msg.sender_name,
+            "room_no": msg.room_no,
+            "status": msg.status,
+            "sent_time": msg.sent_time,
+            "audio": msg.audio,
+            "symptoms_audio":doc.symptoms_audio
+        }
+        )
+    # END OF REALTIME MESSAGE   
     return {'status': status}
 
 
