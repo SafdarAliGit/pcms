@@ -22,10 +22,10 @@ doc_events = {
     "Nurse": {
         "on_update": "pcms.pcms.doctype.nurse.nurse.create_nurse_user"
     },
-    "Message": {
-		"on_update": "pcms.api.notify_new_message.notify_new_message",
-		# "on_update": "pcms.api.notify_update_message.notify_update_message"
-	}
+    # "Message": {
+	# 	"on_update": "pcms.api.notify_new_message.notify_new_message",
+	# 	# "on_update": "pcms.api.notify_update_message.notify_update_message"
+	# }
 }
 
 
