@@ -12,6 +12,7 @@ from frappe.utils.data import format_datetime
 from pcms.api.extract_symptoms import SymptomExtractor
 from gtts import gTTS
 import language_tool_python
+import re
 
 
 @frappe.whitelist()
@@ -119,7 +120,25 @@ def upload_voice_file():
         message.symptoms_audio = attached_mp3.file_url
         message.save()
         
-
+        # SEND REALTIME MESSAGE
+        def sanitize_station(station_name):
+            s = re.sub(r"[-\s]", "", station_name).lower()
+            return s
+        station = sanitize_station(message.nursing_station)
+        frappe.publish_realtime(station, {
+				"message_content": message.message_content,
+				"sender": message.sender,
+				"sender_name": message.sender_name,
+				"room_no": message.room_no,
+				"status": message.status,
+				"sent_time": message.sent_time,
+				"audio": message.audio,
+				"symptoms_audio":message.symptoms_audio,
+				"name": message.name
+			}
+		)
+	    	    
+        # END OF REALTIME MESSAGE
         return {
             "file_name": attached_file.file_name,
             "file_url": attached_file.file_url,
