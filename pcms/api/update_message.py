@@ -1,5 +1,6 @@
 import frappe
 from frappe import _
+import re
 @frappe.whitelist()
 def update_message(name, treatment, status):
     _check_nurse_role()
