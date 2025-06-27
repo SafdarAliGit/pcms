@@ -84,29 +84,20 @@ frappe.ready(function () {
   // });
 
   frappe.realtime.on(room, function (data) {
-    console.log("Socket message:", data);
-    // frappe.call({
-    //   method: "pcms.api.list_ns_messages.list_ns_messages",
-    //   callback: function (r) {
-    //     if (r.message) {
-    //       $container.empty(); 
-    //       r.message.forEach(function (msg) {
-    //         appendMessage(
-    //           msg.message_content,
-    //           msg.sender,
-    //           msg.sender_name,
-    //           msg.room_no,
-    //           msg.sent_time,
-    //           msg.status,
-    //           msg.audio,
-    //           msg.symptoms_audio,
-    //           msg.name
-    //         );
-    //       });
-    //     }
-    //   }
-    // });
-    
+        if (data) {
+          $container.empty(); 
+            appendMessage(
+              data.message_content,
+              data.sender,
+              data.sender_name,
+              data.room_no,
+              data.sent_time,
+              data.status,
+              data.audio,
+              data.symptoms_audio,
+              data.name
+            );
+        }
   });
 
   frappe.realtime.on(room+"_update", function (data) {

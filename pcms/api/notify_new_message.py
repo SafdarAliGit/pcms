@@ -15,7 +15,8 @@ def notify_new_message(doc, method):
             "status": doc.status,
             "sent_time": doc.sent_time,
             "audio": doc.audio,
-            "symptoms_audio":doc.symptoms_audio
+            "symptoms_audio":doc.symptoms_audio,
+            "name": doc.name
         }
         )
 
