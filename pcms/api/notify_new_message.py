@@ -6,8 +6,9 @@ def sanitize_station(station_name):
     return s
 
 def notify_new_message(doc, method):
-    station = sanitize_station(doc.nursing_station)
-    frappe.publish_realtime(station, {
+    if not doc.get("__islocal"):
+        station = sanitize_station(doc.nursing_station)
+        frappe.publish_realtime(station, {
             "message_content": doc.message_content,
             "sender": doc.sender,
             "sender_name": doc.sender_name,
