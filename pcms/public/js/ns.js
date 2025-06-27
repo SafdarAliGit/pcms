@@ -138,6 +138,36 @@ frappe.ready(function () {
     $container.append(div);
     $container.scrollTop($container[0].scrollHeight);
   }
+
+  // play voices
+  let currentAudio = null;
+
+document.addEventListener('click', e => {
+  if (!e.target.classList.contains('audio-btn')) return;
+
+  const btn = e.target;
+  const type = btn.dataset.type;
+  const audioEl = btn.previousElementSibling;
+  if (!audioEl) return;
+
+  document.querySelectorAll('audio').forEach(a => {
+    if (a !== audioEl) a.pause();
+  });
+
+  if (audioEl.paused) {
+    audioEl.play().catch(() => {});
+    btn.textContent = type === 'voice' ? "⏸️ Pause Voice" : "⏸️ Pause Symptoms";
+  } else {
+    audioEl.pause();
+    btn.textContent = type === 'voice' ? "🔊 Play Voice" : "🎤 Play Symptoms";
+  }
+
+  audioEl.onended = () => {
+    btn.textContent = type === 'voice' ? "🔊 Play Voice" : "🎤 Play Symptoms";
+  };
+});
+
+  // end play voices
 });
 
 

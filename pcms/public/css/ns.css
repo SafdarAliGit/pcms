@@ -227,6 +227,36 @@ audio:hover {
 .login-btn:hover{
   background-color: #056522;
 }
+/* play voices */
+.voice-audio, .symptom-audio {
+  display: none;
+}
+
+.audio-btn {
+  background: #e0f7fa;
+  color: #00695c;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 0.9rem;
+  margin: 0.5rem 0.3rem 0.5rem 0;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.audio-btn:hover {
+  background: #b2ebf2;
+  transform: translateY(-1px);
+}
+
+/* Mobile Adaptation */
+@media (max-width: 480px) {
+  .audio-btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+
 /* Mobile responsive adjustments */
 @media (max-width: 480px) {
   .custom-modal-content {
