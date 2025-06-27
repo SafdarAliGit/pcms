@@ -85,7 +85,7 @@ frappe.ready(function () {
 
   frappe.realtime.on(room, function (data) {
         if (data) {
-          $container.empty(); 
+          // $container.empty(); 
             appendMessage(
               data.message_content,
               data.sender,
