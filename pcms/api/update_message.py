@@ -31,7 +31,8 @@ def update_message(name, treatment, status):
             "name": msg.name
         }
         )
-    # END OF REALTIME MESSAGE   
+    # END OF REALTIME MESSAGE  
+     
     return {'status': status}
 
 
