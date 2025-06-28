@@ -8,14 +8,6 @@ app_license = "mit"
 # DocType Events
 # ------------------
 
-def on_session_creation():
-    """Pre-load voice processor resources"""
-    try:
-        from pcms.api.transcription import VoiceProcessor
-        VoiceProcessor.get_instance()
-    except Exception as e:
-        frappe.log_error("VoiceProcessor pre-load failed", str(e))
-
 doc_events = {
     "Doctor": {
         "on_update": "pcms.pcms.doctype.doctor.doctor.create_doctor_user"
