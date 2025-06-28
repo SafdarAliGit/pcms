@@ -7,9 +7,11 @@ app_license = "mit"
 
 # DocType Events
 # ------------------
+from pcms.api.transcription import get_voice_processor
+
 def on_session_creation():
-    from pcms.api.transcription import VoiceProcessorResources
-    VoiceProcessorResources.get_instance()
+    # Initialize processor on app startup
+    get_voice_processor()
 
 doc_events = {
     "Doctor": {
