@@ -151,11 +151,12 @@ frappe.ready( async function () {
   
     $container.append(div);
      // Remove oldest messages if limit exceeded
-    let excess = $container.children.length - ReceivedMessageLimit;
-    while (excess > 0) {
-      $container.removeChild($container.firstChild);
-      excess--;
+     const container = $container[0];
+    const excess = container.children.length - ReceivedMessageLimit;
+    for (let i = 0; i < excess; i++) {
+      container.removeChild(container.firstElementChild);
     }
+
     $container.scrollTop($container[0].scrollHeight);
   }
   
