@@ -111,7 +111,7 @@ frappe.ready(function () {
       }
     }
   });
-
+console.log(ReceivedMessageLimit);
 
   // 4. Message rendering
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status, audio, symptoms_audio, message_name) {
