@@ -216,8 +216,76 @@ class VoiceProcessor:
             frappe.log_error("Audio Processing Failed", f"{str(e)}\n{traceback.format_exc()}")
             return False
 
+    def _generate_tts(self, text, output_path):
+        """Generate text-to-speech audio"""
+        try:
+            tts = gTTS(text=text, lang='en', tld='com', slow=False)
+            tts.save(output_path)
+            return True
+        except Exception as e:
+            frappe.log_error("TTS Generation Failed", f"{str(e)}\n{traceback.format_exc()}")
+            return False
+
+    def _cleanup_files(self, paths):
+        """Clean up temporary files"""
+        for path in paths:
+            try:
+                if path and os.path.exists(path):
+                    os.remove(path)
+            except Exception as e:
+                frappe.log_error(f"File Cleanup Failed: {path}", str(e))
+
+    def _save_attachments(self, message, wav_path, mp3_path, patient):
+        """Save attachments to document"""
+        folder = ensure_folder_path(
+            f"{patient.get('hospital', 'unknown')}/"
+            f"{patient.get('health_care_unit', 'unknown')}/"
+            f"{patient.get('nursing_station', 'unknown')}"
+        )
+        
+        for path, field in [(wav_path, "audio"), (mp3_path, "symptoms_audio")]:
+            if not os.path.exists(path):
+                continue
+                
+            with open(path, 'rb') as f:
+                file_url = save_file(
+                    fname=os.path.basename(path),
+                    content=f.read(),
+                    dt="Message",
+                    dn=message.name,
+                    folder=folder,
+                    is_private=1
+                ).file_url
+                setattr(message, field, file_url)
+        
+        message.save()
+
+    def _send_realtime_update(self, message):
+        """Send realtime update to clients"""
+        try:
+            station = re.sub(r"[-\s]", "", message.nursing_station).lower()
+            frappe.publish_realtime(station, {
+                "message_content": message.message_content,
+                "sender": message.sender,
+                "sender_name": message.sender_name,
+                "room_no": message.room_no,
+                "status": message.status,
+                "sent_time": message.sent_time,
+                "audio": message.audio,
+                "symptoms_audio": message.symptoms_audio,
+                "name": message.name
+            })
+        except Exception as e:
+            frappe.log_error("Realtime Update Failed", str(e))
+
     def process_request(self):
         """Handle the incoming request"""
+        file_paths = {
+            'original': None,
+            'converted': None,
+            'mp3': None
+        }
+        
         try:
             # Get file data from request
             if not frappe.request or not frappe.request.files:
@@ -228,18 +296,27 @@ class VoiceProcessor:
             file_bytes = file.stream.read()
             
             # Create temp files
-            file_paths = {
-                'original': tempfile.mktemp(dir=self.TEMP_DIR, suffix=os.path.splitext(file.filename)[1]),
-                'converted': tempfile.mktemp(dir=self.TEMP_DIR, suffix=".wav"),
-                'mp3': tempfile.mktemp(dir=self.TEMP_DIR, suffix=".mp3")
-            }
+            file_paths['original'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=os.path.splitext(file.filename)[1])
+            file_paths['converted'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=".wav")
+            file_paths['mp3'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=".mp3")
             
             # Process in parallel
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 # Get patient data and process audio concurrently
-                patient_future = executor.submit(self._get_patient_data)
-                audio_future = executor.submit(self._process_audio, file_bytes, 
-                                             file_paths['original'], file_paths['converted'])
+                patient_future = executor.submit(
+                    frappe.db.get_value,
+                    "Patient",
+                    {"user_id": frappe.session.user},
+                    ["name", "patient_name", "mr_no", "nursing_station", 
+                     "health_care_unit", "hospital", "room_no"],
+                    as_dict=True
+                )
+                audio_future = executor.submit(
+                    self._process_audio, 
+                    file_bytes, 
+                    file_paths['original'], 
+                    file_paths['converted']
+                )
                 
                 patient = patient_future.result()
                 if not audio_future.result():
@@ -252,7 +329,21 @@ class VoiceProcessor:
                 
                 # Generate TTS and create message
                 tts_future = executor.submit(self._generate_tts, symptoms, file_paths['mp3'])
-                message = self._create_message(patient, spell_checked_text, symptoms)
+                
+                message = frappe.new_doc("Message")
+                message.update({
+                    "sender": patient.get("name"),
+                    "sender_name": patient.get("patient_name"),
+                    "nursing_station": patient.get("nursing_station"),
+                    "health_care_unit": patient.get("health_care_unit"),
+                    "hospital": patient.get("hospital"),
+                    "message_content": spell_checked_text or "No Message Found",
+                    "sent_time": frappe.utils.now_datetime(),
+                    "room_no": patient.get("room_no", ""),
+                    "status": "New",
+                    "symptoms": symptoms
+                })
+                message.insert(ignore_permissions=True)
                 
                 if not tts_future.result():
                     raise Exception("TTS generation failed")
@@ -261,58 +352,23 @@ class VoiceProcessor:
                 self._save_attachments(message, file_paths['converted'], file_paths['mp3'], patient)
                 self._send_realtime_update(message)
                 
-                return self._prepare_response(message, spell_checked_text, len(file_bytes))
+                return {
+                    "file_name": os.path.basename(message.audio),
+                    "file_url": message.audio,
+                    "symptoms_audio_name": os.path.basename(message.symptoms_audio),
+                    "symptoms_audio_url": message.symptoms_audio,
+                    "is_private": 1,
+                    "size": len(file_bytes),
+                    "transcription": spell_checked_text,
+                    "sent_time": format_datetime(message.sent_time, "dd-MM-yyyy hh:mm a"),
+                    "status": message.status
+                }
 
         except Exception as e:
             frappe.log_error("Voice Processing Error", f"{str(e)}\n{traceback.format_exc()}")
             raise
         finally:
-            self._cleanup_files(file_paths.values())
-
-    def _get_patient_data(self):
-        """Get patient information"""
-        return frappe.db.get_value(
-            "Patient",
-            {"user_id": frappe.session.user},
-            ["name", "patient_name", "mr_no", "nursing_station", 
-             "health_care_unit", "hospital", "room_no"],
-            as_dict=True
-        )
-
-    def _create_message(self, patient, text, symptoms):
-        """Create Message document"""
-        message = frappe.new_doc("Message")
-        message.update({
-            "sender": patient.get("name"),
-            "sender_name": patient.get("patient_name"),
-            "nursing_station": patient.get("nursing_station"),
-            "health_care_unit": patient.get("health_care_unit"),
-            "hospital": patient.get("hospital"),
-            "message_content": text or "No Message Found",
-            "sent_time": frappe.utils.now_datetime(),
-            "room_no": patient.get("room_no", ""),
-            "status": "New",
-            "symptoms": symptoms
-        })
-        message.insert(ignore_permissions=True)
-        return message
-
-    def _prepare_response(self, message, text, file_size):
-        """Prepare success response"""
-        return {
-            "file_name": os.path.basename(message.audio),
-            "file_url": message.audio,
-            "symptoms_audio_name": os.path.basename(message.symptoms_audio),
-            "symptoms_audio_url": message.symptoms_audio,
-            "is_private": 1,
-            "size": file_size,
-            "transcription": text,
-            "sent_time": format_datetime(message.sent_time, "dd-MM-yyyy hh:mm a"),
-            "status": message.status
-        }
-
-    # ... (keep other methods like _generate_tts, _save_attachments, 
-    # _send_realtime_update, _cleanup_files the same as in previous examples)
+            self._cleanup_files([p for p in file_paths.values() if p is not None])
 
 @frappe.whitelist(allow_guest=False)
 def upload_voice_file():

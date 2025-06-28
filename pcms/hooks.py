@@ -12,7 +12,6 @@ def on_session_creation():
     """Pre-load voice processor resources"""
     try:
         from pcms.api.voice_processor import VoiceProcessor
-        # Initialize without processing anything
         VoiceProcessor.get_instance()
     except Exception as e:
         frappe.log_error("VoiceProcessor pre-load failed", str(e))
