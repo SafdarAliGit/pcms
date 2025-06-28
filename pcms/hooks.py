@@ -11,7 +11,7 @@ app_license = "mit"
 def on_session_creation():
     """Pre-load voice processor resources"""
     try:
-        from pcms.api.voice_processor import VoiceProcessor
+        from pcms.api.transcription import VoiceProcessor
         VoiceProcessor.get_instance()
     except Exception as e:
         frappe.log_error("VoiceProcessor pre-load failed", str(e))
