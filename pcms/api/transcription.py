@@ -168,6 +168,7 @@ import tempfile
 import concurrent.futures
 import re
 import time
+import traceback  # Added missing import
 from pcms.utils.ensure_folder_path import ensure_folder_path
 from frappe.utils.data import format_datetime
 from pcms.api.extract_symptoms import SymptomExtractor
@@ -177,7 +178,7 @@ from pcms.api.transcribe_wave import safe_transcribe
 
 class VoiceProcessor:
     _instance = None
-    TEMP_DIR = "/tmp/voice_processor"  # Dedicated fast storage
+    TEMP_DIR = "/tmp/voice_processor"
     
     def __init__(self):
         if not VoiceProcessor._instance:
@@ -193,50 +194,40 @@ class VoiceProcessor:
     
     def _init_resources(self):
         """Pre-load heavy resources at startup"""
-        start = time.time()
         csv_path = os.path.join(os.path.dirname(__file__), 'final_symptoms.csv')
         self.extractor = SymptomExtractor(csv_path)
         self.spell_checker = language_tool_python.LanguageTool('en-US')
-        frappe.log(f"Resource init took {time.time()-start:.2f}s")
 
     def _process_audio(self, filedata, input_path, output_path):
-        """Optimized audio conversion pipeline"""
+        """Optimized audio conversion"""
         try:
-            # Write input file
             with open(input_path, 'wb') as f:
                 f.write(filedata.stream.read())
             
-            # Single-pass audio processing
             (AudioSegment.from_file(input_path)
                 .set_channels(1)
                 .set_frame_rate(16000)
                 .set_sample_width(2)
-                .export(output_path, format="wav", codec="pcm_s16le", bitrate="128k"))
-            
+                .export(output_path, format="wav", codec="pcm_s16le")
+            )
             return True
         except Exception as e:
-            frappe.log_error("Audio Processing Failed", str(e))
+            frappe.log_error("Audio Processing Failed", f"{str(e)}\n{traceback.format_exc()}")
             return False
 
     def _generate_tts(self, text, output_path):
-        """Fast TTS generation with optimized params"""
+        """Fast TTS generation"""
         try:
-            tts = gTTS(
-                text=text,
-                lang='en',
-                tld='com',  # Faster than other domains
-                slow=False,
-                lang_check=False
-            )
+            tts = gTTS(text=text, lang='en', tld='com', slow=False)
             tts.save(output_path)
             return True
         except Exception as e:
-            frappe.log_error("TTS Generation Failed", str(e))
+            frappe.log_error("TTS Generation Failed", f"{str(e)}\n{traceback.format_exc()}")
             return False
 
     @frappe.whitelist()
     def upload_voice_file(self):
-        """Optimized main processing flow"""
+        """Main processing flow"""
         file_paths = {
             'original': None,
             'converted': None,
@@ -244,15 +235,14 @@ class VoiceProcessor:
         }
         
         try:
-            # 1. Initial Setup and Validation (5-10ms)
-            start_time = time.time()
+            # Validate input
             filedata = frappe.request.files.get('file')
             text_msg = frappe.request.form.get('text_msg', '')
             
             if not filedata:
                 frappe.throw(_("No file uploaded"))
 
-            # Validate file size
+            # File size check
             max_size_kb = frappe.db.get_single_value("App Settings", "max_audio_size") or 1024
             file_size = len(filedata.stream.read())
             filedata.stream.seek(0)
@@ -260,54 +250,36 @@ class VoiceProcessor:
             if file_size > max_size_kb * 1024:
                 frappe.throw(_(f"File size exceeds maximum allowed ({max_size_kb} KB). Uploaded: {file_size / 1024:.2f} KB"))
 
-            # 2. Parallel Processing Pipeline
-            with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
-                # Create temp files in fast storage
-                file_paths['original'] = tempfile.mktemp(
-                    dir=self.TEMP_DIR,
-                    suffix=os.path.splitext(filedata.filename)[-1]
-                )
-                file_paths['converted'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=".wav")
-                file_paths['mp3'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=".mp3")
+            # Create temp files
+            file_paths['original'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=os.path.splitext(filedata.filename)[-1])
+            file_paths['converted'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=".wav")
+            file_paths['mp3'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=".mp3")
 
-                # Parallel: Audio processing + Patient data fetch
-                audio_future = executor.submit(
-                    self._process_audio,
-                    filedata,
-                    file_paths['original'],
-                    file_paths['converted']
-                )
-                
+            # Parallel processing
+            with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+                # Audio + Patient data in parallel
+                audio_future = executor.submit(self._process_audio, filedata, file_paths['original'], file_paths['converted'])
                 patient_future = executor.submit(
                     frappe.db.get_value,
                     "Patient",
                     {"user_id": frappe.session.user},
-                    ["name", "patient_name", "mr_no", "nursing_station",
-                     "health_care_unit", "hospital", "room_no"],
+                    ["name", "patient_name", "mr_no", "nursing_station", "health_care_unit", "hospital", "room_no"],
                     as_dict=True
                 )
 
-                # Wait for both
                 if not audio_future.result():
                     raise Exception("Audio processing failed")
                 
                 patient = patient_future.result()
-                frappe.log(f"Stage 1 completed in {time.time()-start_time:.2f}s")
 
-                # 3. Core Processing (Transcription + Symptoms)
+                # Core processing
                 text = text_msg if text_msg else safe_transcribe(file_paths['converted'])
                 spell_checked_text = self.spell_checker.correct(text)
                 symptoms = self.extractor.get_patient_symptoms(spell_checked_text)
-                frappe.log(f"Stage 2 completed in {time.time()-start_time:.2f}s")
 
-                # 4. Parallel Final Steps
-                tts_future = executor.submit(
-                    self._generate_tts,
-                    symptoms,
-                    file_paths['mp3']
-                )
+                # Parallel final steps
+                tts_future = executor.submit(self._generate_tts, symptoms, file_paths['mp3'])
                 
-                # Create message while TTS generates
                 message = frappe.new_doc("Message")
                 message.update({
                     "sender": patient.get("name"),
@@ -323,13 +295,11 @@ class VoiceProcessor:
                 })
                 message.insert(ignore_permissions=True, ignore_mandatory=True)
                 
-                # Finalize TTS and attachments
                 if not tts_future.result():
                     raise Exception("TTS generation failed")
                 
                 self._save_attachments(message, file_paths['converted'], file_paths['mp3'], patient)
                 self._send_realtime_update(message)
-                frappe.log(f"Total processing time: {time.time()-start_time:.2f}s")
 
                 return {
                     "file_name": os.path.basename(message.audio),
@@ -344,18 +314,14 @@ class VoiceProcessor:
                 }
 
         except Exception as e:
-            frappe.log_error("Voice Processing Error", 
-                f"Error: {str(e)}\n"
-                f"File Paths: {file_paths}\n"
-                f"Traceback: {traceback.format_exc()}"
-            )
+            frappe.log_error("Voice Processing Error", f"{str(e)}\n{traceback.format_exc()}")
             return {"error": str(e), "type": type(e).__name__}
         
         finally:
             self._cleanup_files(file_paths.values())
 
     def _save_attachments(self, message, wav_path, mp3_path, patient):
-        """Optimized attachment saving"""
+        """Save attachments efficiently"""
         folder = ensure_folder_path(
             f"{patient.get('hospital', 'unknown')}/"
             f"{patient.get('health_care_unit', 'unknown')}/"
@@ -369,7 +335,7 @@ class VoiceProcessor:
         
         for path, field in attachments:
             if not os.path.exists(path):
-                raise FileNotFoundError(f"Attachment not found: {path}")
+                raise FileNotFoundError(f"File not found: {path}")
             
             with open(path, 'rb') as f:
                 file_url = save_file(
@@ -385,7 +351,7 @@ class VoiceProcessor:
         message.save()
 
     def _send_realtime_update(self, message):
-        """Efficient realtime update"""
+        """Send realtime update"""
         try:
             station = re.sub(r"[-\s]", "", message.nursing_station).lower()
             frappe.publish_realtime(station, {
@@ -400,19 +366,18 @@ class VoiceProcessor:
                 "name": message.name
             })
         except Exception as e:
-            frappe.log_error("Realtime Update Failed", str(e))
+            frappe.log_error("Realtime Update Failed", f"{str(e)}\n{traceback.format_exc()}")
 
     def _cleanup_files(self, paths):
-        """Batch file cleanup"""
+        """Clean up temp files"""
         for path in paths:
             try:
                 if path and os.path.exists(path):
                     os.remove(path)
             except Exception as e:
-                frappe.log_error(f"Cleanup Failed: {path}", str(e))
+                frappe.log_error(f"File Cleanup Failed: {path}", str(e))
 
 # Public endpoint
 @frappe.whitelist()
 def upload_voice_file():
-    """Public interface for Frappe"""
     return VoiceProcessor.get_instance().upload_voice_file()
