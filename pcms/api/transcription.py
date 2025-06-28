@@ -196,16 +196,19 @@ class VoiceProcessor:
         self.spell_checker = language_tool_python.LanguageTool('en-US')
 
     @frappe.whitelist()
-    def upload_voice_file(self):
+    def upload_voice_file(self, filedata=None, text_msg=None):
+        """Main entry point that Frappe will call"""
         original_path = converted_path = mp3_path = None
         
         try:
             # Ensure database connection
             frappe.db.ensure_connection()
             
-            # Validate input
-            filedata = frappe.request.files.get('file')
-            text_msg = frappe.request.form.get('text_msg', '')
+            # Get request data if not passed directly
+            if filedata is None:
+                filedata = frappe.request.files.get('file')
+            if text_msg is None:
+                text_msg = frappe.request.form.get('text_msg', '')
             
             if not filedata:
                 frappe.throw(_("No file uploaded"))
@@ -269,7 +272,7 @@ class VoiceProcessor:
         
         finally:
             self._cleanup_files([original_path, converted_path, mp3_path])
-            frappe.db.close()  # Ensure connection is closed
+            frappe.db.close()
 
     def _process_audio(self, filedata, original_path, converted_path):
         """Thread-safe audio processing"""
@@ -393,6 +396,9 @@ class VoiceProcessor:
             except Exception as e:
                 frappe.log_error(f"Failed to clean up file {path}", str(e))
 
-# Initialize processor in hooks.py
-def get_voice_processor():
-    return VoiceProcessor.get_instance()
+
+# Add this at the bottom to expose the method
+@frappe.whitelist()
+def upload_voice_file():
+    """Public wrapper for the VoiceProcessor method"""
+    return VoiceProcessor.get_instance().upload_voice_file()
