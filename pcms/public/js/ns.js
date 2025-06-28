@@ -158,6 +158,7 @@ frappe.ready(function () {
   
     $container.append(div);
      // Remove oldest messages if limit exceeded
+     console.log(app_settings());
     let excess = $container.children.length - app_settings();
     while (excess > 0) {
       $container.removeChild($container.firstChild);
