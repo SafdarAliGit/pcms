@@ -4,6 +4,9 @@ from frappe.utils.data import format_datetime
 @frappe.whitelist()
 def list_chat_messages():
     # Get patient using the current logged-in user's ID
+    settings = frappe.get_single("App Settings")
+    if not settings:
+        frappe.throw("App Settings not found")
     patient = frappe.db.get_value(
         "Patient", 
         {"user_id": frappe.session.user}, 
@@ -18,7 +21,8 @@ def list_chat_messages():
     messages = frappe.db.get_all(
         "Message",
         filters={"sender": patient.mr_no},
-        fields=["audio", "message_content","sent_time", "status"],order_by="creation asc"
+        fields=["audio", "message_content","sent_time", "status"],order_by="creation asc",
+        limit=settings.display_sent_messages
     )
     for m in messages:
         m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")

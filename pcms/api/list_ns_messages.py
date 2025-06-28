@@ -4,6 +4,9 @@ from frappe.utils.data import format_datetime
 @frappe.whitelist()
 def list_ns_messages():
     """Fetch messages linked to the current user's nursing station."""
+    settings = frappe.get_single("App Settings")
+    if not settings:
+        frappe.throw("App Settings not found")
     user = frappe.session.user
     nursing_station_name = None
 
@@ -33,7 +36,8 @@ def list_ns_messages():
             "message_content", "sender", "sender_name", 
             "room_no", "sent_time", "status", "audio","symptoms_audio", "name"
         ],
-        order_by="creation asc"
+        order_by="creation asc",
+        limit=settings.display_received_messages
     )
 
     # Format datetime for each message

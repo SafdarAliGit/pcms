@@ -5,7 +5,11 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "max_audio_size"
+  "max_audio_size",
+  "no_of_messages_displayed_section",
+  "display_sent_messages",
+  "column_break_ok6o",
+  "display_received_messages"
  ],
  "fields": [
   {
@@ -14,13 +18,36 @@
    "fieldname": "max_audio_size",
    "fieldtype": "Float",
    "label": "Max Audio Size (KB)"
+  },
+  {
+   "default": "25",
+   "description": "Default 25",
+   "fieldname": "display_sent_messages",
+   "fieldtype": "Int",
+   "label": "Display Sent Messages"
+  },
+  {
+   "default": "50",
+   "description": "Default 50",
+   "fieldname": "display_received_messages",
+   "fieldtype": "Int",
+   "label": "Display Received Messages"
+  },
+  {
+   "fieldname": "column_break_ok6o",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "no_of_messages_displayed_section",
+   "fieldtype": "Section Break",
+   "label": "No Of Messages Displayed"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-06-27 16:16:54.210533",
+ "modified": "2025-06-28 19:50:55.933016",
  "modified_by": "Administrator",
  "module": "Pcms",
  "name": "App Settings",

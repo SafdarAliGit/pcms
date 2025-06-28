@@ -100,6 +100,17 @@ frappe.ready(function () {
     });
 
   });
+    // app settings
+  let ReceivedMessageLimit = 50;
+  frappe.call({
+    method: "pcms.api.app_settings.get_app_settings",
+    callback: (r) => {
+      if (r.message && r.message.display_received_messages) {
+        ReceivedMessageLimit = r.message.display_received_messages;
+      }
+    }
+  });
+
 
   // 4. Message rendering
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status, audio, symptoms_audio, message_name) {
@@ -142,6 +153,12 @@ frappe.ready(function () {
     `;
   
     $container.append(div);
+     // Remove oldest messages if limit exceeded
+    let excess = $container.children.length - ReceivedMessageLimit;
+    while (excess > 0) {
+      $container.removeChild($container.firstChild);
+      excess--;
+    }
     $container.scrollTop($container[0].scrollHeight);
   }
   
