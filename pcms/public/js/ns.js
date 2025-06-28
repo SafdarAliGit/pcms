@@ -27,7 +27,7 @@ frappe.realtime = {
 };
 
 // DOM Ready Logic
-frappe.ready(function () {
+frappe.ready( async function () {
   // 1. Initialize realtime connection
   frappe.realtime.init();
   const $container = $("#messages");
@@ -103,15 +103,11 @@ frappe.ready(function () {
      
     // app settings
   let ReceivedMessageLimit = 50;
-  frappe.call({
-    method: "pcms.api.app_settings.get_app_settings",
-    callback: (r) => {
-      if (r.message && r.message.display_received_messages) {
-        ReceivedMessageLimit = r.message.display_received_messages;
-      }
-    }
+  const r = await frappe.call({
+    method: 'pcms.api.app_settings.get_app_settings',
   });
-console.log(ReceivedMessageLimit);
+  ReceivedMessageLimit = r.message.display_received_messages;
+  console.log(ReceivedMessageLimit);
 
   // 4. Message rendering
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status, audio, symptoms_audio, message_name) {
