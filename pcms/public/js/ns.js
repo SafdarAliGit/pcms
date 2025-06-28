@@ -102,7 +102,9 @@ frappe.ready(function () {
   });
     // app 
     function app_settings() {
-      let ReceivedMessageLimit = 50;
+      
+    
+  let ReceivedMessageLimit = 50;
   frappe.call({
     method: "pcms.api.app_settings.get_app_settings",
     callback: (r) => {
@@ -111,9 +113,6 @@ frappe.ready(function () {
       }
     }
   });
-  return ReceivedMessageLimit;
-    }
-  
 
 
   // 4. Message rendering
@@ -158,8 +157,7 @@ frappe.ready(function () {
   
     $container.append(div);
      // Remove oldest messages if limit exceeded
-     console.log(app_settings());
-    let excess = $container.children.length - app_settings();
+    let excess = $container.children.length - ReceivedMessageLimit;
     while (excess > 0) {
       $container.removeChild($container.firstChild);
       excess--;
