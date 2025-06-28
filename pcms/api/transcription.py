@@ -168,7 +168,7 @@ import tempfile
 import concurrent.futures
 import re
 import time
-import traceback  # Added missing import
+import traceback
 from pcms.utils.ensure_folder_path import ensure_folder_path
 from frappe.utils.data import format_datetime
 from pcms.api.extract_symptoms import SymptomExtractor
@@ -202,7 +202,7 @@ class VoiceProcessor:
         """Optimized audio conversion"""
         try:
             with open(input_path, 'wb') as f:
-                f.write(filedata.stream.read())
+                f.write(filedata)
             
             (AudioSegment.from_file(input_path)
                 .set_channels(1)
@@ -225,7 +225,7 @@ class VoiceProcessor:
             return False
 
     @frappe.whitelist()
-    def upload_voice_file(self):
+    def upload_voice_file(self, filedata=None, filename=None, text_msg=None):
         """Main processing flow"""
         file_paths = {
             'original': None,
@@ -234,23 +234,28 @@ class VoiceProcessor:
         }
         
         try:
-            # Validate input
-            filedata = frappe.request.files.get('file')
-            text_msg = frappe.request.form.get('text_msg', '')
+            # Get request data properly
+            if not filedata and hasattr(frappe.local, 'request'):
+                request = frappe.local.request
+                if request.method == 'POST':
+                    if 'file' in request.files:
+                        filedata = request.files['file'].read()
+                        filename = request.files['file'].filename
+                    text_msg = request.form.get('text_msg', text_msg)
             
             if not filedata:
                 frappe.throw(_("No file uploaded"))
 
             # File size check
             max_size_kb = frappe.db.get_single_value("App Settings", "max_audio_size") or 1024
-            file_size = len(filedata.stream.read())
-            filedata.stream.seek(0)
+            file_size = len(filedata)
             
             if file_size > max_size_kb * 1024:
                 frappe.throw(_(f"File size exceeds maximum allowed ({max_size_kb} KB). Uploaded: {file_size / 1024:.2f} KB"))
 
             # Create temp files
-            file_paths['original'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=os.path.splitext(filedata.filename)[-1])
+            file_ext = os.path.splitext(filename)[-1] if filename else '.tmp'
+            file_paths['original'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=file_ext)
             file_paths['converted'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=".wav")
             file_paths['mp3'] = tempfile.mktemp(dir=self.TEMP_DIR, suffix=".mp3")
 
