@@ -100,10 +100,8 @@ frappe.ready(function () {
     });
 
   });
-    // app 
-    function app_settings() {
-      
-    
+     
+    // app settings
   let ReceivedMessageLimit = 50;
   frappe.call({
     method: "pcms.api.app_settings.get_app_settings",
@@ -193,7 +191,7 @@ frappe.ready(function () {
       };
     });
     
-      // end play voices
+    
 });
 
 
