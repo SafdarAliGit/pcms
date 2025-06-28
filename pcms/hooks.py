@@ -7,9 +7,15 @@ app_license = "mit"
 
 # DocType Events
 # ------------------
+
 def on_session_creation():
-    from pcms.api.transcription import VoiceProcessor
-    VoiceProcessor.get_instance()  # Pre-load resources
+    """Pre-load voice processor resources"""
+    try:
+        from pcms.api.voice_processor import VoiceProcessor
+        # Initialize without processing anything
+        VoiceProcessor.get_instance()
+    except Exception as e:
+        frappe.log_error("VoiceProcessor pre-load failed", str(e))
 
 doc_events = {
     "Doctor": {
