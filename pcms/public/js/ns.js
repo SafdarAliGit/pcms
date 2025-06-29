@@ -191,6 +191,7 @@ frappe.ready( async function () {
     }
 
     $container.scrollTop($container[0].scrollHeight);
+    $(filterSelect).trigger('change');
   }
   
     // play voices
