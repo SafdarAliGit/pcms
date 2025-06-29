@@ -17,19 +17,24 @@ def list_chat_messages():
     if not patient:
         frappe.throw("No patient found for this user.")
 
-    # Fetch messages sent by this patient (using mr_no as sender)
-    messages = frappe.db.get_all(
-        "Message",
-        filters={"sender": patient.mr_no},
-        fields=["audio", "message_content", "sent_time", "status", "name"],
-        order_by="creation asc",
-        limit=settings.display_sent_messages
-    )
+    # Fetch messages with formatted datetime
+    messages = frappe.db.sql(f"""
+        SELECT 
+            audio, 
+            message_content, 
+            DATE_FORMAT(sent_time, '%%d-%%m-%%Y %%h:%%i %%p') as sent_time,
+            status, 
+            name
+        FROM `tabMessage`
+        WHERE sender = %(mr_no)s
+        ORDER BY creation DESC
+        LIMIT %(limit)s
+    """, {
+        "mr_no": patient.mr_no,
+        "limit": settings.display_sent_messages
+    }, as_dict=True)
 
-    # for m in messages:
-    #     m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")
+    # Reverse the list to show latest at bottom
+    messages.reverse()
+
     return messages
-
-       
-
-    
