@@ -39,7 +39,7 @@ frappe.ready(async function () {
     callback: r => {
       if (r.message) {
         $chatBody.empty(); 
-        r.message.reverse().forEach(msg => {
+        r.message.forEach(msg => {
           msg.audio ? uploadVoiceMsg(msg.audio, msg.sent_time, msg.status) : appendMessage(msg.message_content, msg.sent_time, msg.status);
         });
       }
@@ -57,7 +57,7 @@ frappe.ready(async function () {
       callback: r => {
         if (r.message) {
           $chatBody.empty(); 
-          r.message.reverse().forEach(msg => {
+          r.message.forEach(msg => {
             msg.audio ? uploadVoiceMsg(msg.audio, msg.sent_time, msg.status) : appendMessage(msg.message_content, msg.sent_time, msg.status);
           });
         }

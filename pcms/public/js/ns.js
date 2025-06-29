@@ -37,7 +37,7 @@ frappe.ready( async function () {
     callback: function (r) {
       if (r.message) {
         $container.empty(); 
-        r.message.reverse().forEach(function (msg) {
+        r.message.forEach(function (msg) {
           appendMessage(
             msg.message_content,
             msg.sender,
@@ -82,7 +82,7 @@ frappe.ready( async function () {
       callback: function (r) {
         if (r.message) {
           $container.empty(); 
-          r.message.reverse().forEach(function (msg) {
+          r.message.forEach(function (msg) {
             appendMessage(
               msg.message_content,
               msg.sender,
