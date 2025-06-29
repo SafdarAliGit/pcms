@@ -20,12 +20,18 @@ frappe.realtime = {
 
 
 
-frappe.ready(function () {
+frappe.ready(async function () {
   frappe.realtime.init();
   const $chatBody = $("#chat-body");
   const $messageInput = $("#message");
   const $voiceModal = $("#voice-modal");
   const $audioReview = $("#audio-review");
+
+  let SentMessageLimit = 25;
+  const r = await frappe.call({
+    method: 'pcms.api.app_settings.get_app_settings',
+  });
+  SentMessageLimit = r.message.display_sent_messages;
 
   // Load existing messages
   frappe.call({
@@ -43,7 +49,7 @@ frappe.ready(function () {
   // 3. Realtime room subscription
   const stationName = window.nursing_station || "";
   const room = stationName.replace(/[-\s]/g, "").toLowerCase();
- console.log(room);
+
   frappe.realtime.on(room+"_update", function (data) {
     
     frappe.call({
@@ -64,6 +70,8 @@ frappe.ready(function () {
     $chatBody.scrollTop($chatBody[0].scrollHeight);
   }
 
+  
+
   function appendMessage(text, sent_time, status) {
     if (!text) return;
     const $msg = $("<div>").addClass("chat-message sent" + (status !== "New" ? " status-acknowledged" : "")).text(text);
@@ -71,6 +79,12 @@ frappe.ready(function () {
     $("<span>").addClass("voice-time").text(sent_time).appendTo($footer);
     $("<span>").addClass((status !== "New" ? "status-acknowledged-text" : "voice-status")).text(status !== "New" ? "Acknowledged \u2713\u2713" : "\u2713").appendTo($footer);
     $chatBody.append($msg);
+    // Remove oldest messages if limit exceeded
+    const container = $chatBody[0];
+    const excess = container.children.length - SentMessageLimit;
+    for (let i = 0; i < excess; i++) {
+      container.removeChild(container.firstElementChild);
+    }
     scrollToBottom();
   }
 
@@ -191,6 +205,13 @@ frappe.ready(function () {
     $("<span>").addClass((status !== "New" ? "status-acknowledged-text" : "voice-status")).text(status !== "New" ? "Acknowledged \u2713\u2713" : "\u2713").appendTo($footer);
   
     $chatBody.append($voiceMsg);
+     // Remove oldest messages if limit exceeded
+     const container = $chatBody[0];
+     const excess = container.children.length - SentMessageLimit;
+     for (let i = 0; i < excess; i++) {
+       container.removeChild(container.firstElementChild);
+     }
+     
     scrollToBottom();
   }
   
@@ -374,7 +395,8 @@ $(".quick-voice-item").click(async function () {
   if (!url) return;
 
   $("#quick-voice-modal").addClass("hidden");
-  uploadVoiceMsg(url, formatDateTime(new Date()), "New");
+
+  // uploadVoiceMsg(url, formatDateTime(new Date()), "New");
 
   // send to Frappe or directly to nursing
   try {

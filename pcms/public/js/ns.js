@@ -107,7 +107,6 @@ frappe.ready( async function () {
     method: 'pcms.api.app_settings.get_app_settings',
   });
   ReceivedMessageLimit = r.message.display_received_messages;
-  console.log(ReceivedMessageLimit);
 
   // 4. Message rendering
   function appendMessage(message_content, sender, sender_name, room_no, sent_time, status, audio, symptoms_audio, message_name) {
