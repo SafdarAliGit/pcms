@@ -22,7 +22,7 @@ def list_chat_messages():
         "Message",
         filters={"sender": patient.mr_no},
         fields=["audio", "message_content", "sent_time", "status", "name"],
-        order_by="creation asc",
+        order_by="creation desc",
         limit=settings.display_sent_messages
     )
 
