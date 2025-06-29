@@ -250,11 +250,10 @@ audio:hover {
 /* filter list */
 
 .filter-container {
-  margin: 1.5rem 0;
   max-width: 720px;
   margin: 0 auto;
   overflow-x: auto;
-  padding-bottom: 0.5rem; /* Space for scrollbar */
+  padding: 0.5rem; /* Space for scrollbar */
 }
 
 .filter-buttons {
