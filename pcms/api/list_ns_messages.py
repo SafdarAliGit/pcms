@@ -41,7 +41,7 @@ def list_ns_messages():
     )
 
     # Format datetime for each message
-    for m in messages:
-        m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")
+    # for m in messages:
+    #     m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")
 
     return messages
