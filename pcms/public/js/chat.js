@@ -57,7 +57,7 @@ frappe.ready(async function () {
       callback: r => {
         if (r.message) {
           $chatBody.empty(); 
-          r.message.forEach(msg => {
+          r.message.reverse().forEach(msg => {
             msg.audio ? uploadVoiceMsg(msg.audio, msg.sent_time, msg.status) : appendMessage(msg.message_content, msg.sent_time, msg.status);
           });
         }

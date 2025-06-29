@@ -26,8 +26,8 @@ def list_chat_messages():
         limit=settings.display_sent_messages
     )
 
-    for m in messages:
-        m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")
+    # for m in messages:
+    #     m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")
     return messages  # Return list (can be empty)
 
        
