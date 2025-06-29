@@ -36,7 +36,7 @@ def list_ns_messages():
             "message_content", "sender", "sender_name", 
             "room_no", "sent_time", "status", "audio","symptoms_audio", "name"
         ],
-        order_by="creation asc",
+        order_by="creation desc",
         limit=settings.display_received_messages
     )
 
@@ -44,4 +44,4 @@ def list_ns_messages():
     # for m in messages:
     #     m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")
 
-    return messages
+    return messages.reverse()
