@@ -21,9 +21,11 @@ def list_chat_messages():
     messages = frappe.db.get_all(
         "Message",
         filters={"sender": patient.mr_no},
-        fields=["audio", "message_content","sent_time", "status"],order_by="sent_time desc",
+        fields=["audio", "message_content", "sent_time", "status", "name"],
+        order_by="creation asc",
         limit=settings.display_sent_messages
     )
+
     for m in messages:
         m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")
     return messages  # Return list (can be empty)
