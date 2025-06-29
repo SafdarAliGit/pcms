@@ -28,7 +28,7 @@ def list_chat_messages():
 
     # for m in messages:
     #     m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")
-    return messages.reverse()  
+    return messages
 
        
 
