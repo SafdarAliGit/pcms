@@ -248,21 +248,72 @@ audio:hover {
   transform: translateY(-1px);
 }
 /* filter list */
+
 .filter-container {
-  margin: 1rem auto;
+  margin: 1.5rem 0;
   max-width: 720px;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  margin: 0 auto;
+  overflow-x: auto;
+  padding-bottom: 0.5rem; /* Space for scrollbar */
 }
 
-#status-filter {
-  width: 100%;
-  padding: 0.4rem 1rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: 1.5px solid #2eb106;
-  height: 2.5rem;
+.filter-buttons {
+  display: inline-flex;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  background: #f3f4f6;
+  border-radius: 0.75rem;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.filter-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: white;
+  color: #4b5563;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  border: 1px solid transparent;
+}
+
+.filter-btn:hover {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+.filter-btn.active {
+  background: var(--active-bg, #6366f1);
+  color: white;
+  border-color: var(--active-border, #4f46e5);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .filter-buttons {
+    gap: 0.25rem;
+  }
+  .filter-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Scrollbar styling */
+.filter-container::-webkit-scrollbar {
+  height: 4px;
+}
+.filter-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.filter-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
 }
 
 

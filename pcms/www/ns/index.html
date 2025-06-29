@@ -7,14 +7,13 @@
 <div id="messages" class="chat-box"></div>
 
 <div class="filter-container">
-  <label for="status-filter"><strong>Filter:</strong></label>
-  <select id="status-filter">
-    <option value="all">All</option>
-    <option value="status-new">New</option>
-    <option value="status-acknowledged">Acknowledged</option>
-    <option value="status-resolved">Resolved</option>
-    <option value="status-escalated">Escalated</option>
-  </select>
+  <div class="filter-buttons">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="status-new" style="--active-bg: #e4a029; --active-border: #9f6706;">New</button>
+    <button class="filter-btn" data-filter="status-acknowledged" style="--active-bg: #acc40d; --active-border: #6f7d12;">Acknowledged</button>
+    <button class="filter-btn" data-filter="status-resolved" style="--active-bg: #63f38e; --active-border: #16a34a;">Resolved</button>
+    <button class="filter-btn" data-filter="status-escalated" style="--active-bg: #fab4b4; --active-border: #dc2626;">Escalated</button>
+  </div>
 </div>
 
 <script>

@@ -33,38 +33,30 @@ frappe.ready( async function () {
   const $container = $("#messages");
 
   // filtering in html ns page
-  const filterSelect = document.getElementById('status-filter');
+  const $filterButtons = $(".filter-btn");
 
-  // Reset to 'All' on page load/refresh
-  if (filterSelect) {
-    filterSelect.value = 'all';
+  $filterButtons.on("click", function() {
+    const filterValue = $(this).data("filter");
     
-    filterSelect.addEventListener('change', function() {
-      const selectedValue = this.value;
-      const $messages = $container.find('.chat-message');
+    // Update active state
+    $filterButtons.removeClass("active");
+    $(this).addClass("active");
 
-      $messages.each(function() {
-        const $msg = $(this);
-        const msgStatus = $msg.data('status');
-        
-        if (selectedValue === 'all') {
-          $msg.show();
-        } else {
-          // Remove 'status-' prefix and compare with data-status
-          const statusClass = selectedValue.replace('status-', '');
-          if (msgStatus === statusClass || $msg.hasClass(selectedValue)) {
-            $msg.show();
-          } else {
-            $msg.hide();
-          }
-        }
-      });
+    // Filter messages
+    const $messages = $container.find(".chat-message");
+    
+    $messages.each(function() {
+      const $msg = $(this);
+      
+      if (filterValue === "all") {
+        $msg.show();
+      } else {
+        $msg.toggle($msg.hasClass(filterValue));
+      }
     });
+  });
 
-    // Trigger change event to apply initial filter
-    $(filterSelect).trigger('change');
-  }
-  
+ 
   // 2. Fetch existing messages
   frappe.call({
     method: "pcms.api.list_ns_messages.list_ns_messages",
@@ -191,7 +183,7 @@ frappe.ready( async function () {
     }
 
     $container.scrollTop($container[0].scrollHeight);
-    $(filterSelect).val('all').trigger('change');
+    
   }
   
     // play voices
