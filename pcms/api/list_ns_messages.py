@@ -28,20 +28,23 @@ def list_ns_messages():
     if not nursing_station:
         frappe.throw("No nursing station found for this user.")
 
-    # Fetch messages for this nursing station
-    messages = frappe.db.get_all(
-        "Message",
-        filters={"nursing_station": nursing_station},
-        fields=[
-            "message_content", "sender", "sender_name", 
-            "room_no", "sent_time", "status", "audio","symptoms_audio", "name"
-        ],
-        order_by="creation asc",
-        limit=settings.display_received_messages
-    )
+    # Fetch messages for this nursing station with formatted datetime
+    messages = frappe.db.sql(f"""
+        SELECT 
+            message_content, sender, sender_name, 
+            room_no, 
+            DATE_FORMAT(sent_time, '%%d-%%m-%%Y %%h:%%i %%p') as sent_time,
+            status, audio, symptoms_audio, name
+        FROM `tabMessage`
+        WHERE nursing_station = %(nursing_station)s
+        ORDER BY creation DESC
+        LIMIT %(limit)s
+    """, {
+        "nursing_station": nursing_station,
+        "limit": settings.display_received_messages
+    }, as_dict=True)
 
-    # Format datetime for each message
-    # for m in messages:
-    #     m["sent_time"] = format_datetime(m["sent_time"], "dd-MM-yyyy hh:mm a")
+    # Reverse the list to show latest at bottom
+    messages.reverse()
 
     return messages
