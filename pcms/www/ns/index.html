@@ -6,6 +6,17 @@
 
 <div id="messages" class="chat-box"></div>
 
+<div class="filter-container">
+  <label for="status-filter"><strong>Filter:</strong></label>
+  <select id="status-filter">
+    <option value="all">All</option>
+    <option value="status-new">New</option>
+    <option value="status-acknowledged">Acknowledged</option>
+    <option value="status-resolved">Resolved</option>
+    <option value="status-escalated">Escalated</option>
+  </select>
+</div>
+
 <script>
   window.nursing_station = {{ station |  tojson | safe }};
 </script>

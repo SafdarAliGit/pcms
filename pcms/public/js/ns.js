@@ -31,6 +31,40 @@ frappe.ready( async function () {
   // 1. Initialize realtime connection
   frappe.realtime.init();
   const $container = $("#messages");
+
+  // filtering in html ns page
+  const filterSelect = document.getElementById('status-filter');
+
+  // Reset to 'All' on page load/refresh
+  if (filterSelect) {
+    filterSelect.value = 'all';
+    
+    filterSelect.addEventListener('change', function() {
+      const selectedValue = this.value;
+      const $messages = $container.find('.chat-message');
+
+      $messages.each(function() {
+        const $msg = $(this);
+        const msgStatus = $msg.data('status');
+        
+        if (selectedValue === 'all') {
+          $msg.show();
+        } else {
+          // Remove 'status-' prefix and compare with data-status
+          const statusClass = selectedValue.replace('status-', '');
+          if (msgStatus === statusClass || $msg.hasClass(selectedValue)) {
+            $msg.show();
+          } else {
+            $msg.hide();
+          }
+        }
+      });
+    });
+
+    // Trigger change event to apply initial filter
+    $(filterSelect).trigger('change');
+  }
+  
   // 2. Fetch existing messages
   frappe.call({
     method: "pcms.api.list_ns_messages.list_ns_messages",
@@ -125,7 +159,7 @@ frappe.ready( async function () {
         <div class="meta-block"><span class="meta-label">Name:</span> <span class="meta-value">${sender_name}</span></div>
         <div class="meta-block"><span class="meta-label">Room No:</span> <span class="meta-value">${room_no}</span></div>
         <div class="meta-block"><span class="meta-label">Time:</span> <span class="meta-value">${sent_time}</span></div>
-        <div class="meta-block"><span class="meta-label">Status:</span> <span class="meta-value">${status}</span></div>
+        <div class="meta-block" data-status="${status}"><span class="meta-label">Status:</span> <span class="meta-value">${status}</span></div>
       </div>
       <div class="chat-text">${message_content}</div>
   

@@ -247,6 +247,24 @@ audio:hover {
   background: #b2ebf2;
   transform: translateY(-1px);
 }
+/* filter list */
+.filter-container {
+  margin: 1rem auto;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#status-filter {
+  width: 100%;
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1.5px solid #2eb106;
+  height: 2.5rem;
+}
+
 
 /* Mobile Adaptation */
 @media (max-width: 480px) {
