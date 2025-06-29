@@ -36,7 +36,7 @@ def list_ns_messages():
             "message_content", "sender", "sender_name", 
             "room_no", "sent_time", "status", "audio","symptoms_audio", "name"
         ],
-        order_by="creation asc",
+        order_by="creation desc",
         limit=settings.display_received_messages
     )
 
